@@ -1,5 +1,5 @@
 {
-  "name": "halal-food-premium",
+  "name": "food-halal-premium",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,23 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@iconify/react": "^4.1.1",
-    "@mui/lab": "^5.0.0-alpha.130",
-    "@mui/material": "^5.13.1",
-    "@mui/styles": "^5.15.3",
-    "axios": "^1.6.5",
-    "firebase": "^10.7.1",
-    "i18next": "^23.7.16",
-    "i18next-browser-languagedetector": "^7.2.0",
-    "next": "13.4.3",
-    "next-auth": "^4.24.5",
-    "nprogress": "^0.2.0",
-    "react": "^18.2.0",
-    "react-dom": "18.2.0",
-    "react-i18next": "^14.0.0"
+    "@emotion/cache": "^11.11.0",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.3",
+    "next": "14.0.4",
+    "next-themes": "^0.2.1",
+    "react": "^18",
+    "react-dom": "^18"
   },
   "devDependencies": {
     "eslint": "^8",
-    "eslint-config-next": "13.4.3"
+    "eslint-config-next": "14.0.4"
   }
 }
