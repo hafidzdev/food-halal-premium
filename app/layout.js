@@ -1,9 +1,11 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
-import ThemeRegistry from "@/theme/ThemeRegistry";
-import { ModeProvider } from "@/context/ThemeContext";
-
-const inter = Inter({ subsets: ["latin"] });
+import PropTypes from "prop-types";
+// import ThemeRegistry from "@/theme/ThemeRegistry";
+// import { ModeProvider } from "@/context/ThemeContext";
+import { primaryFont } from "@/theme/typography";
+import { LocalizationProvider } from "@/locales";
+import ProgressBar from "@/components/partials/ProgressBar";
+import ThemeProvider from "@/theme";
 
 export const metadata = {
   title: "Create Next App",
@@ -12,12 +14,19 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ModeProvider>
-          <ThemeRegistry options={{ key: "mui" }}>{children}</ThemeRegistry>
-        </ModeProvider>
+    <html lang="en" className={primaryFont.className}>
+      <body>
+        <LocalizationProvider>
+          <ThemeProvider>
+            <ProgressBar />
+            {children}
+          </ThemeProvider>
+        </LocalizationProvider>
       </body>
     </html>
   );
 }
+
+RootLayout.propTypes = {
+  children: PropTypes.node,
+};
