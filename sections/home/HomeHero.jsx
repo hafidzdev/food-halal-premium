@@ -51,14 +51,15 @@ export default function HomeHero() {
             <Typography variant="h3" sx={{ my: 3 }}>
               Halal Food Premium E-Commerce Platform
             </Typography>
-
-            <p style={{ color: "text.secondary" }}>
-              Welcome to our exclusive e-commerce platform, where we bring the
-              essence of Japan's finest and Halal-certified premium cuisine
-              right to your doorstep. Immerse yourself in the world of exquisite
-              flavors and culinary excellence, carefully curated to meet the
-              highest standards of Halal practices.
-            </p>
+            <main>
+              <p style={{ color: "text.secondary" }}>
+                Welcome to our exclusive e-commerce platform, where we bring the
+                essence of Japan's finest and Halal-certified premium cuisine
+                right to your doorstep. Immerse yourself in the world of
+                exquisite flavors and culinary excellence, carefully curated to
+                meet the highest standards of Halal practices.
+              </p>
+            </main>
 
             <Stack
               spacing={3}
