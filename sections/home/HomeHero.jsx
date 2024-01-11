@@ -25,8 +25,7 @@ export default function HomeHero() {
       sx={{
         ...bgGradient({
           color: alpha(theme.palette.background.default, 0.9),
-          imgUrl:
-            "https://assets-global.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298cf3bb93c3f_6309fc4305a883fc64b964cc_DrawKit0041_E-commerce_and_Online_Shopping_Banner.png",
+          imgUrl: "",
         }),
         overflow: "hidden",
       }}
@@ -89,8 +88,8 @@ export default function HomeHero() {
           {mdUp && (
             <Grid xs={12} md={6} lg={7}>
               <Image
-                height={400}
-                width={400}
+                height={300}
+                width={300}
                 alt="marketing market"
                 src="https://assets-global.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298cf3bb93c3f_6309fc4305a883fc64b964cc_DrawKit0041_E-commerce_and_Online_Shopping_Banner.png"
               />
