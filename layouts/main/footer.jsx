@@ -196,10 +196,10 @@ export function ListDesktop({ list }) {
               "&:hover": {
                 color: "text.primary",
               },
-              ...(active && {
-                color: "text.primary",
-                fontWeight: "fontWeightSemiBold",
-              }),
+              // ...(active && {
+              //   color: "text.primary",
+              //   fontWeight: "fontWeightSemiBold",
+              // }),
             }}
           >
             {link.title}
