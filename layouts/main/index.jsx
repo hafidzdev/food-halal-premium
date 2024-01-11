@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 
 import Header from "./header";
-// import Footer from "./footer";
+import Footer from "./footer";
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ export default function MainLayout({ children }) {
         {children}
       </Box>
 
-      {/* <Footer /> */}
+      <Footer />
     </Box>
   );
 }
