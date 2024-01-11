@@ -155,7 +155,7 @@ export default function Footer() {
             variant="caption"
             sx={{ color: "text.secondary", marginX: "auto" }}
           >
-            AMY Communications © 2023. All rights reserved
+            Food Halal Premium © 2023. All rights reserved
           </Typography>
 
           <Stack direction="row" spacing={3} justifyContent="center">
