@@ -48,7 +48,7 @@ export default function ProductList({ product, ...other }) {
 
       <Fab
         component={RouterLink}
-        href={"/product-detail"}
+        href={"#"}
         className="add-to-cart"
         color="primary"
         size="small"
@@ -95,7 +95,7 @@ export default function ProductList({ product, ...other }) {
             {product.category}
           </TextMaxLine>
 
-          <Link component={RouterLink} href={"/product-detail"} color="inherit">
+          <Link component={RouterLink} href={"#"} color="inherit">
             <TextMaxLine variant="h6" line={1}>
               {product.name}
             </TextMaxLine>

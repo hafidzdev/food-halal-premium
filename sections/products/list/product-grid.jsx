@@ -50,7 +50,7 @@ export default function ProductGrid({ product, sx, ...other }) {
       <Box sx={{ position: "relative", mb: 2 }}>
         <Fab
           component={RouterLink}
-          href={"/product-detail"}
+          href={"#"}
           className="add-to-cart"
           color="primary"
           size="small"
@@ -78,8 +78,8 @@ export default function ProductGrid({ product, sx, ...other }) {
             bgcolor: "background.neutral",
             borderRadius: 5,
           }}
-          height={200}
-          width={200}
+          height={150}
+          width={150}
           layout="fixed" // Mengubah layout menjadi "fixed"
           loading="lazy"
           alt="product cover"
@@ -91,7 +91,7 @@ export default function ProductGrid({ product, sx, ...other }) {
           {product.category}
         </TextMaxLine>
 
-        <Link component={RouterLink} href={"/product-detail"} color="inherit">
+        <Link component={RouterLink} href={"#"} color="inherit">
           <TextMaxLine
             variant="body2"
             line={1}
