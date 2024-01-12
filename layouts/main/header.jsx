@@ -13,6 +13,8 @@ import useOffSetTop from "@/hooks/use-off-set-top";
 
 import { bgBlur } from "@/theme/css";
 
+import { signIn, signOut, useSession } from "next-auth/react";
+
 import { NavBasicDesktop } from "@/components/partials/nav-basic";
 import NavMobile from "./nav/mobile";
 import { HEADER } from "../config-layout";
@@ -45,6 +47,28 @@ const mainNav = [
     path: "/privacy-policy",
   },
 ];
+
+function AuthButton() {
+  const { data: session } = useSession();
+
+  if (session) {
+    return (
+      <>
+        <button onClick={() => signOut()}>Sign out</button>
+        <Typography variant="body2">
+          {session?.user?.first_name} {session?.user?.last_name}
+        </Typography>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <button onClick={() => signIn()}>Sign in</button>
+      <Typography variant="body2">Not signed in</Typography>
+    </>
+  );
+}
 
 export default function Header({ headerOnDark }) {
   const theme = useTheme();
@@ -93,11 +117,12 @@ export default function Header({ headerOnDark }) {
         alignItems="center"
         justifyContent="flex-end"
       >
-        {/* <Stack spacing={1} direction="row" alignItems="center">
-          <Searchbar />
+        <Stack spacing={1} direction="row" alignItems="center">
+          {/* <Searchbar /> */}
 
-          <SettingsButton />
-        </Stack> */}
+          {/* <SettingsButton /> */}
+          <AuthButton />
+        </Stack>
       </Stack>
 
       {!mdUp && <NavMobile data={navData} />}
