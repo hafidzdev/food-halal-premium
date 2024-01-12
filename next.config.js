@@ -8,7 +8,14 @@ const nextConfig = {
   //   },
   // },
   images: {
-    domains: ["assets-global.website-files.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "assets.example.com",
+        port: "",
+        pathname: "/account123/**",
+      },
+    ],
   },
 };
 
