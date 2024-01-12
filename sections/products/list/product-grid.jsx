@@ -9,7 +9,7 @@ import Stack from "@mui/material/Stack";
 import { RouterLink } from "@/routes/components";
 
 import Label from "@/components/partials/label";
-import Image from "@/components/partials/image";
+import Image from "next/image";
 import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
 import ProductPrice from "../common/product-price";
@@ -78,10 +78,10 @@ export default function ProductGrid({ product, sx, ...other }) {
             bgcolor: "background.neutral",
             borderRadius: 5,
           }}
-          // height={200}
-          // width={200}
-          // layout="fixed" // Mengubah layout menjadi "fixed"
-          // loading="lazy"
+          height={200}
+          width={200}
+          layout="fixed" // Mengubah layout menjadi "fixed"
+          loading="lazy"
           alt="product cover"
         />
       </Box>
