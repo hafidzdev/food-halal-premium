@@ -6,6 +6,8 @@ import Box from "@mui/material/Box";
 import Header from "./header";
 import Footer from "./footer";
 
+import { HEADER } from "../config-layout";
+
 // ----------------------------------------------------------------------
 
 export default function MainLayout({ children }) {
@@ -18,7 +20,7 @@ export default function MainLayout({ children }) {
           flexGrow: 1,
         }}
       >
-        {/* {!actionPage(spacingLayout) && <Spacing />} */}
+        {<Spacing />}
 
         {children}
       </Box>
@@ -33,3 +35,12 @@ MainLayout.propTypes = {
 };
 
 // ----------------------------------------------------------------------
+function Spacing() {
+  return (
+    <Box
+      sx={{
+        height: { xs: HEADER.H_MOBILE, md: HEADER.H_DESKTOP },
+      }}
+    />
+  );
+}
