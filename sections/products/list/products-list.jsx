@@ -8,7 +8,7 @@ import Stack from "@mui/material/Stack";
 import { RouterLink } from "@/routes/components";
 
 import Label from "@/components/partials/label";
-import Image from "next/image";
+import Image from "@/components/partials/image";
 import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
 import ProductPrice from "../common/product-price";
@@ -71,17 +71,17 @@ export default function ProductList({ product, ...other }) {
       <Image
         src={product.coverUrl}
         style={{
-          // mr: 5,
-          // width: 160,
+          mr: 2,
+          width: 160,
           flexShrink: 0,
           borderRadius: 1.5,
           bgcolor: "background.neutral",
           borderRadius: 5,
         }}
-        height={100}
-        width={100}
-        layout="fixed" // Mengubah layout menjadi "fixed"
-        loading="lazy"
+        // height={100}
+        // width={100}
+        // layout="fixed" // Mengubah layout menjadi "fixed"
+        // loading="lazy"
         alt="cover"
       />
 
