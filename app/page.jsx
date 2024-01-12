@@ -2,6 +2,7 @@
 
 import { Box, Button, Container, Typography, useTheme } from "@mui/material";
 import { useModeContext } from "@/context/ThemeContext";
+import NavMenu from "@/components/NavMenu";
 
 export default function Home() {
   const { mode, toggleColorMode } = useModeContext();
@@ -9,6 +10,7 @@ export default function Home() {
   return (
     <Container sx={{ bgcolor: "background.default" }}>
       <nav>
+        <NavMenu />
         <Button onClick={toggleColorMode} variant="contained">
           {mode === "dark" ? "light" : "dark"}
         </Button>
