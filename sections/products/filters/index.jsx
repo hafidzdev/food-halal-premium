@@ -17,56 +17,88 @@ import FilterCategory from "./filter-category";
 import FilterOffer from "./filter-offer";
 import FilterPrice from "./filter-price";
 import FilterStock from "./filter-stock";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const CATEGORY_OPTIONS = [
-  "Frozen Foods",
-  "Drinks",
-  "Meat",
-  "Spices",
-  "Seafood",
+  { id: 1, name: "Frozen Foods", slug: "frozen-foods" },
+  { id: 2, name: "Drinks", slug: "drinks" },
+  { id: 3, name: "Meat", slug: "meat" },
+  { id: 4, name: "Spices", slug: "spices" },
+  { id: 5, name: "Seafood", slug: "seafood" },
 ];
 
 const OFFER_OPTIONS = ["Cashback", "Gratis Ongkir", "COD", "Diskon"];
 
-const defaultValues = {
-  filterCategory: [],
-  filterOffer: [],
-  filterStock: false,
-  filterPrice: {
-    start: 0,
-    end: 0,
-  },
+const getSelected = (selectedItem, item) => {
+  return selectedItem.includes(item)
+    ? selectedItem.filter((value) => value !== item)
+    : [...selectedItem, item];
 };
 
 export default function ProductsFilters({ open, onClose }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  let fCategory = searchParams.get("fcategory");
+  let filterCategoryArray = fCategory && fCategory.split("+");
+  let fOffer = searchParams.get("foffer");
+  let filterOfferArray = fOffer && fOffer.split("+");
+
   const mdUp = useResponsive("up", "md");
+
+  const defaultValues = {
+    filterCategory: filterCategoryArray || [],
+    filterOffer: filterOfferArray || [],
+    filterStock: false,
+    filterPrice: {
+      start: 0,
+      end: 0,
+    },
+  };
 
   const [filters, setFilters] = useState(defaultValues);
 
-  const getSelected = (selectedItem, item) => {
-    selectedItem.includes(item)
-      ? selectedItem.filter((value) => value !== item)
-      : [...selectedItem, item];
-  };
-
   const handleChangeCategory = useCallback(
     (name) => {
-      setFilters({
-        ...filters,
-        filterBrand: getSelected(filters.filterCategory, name),
-      });
+      const isExist = getSelected(filters.filterCategory, name);
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        filterCategory: isExist,
+      }));
+
+      const current = new URLSearchParams(Array.from(searchParams.entries()));
+      if (isExist.length === 0) {
+        current.delete("fcategory");
+      } else {
+        current.set("fcategory", isExist.join("+"));
+      }
+
+      const search = current.toString();
+
+      return search;
     },
-    [filters]
+    [filters, searchParams]
   );
 
   const handleChangeOffer = useCallback(
     (name) => {
-      setFilters({
-        ...filters,
-        filterBrand: getSelected(filters.filterOffer, name),
-      });
+      const isExist = getSelected(filters.filterOffer, name);
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        filterOffer: isExist,
+      }));
+
+      const current = new URLSearchParams(Array.from(searchParams.entries()));
+      if (isExist.length === 0) {
+        current.delete("foffer");
+      } else {
+        current.set("foffer", isExist.join("+"));
+      }
+
+      const search = current.toString();
+
+      return search;
     },
-    [filters]
+    [filters, searchParams]
   );
 
   const handleChangeStartPrice = useCallback(
@@ -107,6 +139,7 @@ export default function ProductsFilters({ open, onClose }) {
 
   const handleClearAll = useCallback(() => {
     setFilters(defaultValues);
+    router.push("/product");
   }, []);
 
   const renderContent = (
