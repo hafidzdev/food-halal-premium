@@ -29,7 +29,7 @@ export default function ProductGrid({ product, sx, ...other }) {
       }}
       {...other}
     >
-      {product.label === "new" && (
+      {/* {product.label === "new" && (
         <Label
           color="info"
           sx={{ position: "absolute", m: 1, top: 0, right: 0, zIndex: 9 }}
@@ -45,7 +45,7 @@ export default function ProductGrid({ product, sx, ...other }) {
         >
           SALE
         </Label>
-      )}
+      )} */}
 
       <Box sx={{ position: "relative", mb: 2 }}>
         <Fab
@@ -71,8 +71,9 @@ export default function ProductGrid({ product, sx, ...other }) {
         </Fab>
 
         <Image
-          src={product.coverUrl}
+          src={product.image}
           style={{
+            objectFit: "cover",
             flexShrink: 0,
             borderRadius: 1.5,
             bgcolor: "background.neutral",
@@ -80,15 +81,17 @@ export default function ProductGrid({ product, sx, ...other }) {
           }}
           height={150}
           width={150}
-          layout="fixed" // Mengubah layout menjadi "fixed"
-          loading="lazy"
+          // layout="fixed" // Mengubah layout menjadi "fixed"
+          // loading="lazy"
           alt="product cover"
+          priority
         />
       </Box>
 
       <Stack spacing={0.5}>
         <TextMaxLine variant="caption" line={1} sx={{ color: "text.disabled" }}>
-          {product.category}
+          {Array.isArray(product.category) &&
+            product.category.map((item) => item.name + " ")}
         </TextMaxLine>
 
         <Link component={RouterLink} href={"#"} color="inherit">
@@ -97,15 +100,18 @@ export default function ProductGrid({ product, sx, ...other }) {
             line={1}
             sx={{ fontWeight: "fontWeightMedium" }}
           >
-            {product.name}
+            {product?.name}
           </TextMaxLine>
         </Link>
 
-        <ProductPrice price={product.price} priceSale={product.priceSale} />
+        <ProductPrice
+          price={product.price_in_currency}
+          priceSale={product.price_in_currency}
+        />
 
         <ProductRating
-          ratingNumber={product.ratingNumber}
-          label={`${product.sold} sold`}
+          ratingNumber={product.rating.avg}
+          label={`${product.delivery_weight} sold`}
         />
       </Stack>
     </Stack>
@@ -114,14 +120,49 @@ export default function ProductGrid({ product, sx, ...other }) {
 
 ProductGrid.propTypes = {
   product: PropTypes.shape({
+    id: PropTypes.string,
     name: PropTypes.string,
-    sold: PropTypes.number,
-    label: PropTypes.string,
-    price: PropTypes.number,
-    category: PropTypes.string,
-    coverUrl: PropTypes.string,
-    priceSale: PropTypes.number,
-    ratingNumber: PropTypes.number,
+    slug: PropTypes.string,
+    brand: PropTypes.string,
+    weight: PropTypes.number,
+    measure: PropTypes.string,
+    barcode: PropTypes.string,
+    delivery_weight: PropTypes.number,
+    image: PropTypes.string,
+    discount: PropTypes.number,
+    quantity: PropTypes.number,
+    sell_price: PropTypes.number,
+    currency: PropTypes.string,
+    price_in_currency: PropTypes.number,
+    category: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        slug: PropTypes.string,
+        type: PropTypes.string,
+      })
+    ),
+    favorite: PropTypes.shape({
+      favorite: PropTypes.bool,
+      total: PropTypes.number,
+      reaction_id: PropTypes.string,
+    }),
+    rating: PropTypes.shape({
+      avg: PropTypes.number,
+      count: PropTypes.number,
+      star_5: PropTypes.number,
+      star_4: PropTypes.number,
+      star_3: PropTypes.number,
+      star_2: PropTypes.number,
+      star_1: PropTypes.number,
+    }),
+    store_info: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      slug: PropTypes.string,
+      location: PropTypes.string,
+      latitude: PropTypes.string,
+      longitude: PropTypes.string,
+    }),
   }),
   sx: PropTypes.object,
 };
