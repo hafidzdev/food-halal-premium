@@ -28,7 +28,7 @@ export default function ProductList({ product, ...other }) {
       }}
       {...other}
     >
-      {product.label === "new" && (
+      {/* {product.label === "new" && (
         <Label
           color="info"
           sx={{ position: "absolute", m: 1, top: 0, left: 0, zIndex: 9 }}
@@ -44,7 +44,7 @@ export default function ProductList({ product, ...other }) {
         >
           SALE
         </Label>
-      )}
+      )} */}
 
       <Fab
         component={RouterLink}
@@ -69,10 +69,9 @@ export default function ProductList({ product, ...other }) {
       </Fab>
 
       <Image
-        src={product.coverUrl}
+        src={product.image}
         style={{
-          // mr: 5,
-          // width: 160,
+          objectFit: "cover",
           flexShrink: 0,
           borderRadius: 1.5,
           bgcolor: "background.neutral",
@@ -80,9 +79,10 @@ export default function ProductList({ product, ...other }) {
         }}
         height={100}
         width={100}
-        layout="fixed" // Mengubah layout menjadi "fixed"
-        loading="lazy"
+        // layout="fixed" // Mengubah layout menjadi "fixed"
+        // loading="lazy"
         alt="cover"
+        priority
       />
 
       <Stack spacing={1} sx={{ ml: 3 }}>
@@ -92,7 +92,8 @@ export default function ProductList({ product, ...other }) {
             line={1}
             sx={{ color: "text.disabled" }}
           >
-            {product.category}
+            {Array.isArray(product.category) &&
+              product.category.map((item) => item.name + " ")}
           </TextMaxLine>
 
           <Link component={RouterLink} href={"#"} color="inherit">
@@ -103,17 +104,17 @@ export default function ProductList({ product, ...other }) {
         </Stack>
 
         <ProductRating
-          ratingNumber={product.ratingNumber}
-          label={`${product.sold} sold`}
+          ratingNumber={product?.rating?.avg}
+          label={`${product?.currency} sold`}
         />
 
         <TextMaxLine variant="body2" line={1} sx={{ color: "text.secondary" }}>
-          {product.caption}
+          {product?.brand}
         </TextMaxLine>
 
         <ProductPrice
-          price={product.price}
-          priceSale={product.priceSale}
+          price={product?.price_in_currency}
+          priceSale={product?.price_in_currency}
           sx={{ typography: "h6" }}
         />
       </Stack>
@@ -123,14 +124,48 @@ export default function ProductList({ product, ...other }) {
 
 ProductList.propTypes = {
   product: PropTypes.shape({
-    caption: PropTypes.string,
-    category: PropTypes.string,
-    coverUrl: PropTypes.string,
-    label: PropTypes.string,
+    id: PropTypes.string,
     name: PropTypes.string,
-    price: PropTypes.number,
-    priceSale: PropTypes.number,
-    sold: PropTypes.number,
-    ratingNumber: PropTypes.number,
+    slug: PropTypes.string,
+    brand: PropTypes.string,
+    weight: PropTypes.number,
+    measure: PropTypes.string,
+    barcode: PropTypes.string,
+    delivery_weight: PropTypes.number,
+    image: PropTypes.string,
+    discount: PropTypes.number,
+    quantity: PropTypes.number,
+    sell_price: PropTypes.number,
+    currency: PropTypes.string,
+    price_in_currency: PropTypes.number,
+    category: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        slug: PropTypes.string,
+        type: PropTypes.string,
+      })
+    ),
+    favorite: PropTypes.shape({
+      favorite: PropTypes.bool,
+      total: PropTypes.number,
+      reaction_id: PropTypes.string,
+    }),
+    rating: PropTypes.shape({
+      avg: PropTypes.number,
+      count: PropTypes.number,
+      star_5: PropTypes.number,
+      star_4: PropTypes.number,
+      star_3: PropTypes.number,
+      star_2: PropTypes.number,
+      star_1: PropTypes.number,
+    }),
+    store_info: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      slug: PropTypes.string,
+      location: PropTypes.string,
+      latitude: PropTypes.string,
+      longitude: PropTypes.string,
+    }),
   }),
 };
