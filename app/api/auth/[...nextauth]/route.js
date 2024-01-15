@@ -7,7 +7,7 @@ async function refreshAccessToken(token) {
       refresh: token.refreshToken,
     };
     const response = await fetch(
-      `${process.env.HOST_NAME}user/v2/login/refresh`,
+      `${process.env.NEXT_PUBLIC_HOST_NAME}user/v2/login/refresh`,
       {
         method: "POST",
         body: JSON.stringify(payload),
@@ -30,8 +30,6 @@ async function refreshAccessToken(token) {
       refreshToken: refreshedTokens.tokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
     };
   } catch (error) {
-    console.log(error);
-
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -54,7 +52,7 @@ const authOptions = {
         };
 
         const res = await fetch(
-          `${process.env.HOST_NAME}user/v2/multifirebase`,
+          `${process.env.NEXT_PUBLIC_HOST_NAME}user/v2/multifirebase`,
           {
             method: "POST",
             body: JSON.stringify(payload),
@@ -119,7 +117,7 @@ const authOptions = {
       if (currentDate.getTime() < token.accessTokenExpires) {
         return token;
       }
-      console.log("tokenku: ", token);
+
       // Access token has expired, try to update it
       return refreshAccessToken(token);
     },
