@@ -94,7 +94,11 @@ export default function ProductGrid({ product, sx, ...other }) {
             product.category.map((item) => item.name + " ")}
         </TextMaxLine>
 
-        <Link component={RouterLink} href={"#"} color="inherit">
+        <Link
+          component={RouterLink}
+          href={`/product/${product.slug}`}
+          color="inherit"
+        >
           <TextMaxLine
             variant="body2"
             line={1}

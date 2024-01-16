@@ -1,17 +1,16 @@
 import PropTypes from "prop-types";
 import { GetProductDetail } from "@/services/Product";
+import ProductView from "@/sections/products/view/product-view";
 
-export async function generateMetadata({ params, searchParams }, parent) {
-  // fetch data
+export async function generateMetadata({ params }, parent) {
   const product = await GetProductDetail(params.productSlug);
 
-  // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
-  const imageUrl = product.response.image[0];
+  const imageUrl = product?.response?.image[0];
 
   return {
-    title: product.response.name,
-    description: "Providing the best quality products for you",
+    title: `${product?.response?.name} - Premium Halal Food at ${process.env.NEXT_PUBLIC_STORE_NAME}`,
+    description: `Indulge in the finest product at ${process.env.NEXT_PUBLIC_STORE_NAME}. Our ${product?.response?.name} is carefully sourced and curated to bring you the ultimate culinary delight. Order now and elevate your dining experience.`,
     openGraph: {
       images: [imageUrl, ...previousImages],
     },
@@ -21,7 +20,11 @@ export async function generateMetadata({ params, searchParams }, parent) {
 export default async function Page({ params }) {
   const getProduct = await GetProductDetail(params.productSlug);
   const product = getProduct.response;
-  return <div>Product detail {product.name}</div>;
+  return product ? (
+    <ProductView product={product} />
+  ) : (
+    <h1>Oppss, product not found.</h1>
+  );
 }
 
 Page.propTypes = {

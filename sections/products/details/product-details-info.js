@@ -1,3 +1,5 @@
+"use client";
+
 import PropTypes from "prop-types";
 
 import Stack from "@mui/material/Stack";
@@ -37,7 +39,13 @@ export default function ProductDetailsInfo({
         <Typography variant="h4"> {name} </Typography>
 
         <Stack spacing={0.5} direction="row" alignItems="center">
-          <Rating size="small" value={ratingNumber} readOnly precision={0.5} />
+          <Rating
+            size="small"
+            value={ratingNumber}
+            defaultValue={0}
+            precision={0.5}
+            readOnly
+          />
 
           <Typography variant="caption" sx={{ color: "text.disabled" }}>
             ({totalReviews} reviews)

@@ -6,7 +6,30 @@ import Typography from "@mui/material/Typography";
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsDescription({ specifications }) {
+function ProductDescription({ type, value }) {
+  return (
+    <Stack
+      spacing={0.5}
+      direction={{ xs: "column", sm: "row" }}
+      alignItems={{ sm: "center" }}
+      sx={{ typography: "body2" }}
+    >
+      <Box component="span" sx={{ width: 160, color: "text.secondary" }}>
+        {type}
+      </Box>
+      <Box component="span">{value || "-"}</Box>
+    </Stack>
+  );
+}
+
+export default function ProductDetailsDescription({
+  weight,
+  measure,
+  discount,
+  quantity,
+  storeName,
+  composition,
+}) {
   return (
     <Stack
       spacing={4}
@@ -17,26 +40,17 @@ export default function ProductDetailsDescription({ specifications }) {
       <Stack spacing={2}>
         <Typography variant="h6"> Specifications </Typography>
 
-        {specifications.map((row) => (
-          <Stack
-            key={row.label}
-            spacing={0.5}
-            direction={{ xs: "column", sm: "row" }}
-            alignItems={{ sm: "center" }}
-            sx={{ typography: "body2" }}
-          >
-            <Box component="span" sx={{ width: 160, color: "text.secondary" }}>
-              {row.label}
-            </Box>
-            <Box component="span">{row.value}</Box>
-          </Stack>
-        ))}
+        <ProductDescription type="Weight" value={weight + " " + measure} />
+        <ProductDescription type="Discount" value={discount + " %"} />
+        <ProductDescription type="Stock" value={quantity} />
+        <ProductDescription type="Store" value={storeName} />
+        <ProductDescription type="Ingredients" value={composition} />
       </Stack>
     </Stack>
   );
 }
 
-ProductDetailsDescription.propTypes = {
-  description: PropTypes.string,
-  specifications: PropTypes.array,
-};
+// ProductDetailsDescription.propTypes = {
+//   description: PropTypes.string,
+//   specifications: PropTypes.array,
+// };
