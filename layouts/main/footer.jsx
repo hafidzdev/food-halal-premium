@@ -104,7 +104,11 @@ export default function Footer() {
                 <Typography variant="h6">Social</Typography>
                 <Stack direction="row" alignItems="center">
                   {_socials.map((social) => (
-                    <IconButton key={social.value} color="primary">
+                    <IconButton
+                      aria-label="Media social"
+                      key={social.value}
+                      color="primary"
+                    >
                       <Iconify icon={social.icon} />
                     </IconButton>
                   ))}
@@ -159,11 +163,11 @@ export default function Footer() {
           </Typography>
 
           <Stack direction="row" spacing={3} justifyContent="center">
-            <Link variant="caption" sx={{ color: "text.secondary" }}>
+            <Link href="/" variant="caption" sx={{ color: "text.secondary" }}>
               Help Center
             </Link>
 
-            <Link variant="caption" sx={{ color: "text.secondary" }}>
+            <Link href="/" variant="caption" sx={{ color: "text.secondary" }}>
               Terms of Service
             </Link>
           </Stack>
