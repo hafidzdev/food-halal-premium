@@ -96,7 +96,11 @@ export default function ProductList({ product, ...other }) {
               product.category.map((item) => item.name + " ")}
           </TextMaxLine>
 
-          <Link component={RouterLink} href={"#"} color="inherit">
+          <Link
+            component={RouterLink}
+            href={`/product/${product.slug}`}
+            color="inherit"
+          >
             <TextMaxLine variant="h6" line={1}>
               {product.name}
             </TextMaxLine>
