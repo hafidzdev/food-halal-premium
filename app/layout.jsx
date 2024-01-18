@@ -1,7 +1,5 @@
 import "./globals.css";
 import PropTypes from "prop-types";
-// import ThemeRegistry from "@/theme/ThemeRegistry";
-// import { ModeProvider } from "@/context/ThemeContext";
 import { primaryFont } from "@/theme/typography";
 import ProgressBar from "@/components/partials/ProgressBar";
 import { getServerSession } from "next-auth";
@@ -9,6 +7,7 @@ import { getServerSession } from "next-auth";
 import SessionProvider from "../context/SessionProvider";
 import ThemeProvider from "@/theme";
 import { LocalizationProvider } from "@/locales";
+import { SettingsProvider } from "@/components/settings";
 
 export const metadata = {
   title: `${process.env.NEXT_PUBLIC_STORE_NAME} - Online Halal Food Store for Fresh and Quality Products`,
@@ -23,10 +22,16 @@ export default async function RootLayout({ children }) {
       <body>
         <SessionProvider session={session}>
           <LocalizationProvider>
-            <ThemeProvider>
-              <ProgressBar />
-              {children}
-            </ThemeProvider>
+            <SettingsProvider
+              defaultSettings={{
+                themeMode: "light", // 'light' | 'dark'
+              }}
+            >
+              <ThemeProvider>
+                <ProgressBar />
+                {children}
+              </ThemeProvider>
+            </SettingsProvider>
           </LocalizationProvider>
         </SessionProvider>
       </body>
