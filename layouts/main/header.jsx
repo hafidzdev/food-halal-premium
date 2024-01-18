@@ -19,6 +19,7 @@ import { NavBasicDesktop } from "@/components/partials/nav-basic";
 import NavMobile from "./nav/mobile";
 import { HEADER } from "../config-layout";
 import HeaderShadow from "../common/header-shadow";
+import SettingMode from "@/components/partials/mode/SettingMode";
 
 // ----------------------------------------------------------------------
 const mainNav = [
@@ -120,7 +121,7 @@ export default function Header({ headerOnDark }) {
         <Stack spacing={1} direction="row" alignItems="center">
           {/* <Searchbar /> */}
 
-          {/* <SettingsButton /> */}
+          <SettingMode />
           <AuthButton />
         </Stack>
       </Stack>
