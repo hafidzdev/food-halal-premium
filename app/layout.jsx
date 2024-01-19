@@ -8,6 +8,8 @@ import SessionProvider from "../context/SessionProvider";
 import ThemeProvider from "@/theme";
 import { LocalizationProvider } from "@/locales";
 import { SettingsProvider } from "@/components/settings";
+import CartProvider from "@/context/CartContext";
+import { GetCart } from "@/services/Purchase";
 
 export const metadata = {
   title: `${process.env.NEXT_PUBLIC_STORE_NAME} - Online Halal Food Store for Fresh and Quality Products`,
@@ -16,6 +18,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const session = await getServerSession();
+  const cart = await GetCart();
 
   return (
     <html lang="en" className={primaryFont.className}>
@@ -28,8 +31,10 @@ export default async function RootLayout({ children }) {
               }}
             >
               <ThemeProvider>
-                <ProgressBar />
-                {children}
+                <CartProvider cart={cart}>
+                  <ProgressBar />
+                  {children}
+                </CartProvider>
               </ThemeProvider>
             </SettingsProvider>
           </LocalizationProvider>
