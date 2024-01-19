@@ -20,6 +20,7 @@ import NavMobile from "./nav/mobile";
 import { HEADER } from "../config-layout";
 import HeaderShadow from "../common/header-shadow";
 import SettingMode from "@/components/partials/mode/SettingMode";
+import { useCart } from "@/context/CartContext";
 
 // ----------------------------------------------------------------------
 const mainNav = [
@@ -73,6 +74,7 @@ function AuthButton() {
 
 export default function Header({ headerOnDark }) {
   const theme = useTheme();
+  const [cart] = useCart();
 
   const offset = useOffSetTop();
 
@@ -120,8 +122,9 @@ export default function Header({ headerOnDark }) {
       >
         <Stack spacing={1} direction="row" alignItems="center">
           {/* <Searchbar /> */}
-
           <SettingMode />
+          {cart.length} Cart
+          {/* <SettingsButton /> */}
           <AuthButton />
         </Stack>
       </Stack>
