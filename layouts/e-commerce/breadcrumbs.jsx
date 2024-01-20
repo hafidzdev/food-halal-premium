@@ -90,6 +90,6 @@ export default function Breadcrumbs({ menuLink }) {
   );
 }
 
-Breadcrumbs.PropTypes = {
+Breadcrumbs.propTypes = {
   menuLink: PropTypes.array,
 };
