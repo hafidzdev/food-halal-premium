@@ -1,7 +1,7 @@
 "use client";
 
 import PropTypes from "prop-types";
-import isEqual from "lodash.isequal";
+// import isEqual from "lodash.isequal";
 import { useMemo, useState, useCallback } from "react";
 
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -29,21 +29,21 @@ export function SettingsProvider({ children, defaultSettings }) {
     setOpenDrawer(false);
   }, []);
 
-  const canReset = !isEqual(state, defaultSettings);
+  // const canReset = !isEqual(state, defaultSettings);
 
   const memoizedValue = useMemo(
     () => ({
       ...state,
       onUpdate: update,
       // Reset
-      canReset,
+      // canReset,
       onReset: reset,
       // Drawer
       open: openDrawer,
       onToggle: onToggleDrawer,
       onClose: onCloseDrawer,
     }),
-    [canReset, onCloseDrawer, onToggleDrawer, openDrawer, reset, state, update]
+    [onCloseDrawer, onToggleDrawer, openDrawer, reset, state, update]
   );
 
   return (
