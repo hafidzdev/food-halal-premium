@@ -17,7 +17,7 @@ export default function BreadcrumbsLink({ link, activeLast, disabled }) {
       !activeLast && {
         cursor: "default",
         pointerEvents: "none",
-        color: "text.disabled",
+        color: "primary.main",
       }),
   };
 
