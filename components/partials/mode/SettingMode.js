@@ -2,15 +2,17 @@
 
 //
 import Iconify from "../Iconify";
-
-import { IconButton } from "@mui/material";
 import { useSettingsContext } from "@/components/settings";
+import IconButtonAnimate from "../animate/IconButtonAnimate";
 
 export default function SettingMode() {
   const settings = useSettingsContext();
 
+  const isLight = settings.themeMode === "light";
+
   return (
-    <IconButton
+    <IconButtonAnimate
+      selected={!isLight}
       onClick={() =>
         settings.onUpdate(
           "themeMode",
@@ -19,13 +21,13 @@ export default function SettingMode() {
       }
     >
       <Iconify
-        icon={settings.themeMode === "light" ? "carbon:asleep" : "carbon:light"}
+        icon={isLight ? "carbon:asleep" : "carbon:light"}
         sx={{
-          width: 20,
-          height: 20,
-          color: settings.themeMode === "light" ? "inherit" : "primary.main",
+          width: 22,
+          height: 22,
+          color: isLight ? "inherit" : "primary.main",
         }}
       />
-    </IconButton>
+    </IconButtonAnimate>
   );
 }
