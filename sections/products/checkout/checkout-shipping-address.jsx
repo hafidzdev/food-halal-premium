@@ -105,7 +105,7 @@ export default function CheckoutShippingAddress({ options }) {
             },
           }}
         >
-          <Iconify icon="carbon:close" width={24} />
+          <Iconify icon="carbon:close-filled" width={24} />
         </IconButton>
         <DialogTitle>
           <Typography color="textPrimary" gutterBottom>
@@ -195,7 +195,7 @@ function OptionItem({ option, selected, click }) {
             },
           }}
         >
-          <Iconify icon={"carbon:bicycle"} width={20} />
+          <Iconify icon={"carbon:edit"} width={20} />
         </IconButton>
       </Stack>
 
