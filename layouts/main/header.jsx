@@ -123,7 +123,7 @@ export default function Header({ headerOnDark }) {
         <Stack spacing={1} direction="row" alignItems="center">
           {/* <Searchbar /> */}
           <SettingMode />
-          {cart.length} Cart
+          {cart?.length} Cart
           {/* <SettingsButton /> */}
           <AuthButton />
         </Stack>
