@@ -1,5 +1,8 @@
 /* eslint-disable jsx-a11y/alt-text */
+import { useState } from "react";
 import PropTypes from "prop-types";
+import { useCart } from "@/context/CartContext";
+import { AddToCart, GetCart } from "@/services/Purchase";
 
 import Fab from "@mui/material/Fab";
 import Link from "@mui/material/Link";
@@ -13,10 +16,77 @@ import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
 import ProductPrice from "../common/product-price";
 import ProductRating from "../common/product-rating";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 
 // ----------------------------------------------------------------------
 
 export default function ProductList({ product, ...other }) {
+  const [, setCart] = useCart();
+  const router = useRouter();
+
+  const [snackbars, setSnackbars] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleCloseSnackbar = (id) => {
+    setSnackbars((prevSnackbars) =>
+      prevSnackbars.filter((snackbar) => snackbar.id !== id)
+    );
+  };
+
+  const handleAddToCart = async (productId) => {
+    try {
+      setLoading(true);
+      const session = await getSession();
+
+      if (!session) {
+        router.push("/signin");
+        return;
+      }
+
+      const addProductToCart = await AddToCart(productId);
+      if (addProductToCart.status === 200) {
+        const getCart = await GetCart();
+        setCart(getCart);
+        setSnackbars((prevSnackbars) => [
+          ...prevSnackbars,
+          {
+            id: Date.now(),
+            message: "Successfully added item to cart",
+            severity: "success",
+          },
+        ]);
+      } else {
+        setSnackbars((prevSnackbars) => [
+          ...prevSnackbars,
+          {
+            id: Date.now(),
+            message: "Failed add product to cart",
+            severity: "error",
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error(
+        "An error occurred while processing the request:",
+        error.message
+      );
+      setSnackbars((prevSnackbars) => [
+        ...prevSnackbars,
+        {
+          id: Date.now(),
+          message: "An error occurred while processing the request",
+          severity: "error",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Stack
       direction="row"
@@ -47,8 +117,7 @@ export default function ProductList({ product, ...other }) {
       )} */}
 
       <Fab
-        component={RouterLink}
-        href={"#"}
+        onClick={() => handleAddToCart(product.id)}
         className="add-to-cart"
         color="primary"
         size="small"
@@ -122,6 +191,23 @@ export default function ProductList({ product, ...other }) {
           sx={{ typography: "h6" }}
         />
       </Stack>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
+      {snackbars.map((snackbar) => (
+        <SnackbarMessage
+          key={snackbar.id}
+          open={true}
+          onClose={() => handleCloseSnackbar(snackbar.id)}
+          message={snackbar.message}
+          severity={snackbar.severity}
+        />
+      ))}
     </Stack>
   );
 }

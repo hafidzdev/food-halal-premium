@@ -37,7 +37,7 @@ async function refreshAccessToken(token) {
   }
 }
 
-const authOptions = {
+export const authOptions = {
   providers: [
     CredentialsProvider({
       id: "credentials",

@@ -26,7 +26,7 @@ function LoadingData({ viewMode, hasMore, dataLength }) {
           md: "repeat(4, 1fr)",
         }}
       >
-        {[...Array(16)].map((_, index) => (
+        {[...Array(4)].map((_, index) => (
           <ProductGridSkeleton key={index} />
         ))}
       </Box>
@@ -35,7 +35,7 @@ function LoadingData({ viewMode, hasMore, dataLength }) {
 
   return (
     <Stack spacing={4}>
-      {[...Array(16)].map((_, index) => (
+      {[...Array(4)].map((_, index) => (
         <ProductListSkeleton key={index} />
       ))}
     </Stack>
@@ -60,7 +60,7 @@ export default function ProductListCard({
           <LoadingData
             viewMode={viewMode}
             hasMore={hasMore}
-            dataLength={loading}
+            dataLength={dataLength}
           />
         }
         endMessage={<h1>No more data...</h1>}
@@ -83,7 +83,7 @@ export default function ProductListCard({
             }}
           >
             {loading
-              ? [...Array(16)].map((_, index) => (
+              ? [...Array(4)].map((_, index) => (
                   <ProductGridSkeleton key={index} />
                 ))
               : products.length > 0
@@ -95,7 +95,7 @@ export default function ProductListCard({
         ) : (
           <Stack spacing={4}>
             {loading
-              ? [...Array(16)].map((_, index) => (
+              ? [...Array(4)].map((_, index) => (
                   <ProductListSkeleton key={index} />
                 ))
               : products.length > 0
