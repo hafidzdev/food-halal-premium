@@ -1,52 +1,31 @@
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Link from "next/link";
+"use client"
+
 import React from "react";
+import { Container, Grid, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+export default function Layout({ children }) {
+  const theme = useTheme();
 
-function layout({ children }) {
   return (
     <>
-      <Container
-        component="main"
-        maxWidth="xl"
-        sx={{ bgcolor: "background.default" }}
+      <div
+        style={{
+          minHeight: "100vh",
+          padding: theme.spacing(12, 0),
+          [theme.breakpoints.up("md")]: {
+            padding: theme.spacing(22, 0),
+          },
+        }}
       >
-        <Box
-          sx={{
-            height: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography color="text.primary">Autentication</Typography>
-
-          {children}
-        </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
+        <Container>
+          <Grid container justifyContent="center" alignItems={"center"}>
+            <Grid item xs={12} md={7} lg={6}>
+              {children}
+            </Grid>
+          </Grid>
+        </Container>
+      </div>
     </>
   );
 }
-
-export default layout;
