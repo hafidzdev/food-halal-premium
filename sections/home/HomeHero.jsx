@@ -11,7 +11,7 @@ import { useResponsive } from "@/hooks/use-responsive";
 
 import { bgGradient } from "@/theme/css";
 
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 // ----------------------------------------------------------------------
 
@@ -32,14 +32,27 @@ export default function HomeHero() {
     >
       <Container
         sx={{
-          py: 20,
+          py: 10,
           display: { md: "flex" },
           alignItems: { md: "center" },
           height: { md: `100vh` },
-          my: 5,
         }}
       >
         <Grid container columnSpacing={{ xs: 0, md: 10 }}>
+          {!mdUp && (
+            <Grid xs={12} md={6} lg={7}>
+              <Image
+                height={150}
+                width={250}
+                alt="marketing market"
+                src="https://previews.123rf.com/images/kaisorn/kaisorn1608/kaisorn160800032/61904824-halal-food-on-a-wooden-background-vector-halal-food-top-view.jpg"
+                layout="responsive"
+                // loading="lazy"
+                priority
+              />
+            </Grid>
+          )}
+
           <Grid
             xs={12}
             md={6}
@@ -86,12 +99,13 @@ export default function HomeHero() {
           {mdUp && (
             <Grid xs={12} md={6} lg={7}>
               <Image
-                height={300}
-                width={300}
+                height={150}
+                width={250}
                 alt="marketing market"
-                src="https://assets-global.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298cf3bb93c3f_6309fc4305a883fc64b964cc_DrawKit0041_E-commerce_and_Online_Shopping_Banner.png"
+                src="https://previews.123rf.com/images/kaisorn/kaisorn1608/kaisorn160800032/61904824-halal-food-on-a-wooden-background-vector-halal-food-top-view.jpg"
                 layout="responsive"
-                loading="lazy"
+                // loading="lazy"
+                priority
               />
             </Grid>
           )}
