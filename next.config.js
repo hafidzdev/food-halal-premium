@@ -11,7 +11,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "assets-global.website-files.com",
+        hostname: "previews.123rf.com",
       },
       {
         protocol: "https",
