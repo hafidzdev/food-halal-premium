@@ -70,8 +70,8 @@ function AnimateWrap({ size, children }) {
   return (
     <Box
       // component={m.div}
-      whileTap="tap"
-      whileHover="hover"
+      // whileTap="tap"
+      // whileHover="hover"
       variants={(isSmall && varSmall) || (isLarge && varLarge) || varMedium}
       sx={{
         display: "inline-flex",
