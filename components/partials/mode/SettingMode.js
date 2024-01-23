@@ -21,7 +21,7 @@ export default function SettingMode() {
       }
     >
       <Iconify
-        icon={isLight ? "carbon:asleep" : "carbon:light"}
+        icon={isLight ? "carbon:asleep" : "carbon:asleep-filled"}
         sx={{
           width: 22,
           height: 22,
