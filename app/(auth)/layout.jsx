@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
 import React from "react";
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 export default function Layout({ children }) {
