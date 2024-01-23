@@ -1,11 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
+import {
+  Box,
+  TextField,
+  Typography,
+  Stack,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import Iconify from "@/components/partials/Iconify";
+import { LoadingButton } from "@mui/lab";
+
 import Link from "next/link";
 import { getSession, signIn } from "next-auth/react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -17,6 +23,12 @@ function Page() {
   const [error, setError] = useState("");
 
   const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -59,60 +71,93 @@ function Page() {
 
   return (
     <>
-      <Typography component="h1" variant="h5" color="text.primary">
-        Sign Up
-      </Typography>
+      <Stack
+        spacing={4}
+        sx={{
+          p: 4,
+          textAlign: { xs: "center", md: "left" },
+          borderRadius: 2,
+          boxShadow: (theme) => theme.customShadows.z24,
+        }}
+      >
+        <div>
+          <Typography variant="h3" paragraph sx={{ color: "text.primary" }}>
+            Register
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ color: "text.secondary", display: "inline" }}
+          >
+            Already have an account?
+          </Typography>
+          <Link href={"/signup"} passHref legacyBehavior>
+            <Typography
+              variant="subtitle2"
+              color="primary"
+              sx={{ display: "inline", cursor: "pointer" }}
+            >
+              {""} Login
+            </Typography>
+          </Link>
+        </div>
 
-      {error !== "" ? (
-        <Typography variant="body2" color="error.main">
-          {error}
-        </Typography>
-      ) : null}
+        {error !== "" ? (
+          <Typography variant="body2" color="error.main">
+            {error}
+          </Typography>
+        ) : null}
 
-      <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleOnSubmit}>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
-          autoFocus
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-        />
+        <Box component="form" noValidate onSubmit={handleOnSubmit}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleShowPassword} edge="end">
+                    <Iconify
+                      icon={
+                        showPassword
+                          ? "carbon:view-filled"
+                          : "carbon:view-off-filled"
+                      }
+                    />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
 
-        <Button
-          type="submit"
-          disabled={loading ? true : false}
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          {loading ? "Loading..." : "Sign Up"}
-        </Button>
-        <Grid container>
-          <Grid item xs>
-            <Link href="#" variant="body2">
-              Forgot password?
-            </Link>
-          </Grid>
-          <Grid item>
-            <Link href="/signin" variant="body2">
-              {"Don't have an account? Sign In"}
-            </Link>
-          </Grid>
-        </Grid>
-      </Box>
+          <LoadingButton
+            loading={loading ? true : false}
+            loadingPosition="start"
+            startIcon={<Iconify icon="carbon:login" />}
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            sx={{ mt: 1 }}
+          >
+            <span>{loading ? "Loading..." : "Sign Up"}</span>
+          </LoadingButton>
+        </Box>
+      </Stack>
     </>
   );
 }
