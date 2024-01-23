@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 import {
   Box,
-  Button,
   TextField,
   Typography,
   Stack,
@@ -79,8 +78,7 @@ function Page() {
           p: 4,
           textAlign: { xs: "center", md: "left" },
           borderRadius: 2,
-          // background: (theme) => theme?.palette?.alternate?.dark,
-          // boxShadow: (theme) => theme?.customShadows?.z24,
+          boxShadow: (theme) => theme.customShadows.z24,
         }}
       >
         <div>
@@ -93,7 +91,7 @@ function Page() {
           >
             Don't have an account?{" "}
           </Typography>
-          <Link href={"#"} passHref legacyBehavior>
+          <Link href={"/signup"} passHref legacyBehavior>
             <Typography
               variant="subtitle2"
               color="primary"
