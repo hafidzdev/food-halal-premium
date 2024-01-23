@@ -6,14 +6,14 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import { useTheme } from "@mui/material/styles";
-import { Typography } from "@mui/material";
+import { Typography, Divider, Link, Button } from "@mui/material";
 
 import { useResponsive } from "@/hooks/use-responsive";
 import useOffSetTop from "@/hooks/use-off-set-top";
 
 import { bgBlur } from "@/theme/css";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 import { NavBasicDesktop } from "@/components/partials/nav-basic";
 import NavMobile from "./nav/mobile";
@@ -28,14 +28,7 @@ const mainNav = [
     title: "Home",
     path: "/",
   },
-  // {
-  //   title: "Examples",
-  //   path: "/examples",
-  //   children: [
-  //     { title: "Travel", path: "/examples/travel" },
-  //     { title: "Education", path: "/examples/education" },
-  //   ],
-  // },
+
   {
     title: "E-Commerce",
     path: "/e-commerce",
@@ -50,37 +43,18 @@ const mainNav = [
   },
 ];
 
-function AuthButton() {
-  const { data: session } = useSession();
-
-  if (session) {
-    return (
-      <>
-        <button onClick={() => signOut()}>Sign out</button>
-        <Typography variant="body2">
-          {session?.user?.first_name} {session?.user?.last_name}
-        </Typography>
-      </>
-    );
-  }
-
-  return (
-    <>
-      <button onClick={() => signIn()}>Sign in</button>
-      <Typography variant="body2">Not signed in</Typography>
-    </>
-  );
-}
-
 export default function Header({ headerOnDark }) {
+  const { status } = useSession();
   const theme = useTheme();
-  const [cart] = useCart();
+  // const [cart] = useCart();
 
   const offset = useOffSetTop();
-
   const mdUp = useResponsive("up", "md");
 
   const navData = mainNav;
+
+  // initialize locales
+  // const { translate } = useLocales();
 
   const renderContent = (
     <>
@@ -123,9 +97,57 @@ export default function Header({ headerOnDark }) {
         <Stack spacing={1} direction="row" alignItems="center">
           {/* <Searchbar /> */}
           <SettingMode />
-          {cart?.length} Cart
-          {/* <SettingsButton /> */}
-          <AuthButton />
+          {/* 
+          <LanguagePopover
+            sx={{
+              ...(isScrolling && { color: "text.primary" }),
+            }}
+          /> */}
+
+          {status === "authenticated" ? (
+            <></>
+          ) : (
+            <>
+              {mdUp ? (
+                <>
+                  <Divider orientation="vertical" sx={{ height: 24 }} />
+                  <Stack direction="row" spacing={1}>
+                    <Link
+                      href="/signup"
+                      prefetch={false}
+                      passHref
+                      legacyBehavior
+                    >
+                      <div>
+                        <Button
+                          color="inherit"
+                          variant="outlined"
+                          sx={{
+                            color: "text.primary",
+                          }}
+                        >
+                          Register
+                        </Button>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href="/signin"
+                      prefetch={false}
+                      passHref
+                      legacyBehavior
+                    >
+                      <div>
+                        <Button variant="contained">Login</Button>
+                      </div>
+                    </Link>
+                  </Stack>
+                </>
+              ) : (
+                ""
+              )}
+            </>
+          )}
         </Stack>
       </Stack>
 
