@@ -39,20 +39,6 @@ export default function HomeHero() {
         }}
       >
         <Grid container columnSpacing={{ xs: 0, md: 10 }}>
-          {!mdUp && (
-            <Grid xs={12} md={6} lg={7}>
-              <Image
-                height={150}
-                width={250}
-                alt="marketing market"
-                src="https://previews.123rf.com/images/kaisorn/kaisorn1608/kaisorn160800032/61904824-halal-food-on-a-wooden-background-vector-halal-food-top-view.jpg"
-                layout="responsive"
-                // loading="lazy"
-                priority
-              />
-            </Grid>
-          )}
-
           <Grid
             xs={12}
             md={6}
