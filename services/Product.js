@@ -15,13 +15,21 @@ export async function GetProductData(category, limit, page) {
 }
 
 export async function GetProductDetail(productSlug) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/product-entity/${productSlug}`,
-    {
-      cache: "force-cache",
-    }
-  );
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/product-entity/${productSlug}`,
+      {
+        cache: "force-cache",
+      }
+    );
 
-  const data = await res.json();
-  return data;
+    const data = await res.json();
+    if (!res.ok) {
+      return false;
+    }
+
+    return data.response;
+  } catch (error) {
+    return false;
+  }
 }
