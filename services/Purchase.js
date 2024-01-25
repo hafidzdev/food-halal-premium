@@ -30,7 +30,9 @@ export async function GetCart() {
     );
 
     const data = await res.json();
-    const cartItems = data?.response.flatMap((cart) => cart.cart_item);
+    const cartItems = Array.isArray(data?.response)
+      ? data?.response[0]?.cart_item
+      : [];
 
     if (!res.ok || !userSession?.accessToken) {
       return [];
@@ -39,6 +41,7 @@ export async function GetCart() {
     return cartItems;
   } catch (error) {
     console.error("Error finding cart:", error.message);
+    return [];
   }
 }
 
