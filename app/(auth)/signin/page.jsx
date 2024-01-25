@@ -24,6 +24,11 @@ function Page() {
   const [error, setError] = useState("");
 
   const router = useRouter();
+  // const searchParams = useSearchParams();
+
+  // const callbackUrl = searchParams.get("callbackUrl");
+  // const redirectUrl = callbackUrl || "/";
+  const redirectUrl = "/";
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -61,7 +66,7 @@ function Page() {
           firebaseToken: res.user.accessToken,
           callbackUrl: `${window.location.origin}`,
         });
-        if (loginExternalAPI) router.push("/");
+        if (loginExternalAPI) router.push(redirectUrl);
       }
     } catch (err) {
       setError(err.message);
