@@ -13,7 +13,11 @@ import Iconify from "@/components/partials/Iconify";
 
 // ----------------------------------------------------------------------
 
-export default function CheckoutShippingMethod({ options }) {
+export default function CheckoutShippingMethod({
+  deliveryList,
+  purchase,
+  setPurchase,
+}) {
   return (
     <>
       <RadioGroup
@@ -25,26 +29,39 @@ export default function CheckoutShippingMethod({ options }) {
           gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(2, 1fr)" },
         }}
       >
-        {options.map((option) => (
-          <OptionItem
-            key={option.name}
-            option={option}
-            selected={option.name}
-          />
-        ))}
+        {Array.isArray(deliveryList) &&
+          deliveryList.map((item) => (
+            <OptionItem
+              key={item?.id}
+              option={item}
+              selected={
+                purchase.purchaseShipDelivery === item.id ? true : false
+              }
+              setPurchase={setPurchase}
+            />
+          ))}
       </RadioGroup>
     </>
   );
 }
 
 CheckoutShippingMethod.propTypes = {
-  options: PropTypes.array,
+  deliveryList: PropTypes.array,
+  purchase: PropTypes.object,
+  setPurchase: PropTypes.func,
 };
 
 // ----------------------------------------------------------------------
 
-function OptionItem({ option, selected }) {
-  const { name, delivery_entity_name, price_per_km, description } = option;
+function OptionItem({ option, selected, setPurchase }) {
+  const { id, name, delivery_entity_name, price_per_km, description } = option;
+
+  const handlePurchaseShippingUpdate = (deliveryId) => {
+    setPurchase((prevPurchase) => ({
+      ...prevPurchase,
+      purchaseShipDelivery: deliveryId,
+    }));
+  };
 
   const renderLabel = (
     <Stack flexGrow={1} spacing={1} sx={{ width: 1 }}>
@@ -89,6 +106,7 @@ function OptionItem({ option, selected }) {
         />
       }
       label={renderLabel}
+      onClick={() => handlePurchaseShippingUpdate(id)}
       sx={{
         m: 0,
         py: 3,
@@ -113,5 +131,6 @@ OptionItem.propTypes = {
     price_per_km: PropTypes.number,
     description: PropTypes.string,
   }),
-  selected: PropTypes.string, // type bool if field selected
+  selected: PropTypes.bool,
+  setPurchase: PropTypes.func,
 };
