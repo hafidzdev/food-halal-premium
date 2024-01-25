@@ -1,5 +1,3 @@
-"use client";
-
 import PropTypes from "prop-types";
 import MainLayouts from "@/layouts/main";
 
