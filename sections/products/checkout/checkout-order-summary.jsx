@@ -110,7 +110,7 @@ function ProductItem({ product, ...other }) {
   return (
     <Stack direction="row" alignItems="flex-start" {...other}>
       <Image
-        src={product.coverUrl}
+        src={product.thumbnail}
         sx={{
           mr: 2,
           width: 64,
@@ -131,18 +131,14 @@ function ProductItem({ product, ...other }) {
         </TextMaxLine>
       </Stack>
       <Typography variant="subtitle2" sx={{ mt: 0.5, mb: 1.5 }}>
-        {fCurrency(product.price)}
+        {fCurrency(product.sub_total_price)}
       </Typography>
     </Stack>
   );
 }
 
 ProductItem.propTypes = {
-  product: PropTypes.shape({
-    coverUrl: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number,
-  }),
+  product: PropTypes.object.isRequired,
 };
 
 // ----------------------------------------------------------------------
