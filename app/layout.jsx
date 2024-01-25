@@ -11,6 +11,8 @@ import { SettingsProvider } from "@/components/settings";
 import CartProvider from "@/context/CartContext";
 import { GetCart } from "@/services/Purchase";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL),
   title: `${process.env.NEXT_PUBLIC_STORE_NAME} - Online Halal Food Store for Fresh and Quality Products`,

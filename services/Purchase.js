@@ -12,44 +12,54 @@ const getSession = async () => {
     return null;
   }
 };
-const userSession = await getSession();
+
+async function fetchWithToken(url, options = {}) {
+  const userSession = await getSession();
+
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${userSession.accessToken}`,
+    },
+  });
+}
 
 // ************
 // 		CART
 // ************
 export async function GetCart() {
   try {
-    const res = await fetch(
+    const res = await fetchWithToken(
       `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/cart?shared=false`,
       {
-        headers: {
-          Authorization: `Bearer ${userSession?.accessToken}`,
-        },
         cache: "no-store",
       }
     );
 
     const data = await res.json();
-    const cartItems = data?.response.flatMap((cart) => cart.cart_item);
+    const cartItems = Array.isArray(data?.response)
+      ? data?.response[0]?.cart_item
+      : [];
 
-    if (!res.ok || !userSession?.accessToken) {
+    if (!res.ok) {
       return [];
     }
 
     return cartItems;
   } catch (error) {
     console.error("Error finding cart:", error.message);
+    return [];
   }
 }
 
 export async function AddToCart(productId) {
   try {
-    const res = await fetch(
+    const res = await fetchWithToken(
       `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/cart`,
       {
         method: "post",
         headers: {
-          Authorization: `Bearer ${userSession?.accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -72,12 +82,11 @@ export async function AddToCart(productId) {
 
 export async function UpdateCart(cartId, quantity) {
   try {
-    const res = await fetch(
+    const res = await fetchWithToken(
       `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/cart/${cartId}`,
       {
         method: "put",
         headers: {
-          Authorization: `Bearer ${userSession?.accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -100,12 +109,11 @@ export async function UpdateCart(cartId, quantity) {
 
 export async function DeleteCart(cartId) {
   try {
-    const res = await fetch(
+    const res = await fetchWithToken(
       `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/cart/${cartId}`,
       {
         method: "delete",
         headers: {
-          Authorization: `Bearer ${userSession?.accessToken}`,
           "Content-Type": "application/json",
         },
       }
@@ -127,18 +135,13 @@ export async function DeleteCart(cartId) {
 // ************
 export async function GetAddress() {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/shipping-address`,
-      {
-        headers: {
-          Authorization: `Bearer ${userSession?.accessToken}`,
-        },
-      }
+    const res = await fetchWithToken(
+      `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/shipping-address`
     );
 
     const data = await res.json();
 
-    if (!res.ok || !userSession?.accessToken) {
+    if (!res.ok) {
       return [];
     }
 
@@ -150,13 +153,10 @@ export async function GetAddress() {
 
 export async function UpdateMainAddress(addressId) {
   try {
-    const res = await fetch(
+    const res = await fetchWithToken(
       `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/shipping-address/set-main/${addressId}`,
       {
         method: "put",
-        headers: {
-          Authorization: `Bearer ${userSession?.accessToken}`,
-        },
       }
     );
 
@@ -181,11 +181,10 @@ export async function UpdateMainAddress(addressId) {
 // ************
 export async function GetDeliveryList() {
   try {
-    const res = await fetch(
+    const res = await fetchWithToken(
       `${process.env.NEXT_PUBLIC_HOST_NAME}delivery/v1/entity/shipment-methods?limit=15&page=1`,
       {
         headers: {
-          Authorization: `Bearer ${userSession?.accessToken}`,
           slug: process.env.NEXT_PUBLIC_ENTITY_NAME,
         },
       }
@@ -193,7 +192,7 @@ export async function GetDeliveryList() {
 
     const data = await res.json();
 
-    if (!res.ok || !userSession?.accessToken) {
+    if (!res.ok) {
       return [];
     }
 
@@ -205,18 +204,13 @@ export async function GetDeliveryList() {
 
 export async function GetPaymentList() {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_HOST_NAME}payment/v1/entity/payment_method?entity=${process.env.NEXT_PUBLIC_ENTITY_NAME}`,
-      {
-        headers: {
-          Authorization: `Bearer ${userSession?.accessToken}`,
-        },
-      }
+    const res = await fetchWithToken(
+      `${process.env.NEXT_PUBLIC_HOST_NAME}payment/v1/entity/payment_method?entity=${process.env.NEXT_PUBLIC_ENTITY_NAME}`
     );
 
     const data = await res.json();
 
-    if (!res.ok || !userSession?.accessToken) {
+    if (!res.ok) {
       return [];
     }
 
