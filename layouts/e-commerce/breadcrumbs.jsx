@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useCart } from "@/context/CartContext";
 
 import Box from "@mui/material/Box";
 import Badge from "@mui/material/Badge";
@@ -16,6 +17,7 @@ import Iconify from "@/components/partials/Iconify";
 
 export default function Breadcrumbs({ menuLink }) {
   const theme = useTheme();
+  const [cart] = useCart();
 
   return (
     <Box
@@ -51,7 +53,7 @@ export default function Breadcrumbs({ menuLink }) {
           flexGrow={1}
           justifyContent="flex-end"
         >
-          <Badge badgeContent={2} color="info">
+          <Badge badgeContent={0} color="info">
             <IconButton
               component={RouterLink}
               href={"#"}
@@ -63,10 +65,10 @@ export default function Breadcrumbs({ menuLink }) {
             </IconButton>
           </Badge>
 
-          <Badge badgeContent={4} color="error">
+          <Badge badgeContent={cart?.length} color="error">
             <IconButton
               component={RouterLink}
-              href={"#"}
+              href={"/cart"}
               size="small"
               color="inherit"
               sx={{ p: 0 }}

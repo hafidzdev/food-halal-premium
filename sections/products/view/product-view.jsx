@@ -79,7 +79,7 @@ ProductView.propTypes = {
     sell_price: PropTypes.number.isRequired,
     currency: PropTypes.string.isRequired,
     price_in_currency: PropTypes.number.isRequired,
-    category: PropTypes.arrayOf(PropTypes.string).isRequired,
+    category: PropTypes.arrayOf(PropTypes.object).isRequired,
     favorite: PropTypes.shape({
       favorite: PropTypes.bool.isRequired,
       total: PropTypes.number.isRequired,

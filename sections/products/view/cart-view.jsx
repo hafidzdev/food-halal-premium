@@ -5,9 +5,9 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-import { RouterLink } from "@/routes/components";
+import { useCart } from "@/context/CartContext";
 
-import { dummyProducts } from "@/__mocks__/product";
+import { RouterLink } from "@/routes/components";
 
 import Iconify from "@/components/partials/Iconify";
 
@@ -17,6 +17,8 @@ import CartSummary from "../cart/cart-summary";
 // ----------------------------------------------------------------------
 
 export default function CartView() {
+  const [cart] = useCart();
+
   return (
     <Container
       sx={{
@@ -31,17 +33,11 @@ export default function CartView() {
 
       <Grid container spacing={{ xs: 5, md: 8 }}>
         <Grid xs={12} md={8}>
-          <CartList products={dummyProducts} />
+          <CartList products={cart} />
         </Grid>
 
         <Grid xs={12} md={4}>
-          <CartSummary
-            tax={7}
-            total={357.09}
-            subtotal={89.09}
-            shipping={55.47}
-            discount={16.17}
-          />
+          <CartSummary products={cart} tax={0} shipping={0} discount={0} />
         </Grid>
       </Grid>
 

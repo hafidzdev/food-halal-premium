@@ -20,7 +20,6 @@ import NavMobile from "./nav/mobile";
 import { HEADER } from "../config-layout";
 import HeaderShadow from "../common/header-shadow";
 import SettingMode from "@/components/partials/mode/SettingMode";
-import { useCart } from "@/context/CartContext";
 
 // ----------------------------------------------------------------------
 const mainNav = [
@@ -46,7 +45,6 @@ const mainNav = [
 export default function Header({ headerOnDark }) {
   const { status } = useSession();
   const theme = useTheme();
-  // const [cart] = useCart();
 
   const offset = useOffSetTop();
   const mdUp = useResponsive("up", "md");

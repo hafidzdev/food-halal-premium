@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 
 export default function useOffSetTop(top) {
   const [offsetTop, setOffSetTop] = useState(false);
-  const isTop = top || 100;
+  const isTop = top || 30;
 
   useEffect(() => {
     window.onscroll = () => {

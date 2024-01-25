@@ -13,11 +13,12 @@ import Iconify from "@/components/partials/Iconify";
 
 // ----------------------------------------------------------------------
 
-export default function CheckoutShippingMethod({
-  deliveryList,
+export default function CheckoutPaymentMethod({
+  paymentList,
   purchase,
   setPurchase,
 }) {
+  console.log(paymentList);
   return (
     <>
       <RadioGroup
@@ -29,14 +30,12 @@ export default function CheckoutShippingMethod({
           gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(2, 1fr)" },
         }}
       >
-        {Array.isArray(deliveryList) &&
-          deliveryList.map((item) => (
+        {Array.isArray(paymentList) &&
+          paymentList.map((item) => (
             <OptionItem
               key={item?.id}
               option={item}
-              selected={
-                purchase.purchaseShipDelivery === item.id ? true : false
-              }
+              selected={purchase.purchasePayment === item.id ? true : false}
               setPurchase={setPurchase}
             />
           ))}
@@ -45,7 +44,7 @@ export default function CheckoutShippingMethod({
   );
 }
 
-CheckoutShippingMethod.propTypes = {
+CheckoutPaymentMethod.propTypes = {
   deliveryList: PropTypes.array,
   purchase: PropTypes.object,
   setPurchase: PropTypes.func,
@@ -54,7 +53,7 @@ CheckoutShippingMethod.propTypes = {
 // ----------------------------------------------------------------------
 
 function OptionItem({ option, selected, setPurchase }) {
-  const { id, name, delivery_entity_name, price_per_km, description } = option;
+  const { id, name, cost_type, service_cost, provider, description } = option;
 
   const handlePurchaseShippingUpdate = (deliveryId) => {
     setPurchase((prevPurchase) => ({
@@ -76,13 +75,13 @@ function OptionItem({ option, selected, setPurchase }) {
         </Box>
 
         <Box component="span" sx={{ typography: "subtitle2" }}>
-          Price /Km: {`${price_per_km}`}
+          Cost: {service_cost} {cost_type === "percent" ? "%" : "$"}{" "}
         </Box>
       </Stack>
 
       <Stack direction="row" alignItems="center">
         <Box component="span" sx={{ typography: "body2", flexGrow: 1 }}>
-          {delivery_entity_name}
+          {provider?.name}
         </Box>
       </Stack>
 

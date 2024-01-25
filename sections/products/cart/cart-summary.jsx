@@ -15,13 +15,12 @@ import { fPercent, fCurrency } from "@/utils/format-number";
 
 // ----------------------------------------------------------------------
 
-export default function CartSummary({
-  tax,
-  total,
-  subtotal,
-  shipping,
-  discount,
-}) {
+export default function CartSummary({ products, tax, shipping, discount }) {
+  const totalSubTotalPrice = products.reduce(
+    (accumulator, item) => accumulator + item.sub_total_price,
+    0
+  );
+
   return (
     <Stack
       spacing={3}
@@ -34,11 +33,13 @@ export default function CartSummary({
       <Typography variant="h6"> Summary </Typography>
 
       <Stack spacing={2}>
-        <Row label="Subtotal" value={fCurrency(subtotal)} />
+        <Row label="Item" value={products.length} />
+
+        <Row label="Subtotal" value={fCurrency(totalSubTotalPrice)} />
 
         <Row label="Shipping" value={fCurrency(shipping)} />
 
-        <Row label="Discount (15%)" value={`-${fCurrency(discount)}`} />
+        <Row label="Discount (0%)" value={`-${fCurrency(discount)}`} />
 
         <Row label="Tax" value={fPercent(tax)} />
       </Stack>
@@ -59,7 +60,7 @@ export default function CartSummary({
 
       <Row
         label="Total"
-        value={fCurrency(total)}
+        value={fCurrency(totalSubTotalPrice)}
         sx={{
           typography: "h6",
           "& span": { typography: "h6" },
@@ -68,7 +69,7 @@ export default function CartSummary({
 
       <Button
         component={RouterLink}
-        href={"#"}
+        href={"/checkout"}
         size="large"
         variant="contained"
         color="inherit"
@@ -80,11 +81,10 @@ export default function CartSummary({
 }
 
 CartSummary.propTypes = {
+  products: PropTypes.array.isRequired,
   tax: PropTypes.number,
-  total: PropTypes.number,
   discount: PropTypes.number,
   shipping: PropTypes.number,
-  subtotal: PropTypes.number,
 };
 
 // ----------------------------------------------------------------------
@@ -109,5 +109,5 @@ function Row({ label, value, sx, ...other }) {
 Row.propTypes = {
   sx: PropTypes.object,
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.any,
 };
