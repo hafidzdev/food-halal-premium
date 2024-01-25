@@ -2,70 +2,97 @@ import { useState } from "react";
 
 import PropTypes from "prop-types";
 
-import Box from "@mui/material/Box";
-import Radio from "@mui/material/Radio";
 import Stack from "@mui/material/Stack";
 import { alpha } from "@mui/material/styles";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel, {
-  formControlLabelClasses,
-} from "@mui/material/FormControlLabel";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   Button,
   IconButton,
-  TextField,
-  Grid,
   Typography,
   Divider,
+  CardContent,
+  Card,
+  Grid,
+  Chip,
 } from "@mui/material";
 
 import { useResponsive } from "@/hooks/use-responsive";
 import Iconify from "@/components/partials/Iconify";
+import ConfirmDialog from "@/components/partials/modal/confirm-dialog";
+import { UpdateMainAddress } from "@/services/Purchase";
 
 // ----------------------------------------------------------------------
 
-export default function CheckoutShippingAddress({ options }) {
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const onClose = () => {
-    setOpen(false);
-  };
-
+export default function CheckoutShippingAddress({
+  addressList,
+  purchase,
+  setPurchase,
+}) {
+  const [addresses, setAddresses] = useState(addressList || []);
+  const [openAddressModal, setOpenAddressModal] = useState(false);
+  const [openAddressMainModal, setOpenAddressMainModal] = useState({
+    open: false,
+    addressId: "",
+    addressName: "",
+  });
   const mdUp = useResponsive("up", "md");
 
-  const [inputName, setInputName] = useState("");
-  const [inputRecipentName, setInputRecipentName] = useState("");
-  const [inputFullAddress, setInputFullAddress] = useState("");
-  const [inputZipcode, setInputZipcode] = useState("");
-  const [inputPhone, setInputPhone] = useState("");
+  const handleClickOpen = () => setOpenAddressModal(true);
+  const handleCloseModal = () => setOpenAddressModal(false);
+  const handleOpenSetMain = (id, name) =>
+    setOpenAddressMainModal({ open: true, addressId: id, addressName: name });
+  const handleCloseSetMain = () =>
+    setOpenAddressMainModal({ open: false, addressId: "", addressName: "" });
+
+  const handleUpdateMainAddress = async () => {
+    if (openAddressMainModal.addressId !== "") {
+      const res = await UpdateMainAddress(openAddressMainModal.addressId);
+      if (res.status === 200) {
+        console.log("main: ", res);
+      }
+    }
+  };
+
+  const handleSelectAddress = (chooseAddress) => {
+    setPurchase((prevPurchase) => ({
+      ...prevPurchase,
+      purchaseShipAddress: chooseAddress,
+    }));
+    handleCloseModal();
+  };
+  // const handleSelectAddress = (id, selectedValue) => {
+  //   setAddress((prevData) =>
+  //     prevData.map((item) =>
+  //       item.id === id
+  //         ? { ...item, selected: selectedValue }
+  //         : { ...item, selected: !selectedValue }
+  //     )
+  //   );
+  // };
+  const orderedAddresses = [...addresses].sort((a, b) => {
+    console.log("Urutan alamat lagi...");
+    if (a.id === purchase.purchaseShipAddress?.id) return -1;
+    if (b.id === purchase.purchaseShipAddress?.id) return 1;
+    return 0;
+  });
 
   return (
     <>
-      <RadioGroup
-        sx={{
-          rowGap: 2.5,
-          columnGap: 2,
-          display: "grid",
-          gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(2, 1fr)" },
-        }}
-      >
-        {options.map((option) => (
-          <OptionItem
-            key={option.name}
-            option={option}
-            selected={option.name}
-            click={handleClickOpen}
-          />
-        ))}
-      </RadioGroup>
+      <Typography variant="subtitle1">
+        <Iconify
+          icon={"carbon:location-filled"}
+          width={18}
+          sx={{ color: "primary.main" }}
+        />{" "}
+        {purchase.purchaseShipAddress?.name} •{" "}
+        {purchase.purchaseShipAddress?.recipient_name}
+      </Typography>
+      <Typography variant="body2" sx={{ pt: 1, pl: 0.5 }}>
+        {purchase.purchaseShipAddress?.address},{" "}
+        {purchase.purchaseShipAddress?.phone}
+      </Typography>
 
       <Button
         variant="contained"
@@ -73,35 +100,21 @@ export default function CheckoutShippingAddress({ options }) {
         sx={{ mt: 1, float: "right" }}
         onClick={handleClickOpen}
       >
-        Add Address
+        Ganti Alamat
       </Button>
 
-      <Dialog
-        open={open}
-        fullWidth={true}
-        maxWidth="md"
-        // fullScreen
-        sx={{
-          "& .MuiDialog-container": {
-            "& .MuiPaper-root": {
-              width: "100%",
-              maxWidth: "550px", // Set your width here
-            },
-          },
-        }}
-      >
+      <Dialog open={openAddressModal} fullWidth={true} maxWidth="sm">
         <IconButton
           size="large"
-          onClick={onClose}
+          onClick={handleCloseModal}
           sx={{
-            top: 45,
-            right: mdUp ? 350 : 25,
+            top: 10,
+            right: mdUp ? 5 : 25,
             zIndex: 9,
-            position: "fixed",
-            color: (theme) => alpha(theme.palette.common.white, 0.72),
-            bgcolor: (theme) => alpha(theme.palette.common.white, 0.08),
+            position: "absolute",
+            color: (theme) => alpha(theme.palette.text.primary, 0.72),
             "&:hover": {
-              bgcolor: (theme) => alpha(theme.palette.common.white, 0.16),
+              bgcolor: (theme) => alpha(theme.palette.text.primary, 0.16),
             },
           }}
         >
@@ -109,141 +122,162 @@ export default function CheckoutShippingAddress({ options }) {
         </IconButton>
         <DialogTitle>
           <Typography color="textPrimary" gutterBottom>
-            Add Address
+            List Address
           </Typography>
         </DialogTitle>
         <Divider />
 
-        <DialogContent dividers>
-          <Grid container>
-            <form>
-              <TextField
-                label="Name"
-                value={inputName}
-                onChange={(e) => setInputName(e.target.value)}
-                sx={{ mt: 1 }}
-                fullWidth
-              />
-              <TextField
-                label="Recipient Name"
-                sx={{ mt: 1 }}
-                fullWidth
-                value={inputRecipentName}
-                onChange={(e) => setInputRecipentName(e.target.value)}
-              />
-              <TextField
-                label="Full Address"
-                fullWidth
-                sx={{ mt: 1 }}
-                value={inputFullAddress}
-                onChange={(e) => setInputFullAddress(e.target.value)}
-              />
-              <TextField
-                label="Phone"
-                fullWidth
-                sx={{ mt: 1 }}
-                value={inputPhone}
-                onChange={(e) => setInputPhone(e.target.value)}
-              />
-              <TextField
-                label="Zipcode"
-                fullWidth
-                sx={{ mt: 1 }}
-                value={inputZipcode}
-                onChange={(e) => setInputZipcode(e.target.value)}
-              />
-            </form>
-          </Grid>
+        <DialogContent dividers sx={{ p: 5 }}>
+          {orderedAddresses.map((item) => {
+            return (
+              <Card
+                key={item.id}
+                variant="outlined"
+                sx={{
+                  bgcolor:
+                    item.id === purchase.purchaseShipAddress?.id
+                      ? "background.neutral"
+                      : "background.paper",
+                  mb: 2,
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: "16px",
+                    left: "0px",
+                    width: "6px",
+                    height: "34px",
+                    borderTopRightRadius: "8px",
+                    borderBottomRightRadius: "8px",
+                    backgroundColor: "success.main",
+                  },
+                }}
+              >
+                <CardContent>
+                  <Grid container>
+                    <Grid item xs={12} sm={10}>
+                      <Typography
+                        variant="h5"
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        <Iconify
+                          icon="carbon:location-filled"
+                          width={16}
+                          sx={{ color: "primary.main" }}
+                        />{" "}
+                        {item.name}{" "}
+                        {item.is_main ? (
+                          <Chip
+                            size="small"
+                            label="Main Address"
+                            sx={{
+                              bgcolor: "background.default",
+                              color: "text.secondary",
+                            }}
+                          />
+                        ) : null}
+                      </Typography>
+                      <Typography variant="h5" component="div">
+                        {item.recipient_name}
+                      </Typography>
+                      <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                        {item.phone}
+                      </Typography>
+                      <Typography variant="body2" sx={{ mb: 1 }}>
+                        {item.address} - {item.zipcode}
+                      </Typography>
+
+                      <Stack
+                        direction="row"
+                        divider={<Divider orientation="vertical" flexItem />}
+                        spacing={2}
+                      >
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: "primary.main",
+                            cursor: "pointer",
+                            ":hover": { color: "primary.light" },
+                          }}
+                        >
+                          Update
+                        </Typography>
+                        {!item.is_main ? (
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: "primary.main",
+                              cursor: "pointer",
+                              ":hover": { color: "primary.light" },
+                            }}
+                            onClick={() =>
+                              handleOpenSetMain(item.id, item.name)
+                            }
+                          >
+                            Jadikan Alamat Utama{" "}
+                            {item.id === purchase.purchaseShipAddress?.id
+                              ? ""
+                              : "& Pilih"}
+                          </Typography>
+                        ) : null}
+                        {!item.is_main ? (
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: "primary.main",
+                              cursor: "pointer",
+                              ":hover": { color: "primary.light" },
+                            }}
+                          >
+                            Delete
+                          </Typography>
+                        ) : null}
+                      </Stack>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={2}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {item.id === purchase.purchaseShipAddress?.id ? (
+                        <Iconify
+                          icon="carbon:checkmark"
+                          width={30}
+                          sx={{ color: "success.light" }}
+                        />
+                      ) : (
+                        <Button
+                          size="small"
+                          variant="contained"
+                          onClick={() => handleSelectAddress(item)}
+                        >
+                          Select
+                        </Button>
+                      )}
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            );
+          })}
         </DialogContent>
-        <DialogActions>
-          <Button variant="contained" color="error" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button variant="contained" color="warning">
-            Update
-          </Button>
-        </DialogActions>
       </Dialog>
-    </>
-  );
-}
 
-CheckoutShippingAddress.propTypes = {
-  options: PropTypes.array,
-};
-
-// ----------------------------------------------------------------------
-
-function OptionItem({ option, selected, click }) {
-  const { name, fullAddress } = option;
-
-  const renderLabel = (
-    <Stack flexGrow={1} spacing={0.5} sx={{ width: 1 }}>
-      <Stack direction="row" alignItems="center">
-        <Box component="span" sx={{ typography: "subtitle1", flexGrow: 1 }}>
-          {name}
-        </Box>
-
-        <IconButton
-          size="large"
-          onClick={click}
-          sx={{
-            color: (theme) => alpha(theme.palette.common.white, 0.72),
-            bgcolor: (theme) => alpha(theme.palette.common.white, 0.08),
-            "&:hover": {
-              bgcolor: (theme) => alpha(theme.palette.common.white, 0.16),
-            },
-          }}
-        >
-          <Iconify icon={"carbon:edit"} width={20} />
-        </IconButton>
-      </Stack>
-
-      <Box
-        component="span"
-        sx={{ typography: "body2", color: "text.secondary" }}
-      >
-        {fullAddress}
-      </Box>
-    </Stack>
-  );
-
-  return (
-    <>
-      <FormControlLabel
-        value={name}
-        control={
-          <Radio
-            disableRipple
-            checkedIcon={<Iconify icon="carbon:checkmark-outline" />}
-            sx={{ mx: 1, mt: -3 }}
-          />
-        }
-        label={renderLabel}
-        sx={{
-          m: 0,
-          py: 2.5,
-          pr: 2,
-          borderRadius: 1,
-          border: (theme) =>
-            `solid 1px ${alpha(theme.palette.grey[500], 0.24)}`,
-          ...(selected && {
-            boxShadow: (theme) => `0 0 0 2px ${theme.palette.text.primary}`,
-          }),
-          [`& .${formControlLabelClasses.label}`]: {
-            width: 1,
-          },
-        }}
+      <ConfirmDialog
+        open={openAddressMainModal.open}
+        onClose={handleCloseSetMain}
+        onAgree={handleUpdateMainAddress}
+        title="Jadikan Alamat Utama"
+        description={`Apakah Anda yakin ingin menjadikan "${openAddressMainModal.addressName}" sebagai alamat utama? Anda hanya dapat memilih satu alamat utama.`}
       />
     </>
   );
 }
 
-OptionItem.propTypes = {
-  option: PropTypes.shape({
-    name: PropTypes.string,
-    fullAddress: PropTypes.string,
-  }),
-  selected: PropTypes.string, // type bool if field selected
-  click: PropTypes.func,
+CheckoutShippingAddress.propTypes = {
+  address: PropTypes.array,
 };
