@@ -9,12 +9,13 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-import { dummyProducts } from "@/__mocks__/product";
-
 import CheckoutOrderSummary from "../checkout/checkout-order-summary";
 import CheckoutShippingMethod from "../checkout/checkout-shipping-method";
 import CheckoutShippingAddress from "../checkout/checkout-shipping-address";
-
+import { useCart } from "@/context/CartContext";
+import { useState } from "react";
+import { Alert } from "@mui/material";
+import CheckoutPaymentMethod from "../checkout/checkout-shipping-payment";
 // ----------------------------------------------------------------------
 
 const SHIPPING_ADDRESS = [
@@ -52,10 +53,29 @@ const SHIPPING_METHOD = [
     description: "Japan delivery service",
   },
 ];
-
 // ----------------------------------------------------------------------
 
-export default function CheckoutView() {
+export default function CheckoutView({
+  addressList,
+  deliveryList,
+  paymentList,
+}) {
+  const [cart] = useCart();
+  const [purchase, setPurchase] = useState({
+    purchaseShipAddress: addressList.find((item) => item.is_main),
+    purchaseShipDelivery: "",
+    purchasePayment: "",
+    purchaseShipping: "",
+    purchaseId: "",
+  });
+  // const [address, setAddress] = useState(addressList || []);
+
+  const totalSubTotalPrice = Array.isArray(cart)
+    ? cart.reduce((accumulator, item) => accumulator + item.sub_total_price, 0)
+    : 0;
+
+  console.log("purchase: ", purchase);
+  // console.log("select delv: ", purchase);
   return (
     <Container
       sx={{
@@ -76,23 +96,57 @@ export default function CheckoutView() {
           >
             <div>
               <StepLabel title="Shipping Address" step="1" />
-              <CheckoutShippingAddress options={SHIPPING_ADDRESS} />
+              <CheckoutShippingAddress
+                addressList={addressList}
+                purchase={purchase}
+                setPurchase={setPurchase}
+              />
             </div>
-            <div>
-              <StepLabel title="Shipping Method" step="2" />
-              <CheckoutShippingMethod options={SHIPPING_METHOD} />
-            </div>
+
+            {purchase.purchaseShipAddress !== "" && (
+              <div>
+                <StepLabel title="Shipping Method" step="2" />
+                {deliveryList.length < 1 ? (
+                  <Alert severity="warning">
+                    There are no shipping types to choose.
+                  </Alert>
+                ) : (
+                  <CheckoutShippingMethod
+                    deliveryList={deliveryList}
+                    purchase={purchase}
+                    setPurchase={setPurchase}
+                  />
+                )}
+              </div>
+            )}
+
+            {purchase.purchaseShipDelivery !== "" && (
+              <div>
+                <StepLabel title="Select Payment" step="2" />
+                {paymentList.length < 1 ? (
+                  <Alert severity="warning">
+                    There are no payment method to choose.
+                  </Alert>
+                ) : (
+                  <CheckoutPaymentMethod
+                    paymentList={paymentList}
+                    purchase={purchase}
+                    setPurchase={setPurchase}
+                  />
+                )}
+              </div>
+            )}
           </Stack>
         </Grid>
 
         <Grid xs={12} md={4}>
           <CheckoutOrderSummary
-            tax={7}
-            total={357.09}
-            subtotal={89.09}
-            shipping={55.47}
-            discount={16.17}
-            products={dummyProducts.slice(0, 3)}
+            tax={0}
+            total={totalSubTotalPrice}
+            subtotal={totalSubTotalPrice}
+            shipping={0}
+            discount={0}
+            products={cart}
             loading={false}
           />
         </Grid>
@@ -127,6 +181,10 @@ function StepLabel({ step, title }) {
     </Stack>
   );
 }
+
+CheckoutView.propTypes = {
+  addressList: PropTypes.array,
+};
 
 StepLabel.propTypes = {
   step: PropTypes.string,
