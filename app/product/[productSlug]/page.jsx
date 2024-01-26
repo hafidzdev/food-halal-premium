@@ -6,11 +6,11 @@ export async function generateMetadata({ params }, parent) {
   const product = await GetProductDetail(params.productSlug);
 
   const previousImages = (await parent).openGraph?.images || [];
-  const imageUrl = product?.response?.image[0];
+  const imageUrl = product?.image[0];
 
   return {
-    title: `${product?.response?.name} - Premium Halal Food at ${process.env.NEXT_PUBLIC_STORE_NAME}`,
-    description: `Indulge in the finest product at ${process.env.NEXT_PUBLIC_STORE_NAME}. Our ${product?.response?.name} is carefully sourced and curated to bring you the ultimate culinary delight. Order now and elevate your dining experience.`,
+    title: `${product?.name} - Premium Halal Food at ${process.env.NEXT_PUBLIC_STORE_NAME}`,
+    description: `Indulge in the finest product at ${process.env.NEXT_PUBLIC_STORE_NAME}. Our ${product?.name} is carefully sourced and curated to bring you the ultimate culinary delight. Order now and elevate your dining experience.`,
     openGraph: {
       images: [imageUrl, ...previousImages],
     },
@@ -18,8 +18,7 @@ export async function generateMetadata({ params }, parent) {
 }
 
 export default async function Page({ params }) {
-  const getProduct = await GetProductDetail(params.productSlug);
-  const product = getProduct.response;
+  const product = await GetProductDetail(params.productSlug);
   return product ? (
     <ProductView product={product} />
   ) : (
