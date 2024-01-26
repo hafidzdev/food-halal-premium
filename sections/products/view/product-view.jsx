@@ -2,8 +2,6 @@ import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 
-import CustomBreadcrumbs from "@/components/partials/custom-breadcrumbs";
-
 import ProductDetailsCarousel from "../details/product-details-carousel";
 import ProductDetailsInfo from "../details/product-details-info";
 import ProductDetailsDescription from "../details/product-details-description";
@@ -14,21 +12,6 @@ export default function ProductView({ product }) {
   return (
     <>
       <Container sx={{ overflow: "hidden" }}>
-        <CustomBreadcrumbs
-          links={[
-            {
-              name: "Home",
-            },
-            {
-              name: "Products",
-            },
-            {
-              name: "Detail Products",
-            },
-          ]}
-          sx={{ my: 5 }}
-        />
-
         <Grid container spacing={{ xs: 5, md: 8 }}>
           <Grid item xs={12} md={6} lg={7}>
             <ProductDetailsCarousel images={product.image} />
