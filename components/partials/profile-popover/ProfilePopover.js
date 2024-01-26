@@ -20,13 +20,9 @@ export default function ProfilePopover({ sx }) {
 
   const [openPopover, setOpenPopover] = useState(null);
 
-  const handleOpenPopover = (event) => {
-    setOpenPopover(event.currentTarget);
-  };
-
-  const handleClosePopover = () => {
-    setOpenPopover(null);
-  };
+  const handleOpenPopover = (event) => setOpenPopover(event.currentTarget);
+  const handleClosePopover = () => setOpenPopover(null);
+  const handleLogout = () => signOut();
 
   if (status === "authenticated") {
     return (
@@ -55,20 +51,13 @@ export default function ProfilePopover({ sx }) {
           sx={{ width: 180 }}
         >
           <Stack spacing={0}>
-            <Link
-              href="account/personal"
-              prefetch={false}
-              passHref
-              legacyBehavior
-            >
+            <Link href="account/personal" legacyBehavior>
               <MenuItem onClick={handleClosePopover}>Profile</MenuItem>
             </Link>
-            <Link href="/cart" prefetch={false} passHref legacyBehavior>
+            <Link href="/cart" legacyBehavior>
               <MenuItem>Cart</MenuItem>
             </Link>
-            <Link href={signOut()} prefetch={false} passHref legacyBehavior>
-              <MenuItem>Logout</MenuItem>
-            </Link>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Stack>
         </MenuPopover>
       </>
