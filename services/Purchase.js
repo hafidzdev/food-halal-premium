@@ -48,7 +48,7 @@ export async function GetCart() {
 
     return cartItems;
   } catch (error) {
-    console.error("Error finding cart:", error.message);
+    // console.error("Error finding cart:", error.message);
     return [];
   }
 }
