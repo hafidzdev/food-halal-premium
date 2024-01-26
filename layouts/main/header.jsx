@@ -20,6 +20,7 @@ import NavMobile from "./nav/mobile";
 import { HEADER } from "../config-layout";
 import HeaderShadow from "../common/header-shadow";
 import SettingMode from "@/components/partials/mode/SettingMode";
+import ProfilePopover from "@/components/partials/profile-popover/ProfilePopover";
 
 // ----------------------------------------------------------------------
 const mainNav = [
@@ -29,16 +30,16 @@ const mainNav = [
   },
 
   {
-    title: "E-Commerce",
-    path: "/e-commerce",
+    title: "Products",
+    path: "/product",
   },
   {
     title: "About Us",
-    path: "/about",
+    path: "#",
   },
   {
     title: "Privacy Policy",
-    path: "/privacy-policy",
+    path: "#",
   },
 ];
 
@@ -103,7 +104,9 @@ export default function Header({ headerOnDark }) {
           /> */}
 
           {status === "authenticated" ? (
-            <></>
+            <>
+              <ProfilePopover />
+            </>
           ) : (
             <>
               {mdUp ? (
