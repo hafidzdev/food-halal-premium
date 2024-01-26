@@ -90,7 +90,7 @@ function Page() {
           >
             Already have an account?
           </Typography>
-          <Link href={"/signup"} passHref legacyBehavior>
+          <Link href={"/signin"} passHref legacyBehavior>
             <Typography
               variant="subtitle2"
               color="primary"

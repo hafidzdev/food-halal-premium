@@ -11,7 +11,7 @@ import ProductDetailsDescription from "../details/product-details-description";
 export default function ProductView({ product }) {
   return (
     <>
-      <Container sx={{ overflow: "hidden" }}>
+      <Container sx={{ overflow: "hidden", mt: 5 }}>
         <Grid container spacing={{ xs: 5, md: 8 }}>
           <Grid item xs={12} md={6} lg={7}>
             <ProductDetailsCarousel images={product.image} />

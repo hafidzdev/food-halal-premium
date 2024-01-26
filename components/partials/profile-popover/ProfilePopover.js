@@ -7,7 +7,7 @@ import { Avatar, MenuItem, Stack } from "@mui/material";
 import IconButtonAnimate from "../animate/IconButtonAnimate";
 import MenuPopover from "../menu-popover/MenuPopover";
 // locales
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 // eslint-disable-next-line no-use-before-define
 ProfilePopover.propTypes = {
@@ -65,6 +65,9 @@ export default function ProfilePopover({ sx }) {
             </Link>
             <Link href="/cart" prefetch={false} passHref legacyBehavior>
               <MenuItem>Cart</MenuItem>
+            </Link>
+            <Link href={signOut()} prefetch={false} passHref legacyBehavior>
+              <MenuItem>Logout</MenuItem>
             </Link>
           </Stack>
         </MenuPopover>
