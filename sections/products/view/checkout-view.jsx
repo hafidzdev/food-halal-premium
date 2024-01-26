@@ -16,44 +16,6 @@ import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import { Alert } from "@mui/material";
 import CheckoutPaymentMethod from "../checkout/checkout-shipping-payment";
-// ----------------------------------------------------------------------
-
-const SHIPPING_ADDRESS = [
-  {
-    name: "Demo 1",
-    fullAddress: "Shibuya, Japan",
-  },
-  {
-    name: "Demo 2",
-    fullAddress: "Tokyo, Japan",
-  },
-  {
-    name: "Demo 3",
-    fullAddress: "Nagoya, Japan",
-  },
-];
-
-const SHIPPING_METHOD = [
-  {
-    name: "Instan",
-    delivery_entity_name: "Normal Delivery",
-    price_per_km: 10000,
-    description: "akan diproses dalam 5 sampai 10menit",
-  },
-  {
-    name: "Kuroneko",
-    delivery_entity_name: "Normal Delivery",
-    price_per_km: 10,
-    description: "Japan delivery service",
-  },
-  {
-    name: "Sagawa",
-    delivery_entity_name: "Normal Delivery",
-    price_per_km: 20,
-    description: "Japan delivery service",
-  },
-];
-// ----------------------------------------------------------------------
 
 export default function CheckoutView({
   addressList,
