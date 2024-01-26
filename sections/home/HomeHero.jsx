@@ -1,102 +1,121 @@
-/* eslint-disable react/no-unescaped-entities */
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Unstable_Grid2";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import { alpha, useTheme } from "@mui/material/styles";
+import { useRef } from "react";
+// @mui
+import { styled } from "@mui/material/styles";
+import {
+  Box,
+  Stack,
+  Container,
+  Typography,
+  Grid,
+  Button,
+  useTheme,
+} from "@mui/material";
+// hooks
+import useBoundingClientRect from "@/hooks/useBoundingClientRect";
+// components
+import Image from "@/components/partials/image";
 
-import { useResponsive } from "@/hooks/use-responsive";
+// ----------------------------------------------------------------------
 
-import { bgGradient } from "@/theme/css";
-
-import Image from "next/legacy/image";
-
+const RootStyle = styled(Container)(({ theme }) => ({
+  // padding: theme.spacing(8, 0),
+  // overflow: "hidden",
+  // position: "relative",
+  // [theme.breakpoints.up("md")]: {
+  //   padding: theme.spacing(5, 0, 15, 0),
+  // },
+}));
 // ----------------------------------------------------------------------
 
 export default function HomeHero() {
   const theme = useTheme();
+  const containerRef = useRef(null);
+  const container = useBoundingClientRect(containerRef);
 
-  const mdUp = useResponsive("up", "md");
+  const offsetLeft = container?.left;
 
   return (
-    <Box
-      sx={{
-        ...bgGradient({
-          color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: "",
-        }),
-        overflow: "hidden",
-      }}
-    >
-      <Container
-        sx={{
-          py: 10,
-          display: { md: "flex" },
-          alignItems: { md: "center" },
-          height: { md: `100vh` },
-        }}
-      >
-        <Grid container columnSpacing={{ xs: 0, md: 10 }}>
-          <Grid
-            xs={12}
-            md={6}
-            lg={5}
-            sx={{
-              textAlign: { xs: "center", md: "left" },
-            }}
-          >
-            <Typography variant="h3" sx={{ my: 3 }}>
-              Halal Food Premium E-Commerce Platform
-            </Typography>
-
-            <p style={{ color: "text.secondary" }}>
-              Welcome to our exclusive e-commerce platform, where we bring the
-              essence of Japan's finest and Halal-certified premium cuisine
-              right to your doorstep.
-            </p>
-
-            <Stack
-              spacing={3}
-              direction={{ xs: "column", sm: "row" }}
-              alignItems={{ xs: "center", md: "unset" }}
-              justifyContent={{ xs: "center", md: "unset" }}
-              sx={{ mt: 5 }}
+    <RootStyle maxWidth="xl">
+      <Container maxWidth="lg">
+        <Grid container columnSpacing={3} alignItems="center">
+          <Grid item xs={12} md={5}>
+            <Box
+              sx={{
+                display: { md: "none" },
+                mt: 5,
+              }}
             >
+              <br />
+              <br />
+              <Image
+                alt="home-hero"
+                src={
+                  "https://uploads-ssl.webflow.com/5ef11a90e077558caad294c1/5ef11a90e0775563bbd29746_halal-food-airline.jpg"
+                }
+              />
+            </Box>
+            <Stack
+              spacing={5}
+              alignItems={{ xs: "center", md: "flex-start" }}
+              justifyContent="center"
+              sx={{
+                py: { md: 15, xs: 10 },
+                textAlign: { xs: "center", md: "left" },
+              }}
+            >
+              <Typography variant="h3">
+                <Box
+                  component="span"
+                  sx={{
+                    color: "primary.main",
+                  }}
+                >
+                  Halal Food Premium E-Commerce Platform
+                </Box>
+              </Typography>
+
+              <Typography variant="body1" sx={{ color: "text.secondary" }}>
+                Welcome to our exclusive e-commerce platform, where we bring the
+                essence of Japan's finest and Halal-certified premium cuisine
+                right to your doorstep.
+              </Typography>
+
               <Button
                 variant="contained"
                 color="inherit"
                 size="large"
-                href="/get-started"
+                href="/product"
               >
                 Get Started
               </Button>
-
-              {/* <Stack direction="row" alignItems="center" sx={{ typography: 'h6' }}>
-                <Fab size="medium" sx={{ mr: 1 }}>
-                  <Iconify width={24} icon="carbon:play" />
-                </Fab>
-                See Examples
-              </Stack> */}
             </Stack>
           </Grid>
 
-          {mdUp && (
-            <Grid xs={12} md={6} lg={7}>
+          <Grid item xs={12} md={7}>
+            <Box ref={containerRef} />
+            <Box
+              sx={{
+                display: { xs: "none", md: "block" },
+                width: { md: `calc(100% - ${offsetLeft}px)` },
+                ml: 15,
+                // mt: 10,
+                // pt: 5,
+              }}
+            >
               <Image
-                height={150}
-                width={250}
-                alt="marketing market"
-                src="https://previews.123rf.com/images/kaisorn/kaisorn1608/kaisorn160800032/61904824-halal-food-on-a-wooden-background-vector-halal-food-top-view.jpg"
-                layout="responsive"
-                // loading="lazy"
-                priority
+                alt="home-hero"
+                src={
+                  "https://uploads-ssl.webflow.com/5ef11a90e077558caad294c1/5ef11a90e0775563bbd29746_halal-food-airline.jpg"
+                }
+                sx={{
+                  width: "500px",
+                  height: "300px",
+                }}
               />
-            </Grid>
-          )}
+            </Box>
+          </Grid>
         </Grid>
       </Container>
-    </Box>
+    </RootStyle>
   );
 }

@@ -55,7 +55,7 @@ export default function ProfilePopover({ sx }) {
               <MenuItem onClick={handleClosePopover}>Profile</MenuItem>
             </Link>
             <Link href="/cart" legacyBehavior>
-              <MenuItem>Cart</MenuItem>
+              <MenuItem onClick={handleClosePopover}>Cart</MenuItem>
             </Link>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Stack>
