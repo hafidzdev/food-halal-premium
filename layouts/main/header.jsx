@@ -113,12 +113,7 @@ export default function Header({ headerOnDark }) {
                 <>
                   <Divider orientation="vertical" sx={{ height: 24 }} />
                   <Stack direction="row" spacing={1}>
-                    <Link
-                      href="/signup"
-                      prefetch={false}
-                      passHref
-                      legacyBehavior
-                    >
+                    <Link href="/signup">
                       <div>
                         <Button
                           color="inherit"
@@ -132,12 +127,7 @@ export default function Header({ headerOnDark }) {
                       </div>
                     </Link>
 
-                    <Link
-                      href="/signin"
-                      prefetch={false}
-                      passHref
-                      legacyBehavior
-                    >
+                    <Link href="/signin">
                       <div>
                         <Button variant="contained">Login</Button>
                       </div>
