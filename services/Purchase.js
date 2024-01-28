@@ -33,6 +33,7 @@ export async function GetCart() {
     const res = await fetchWithToken(
       `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/cart?shared=false`,
       {
+        headers: { entity: process.env.NEXT_PUBLIC_ENTITY_NAME },
         cache: "no-store",
       }
     );
