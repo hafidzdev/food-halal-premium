@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -60,6 +61,14 @@ const ConfirmDialog = ({ open, onClose, onAgree, title, description }) => {
       </Box>
     </Modal>
   );
+};
+
+ConfirmDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onAgree: PropTypes.func.isRequired,
+  title: PropTypes.bool,
+  description: PropTypes.bool,
 };
 
 export default ConfirmDialog;
