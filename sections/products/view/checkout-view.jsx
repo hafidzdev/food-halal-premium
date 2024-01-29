@@ -33,7 +33,7 @@ export default function CheckoutView({
   // const [address, setAddress] = useState(addressList || []);
 
   const totalSubTotalPrice = Array.isArray(cart)
-    ? cart.reduce((accumulator, item) => accumulator + item.sub_total_price, 0)
+    ? cart?.reduce((accumulator, item) => accumulator + item.sub_total_price, 0)
     : 0;
 
   console.log("purchase: ", purchase);

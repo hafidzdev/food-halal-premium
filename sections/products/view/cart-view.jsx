@@ -43,7 +43,7 @@ export default function CartView() {
 
       <Button
         component={RouterLink}
-        href={"/products"}
+        href={"/product"}
         color="inherit"
         startIcon={<Iconify icon="carbon:chevron-left" />}
         sx={{ mt: 3 }}

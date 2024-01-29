@@ -16,7 +16,7 @@ import { fPercent, fCurrency } from "@/utils/format-number";
 // ----------------------------------------------------------------------
 
 export default function CartSummary({ products, tax, shipping, discount }) {
-  const totalSubTotalPrice = products.reduce(
+  const totalSubTotalPrice = products?.reduce(
     (accumulator, item) => accumulator + item.sub_total_price,
     0
   );
@@ -33,7 +33,7 @@ export default function CartSummary({ products, tax, shipping, discount }) {
       <Typography variant="h6"> Summary </Typography>
 
       <Stack spacing={2}>
-        <Row label="Item" value={products.length} />
+        <Row label="Item" value={products?.length} />
 
         <Row label="Subtotal" value={fCurrency(totalSubTotalPrice)} />
 

@@ -29,7 +29,7 @@ export default function CartList({ products, wishlist = false }) {
         {wishlist && <Stack sx={{ width: 36 }} />}
       </Stack>
 
-      {products.map((product) => (
+      {products?.map((product) => (
         <CartItem key={product.id} product={product} wishlist={wishlist} />
       ))}
     </Scrollbar>
