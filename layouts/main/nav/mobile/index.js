@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import Drawer from "@mui/material/Drawer";
@@ -15,7 +15,7 @@ import { NavBasicMobile } from "@/components/partials/nav-basic";
 import { NAV } from "@/layouts/config-layout";
 
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +32,8 @@ export default function NavMobile({ data }) {
   }, [pathname]);
 
   const { status } = useSession();
+
+  const handleSignIn = () => signIn();
 
   return (
     <>
@@ -61,13 +63,13 @@ export default function NavMobile({ data }) {
 
           {status !== "authenticated" ? (
             <Stack spacing={2} sx={{ p: 2.5, pb: 5 }}>
-              <Link href="/login" passHref legacyBehavior>
+              <Link href="/signin" passHref legacyBehavior>
                 <Button fullWidth variant="outlined" color="inherit">
                   Login
                 </Button>
               </Link>
 
-              <Link href="/register" passHref legacyBehavior>
+              <Link href="/signup" passHref legacyBehavior>
                 <Button fullWidth variant="contained" color="inherit">
                   Register
                 </Button>
