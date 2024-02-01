@@ -64,7 +64,7 @@ export default function Header({ headerOnDark }) {
           component="div"
           sx={{ flexGrow: 1, display: "flex", alignItems: "baseline" }}
         >
-          {"Food Halal Premium"}
+          {"Shop Manager"}
         </Typography>
       </Box>
 
