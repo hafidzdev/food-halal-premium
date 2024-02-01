@@ -1,0 +1,26 @@
+import PropTypes from "prop-types";
+import Image from "@/components/partials/image/";
+import { Card, Box } from "@mui/material";
+
+const ImageList = ({ item }) => {
+  return (
+    <Card
+      sx={{
+        cursor: "pointer",
+        "&:hover": {
+          boxShadow: (theme) => theme.customShadows.z24,
+        },
+      }}
+    >
+      <Box sx={{ overflow: "hidden" }}>
+        <Image src={item} alt="cover" ratio="3/4" />
+      </Box>
+    </Card>
+  );
+};
+
+export default ImageList;
+
+ImageList.propTypes = {
+  item: PropTypes.string,
+};
