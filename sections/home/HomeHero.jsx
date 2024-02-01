@@ -17,7 +17,7 @@ import Carousel, {
   CarouselArrows,
 } from "@/components/partials/carousel";
 
-import Image from "@/components/partials/image/image";
+import Image from "next/image";
 import ImageList from "./common/ImageList";
 import { GetEntityInfo } from "@/services/Entity";
 
@@ -92,16 +92,16 @@ export default function HomeHero() {
             <Image
               alt="Logo Company"
               src={entity?.logo}
-              // width={350}
-              // height={350}
+              width={350}
+              height={350}
               style={{
                 borderRadius: 2,
                 mx: "auto",
                 display: "block",
               }}
-              // layout="responsive"
-              // // loading="lazy"
-              // priority
+              layout="responsive"
+              // loading="lazy"
+              priority
             />
           </Grid>
 
