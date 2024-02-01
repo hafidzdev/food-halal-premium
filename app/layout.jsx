@@ -10,6 +10,7 @@ import { LocalizationProvider } from "@/locales";
 import { SettingsProvider } from "@/components/settings";
 import CartProvider from "@/context/CartContext";
 import { GetCart } from "@/services/Purchase";
+import { MotionLazy } from "@/components/partials/animate/motion-lazy";
 
 export const dynamic = "force-dynamic";
 
@@ -48,10 +49,12 @@ export default async function RootLayout({ children }) {
               }}
             >
               <ThemeProvider>
-                <CartProvider cart={cart}>
-                  <ProgressBar />
-                  {children}
-                </CartProvider>
+                <MotionLazy>
+                  <CartProvider cart={cart}>
+                    <ProgressBar />
+                    {children}
+                  </CartProvider>
+                </MotionLazy>
               </ThemeProvider>
             </SettingsProvider>
           </LocalizationProvider>
