@@ -15,7 +15,8 @@ import { RouterLink } from "@/routes/components";
 import { useResponsive } from "@/hooks/use-responsive";
 import useBoundingClientRect from "@/hooks/useBoundingClientRect";
 
-import Image from "@/components/partials/image";
+import Image from "next/image";
+
 import Iconify from "@/components/partials/Iconify";
 import { varHover, varTranHover } from "@/components/partials/animate";
 import Carousel, {
@@ -77,12 +78,21 @@ export default function HomeHero({ entity }) {
           height: { md: "calc(100% - 320px)" },
         }}
       >
-        <Grid container spacing={4} justifyContent="center">
+        <Grid container spacing={6} justifyContent="center">
           <Grid xs={12} md={4}>
             <Image
-              alt="services"
+              alt="Logo Company"
               src={entity?.logo}
-              sx={{ height: "350px", borderRadius: 2 }}
+              width={350}
+              height={350}
+              style={{
+                borderRadius: 2,
+                mx: "auto",
+                display: "block",
+              }}
+              layout="responsive"
+              // loading="lazy"
+              priority
             />
           </Grid>
 
@@ -198,7 +208,16 @@ function ImageItem({ item }) {
       >
         <Box sx={{ overflow: "hidden" }}>
           <m.div variants={varHover(1.1)} transition={varTranHover()}>
-            <Image src={item} alt="cover" ratio="3/4" />
+            <Image
+              src={item}
+              alt="cover"
+              ratio="3/4"
+              width="200"
+              height={200}
+              // layout="responsive"
+              // loading="lazy"
+              priority
+            />
           </m.div>
         </Box>
       </Card>
