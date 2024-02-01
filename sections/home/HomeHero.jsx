@@ -24,6 +24,8 @@ import Carousel, {
   CarouselArrows,
 } from "@/components/partials/carousel";
 
+import ImageList from "./common/ImageList";
+
 // ----------------------------------------------------------------------
 
 export default function HomeHero({ entity }) {
@@ -170,7 +172,7 @@ export default function HomeHero({ entity }) {
                 color: "common.white",
               }}
             >
-              <ImageItem key={item.id} item={item} />
+              <ImageList key={item.id} item={item} />
             </Box>
           ))}
         </Carousel>
@@ -189,44 +191,6 @@ export default function HomeHero({ entity }) {
 
 HomeHero.propTypes = {
   entity: PropTypes.object,
-};
-
-// ----------------------------------------------------------------------
-
-function ImageItem({ item }) {
-  return (
-    <Card
-      // component={m.div}
-      // whileHover="hover"
-      sx={{
-        cursor: "pointer",
-        "&:hover": {
-          boxShadow: (theme) => theme.customShadows.z24,
-        },
-      }}
-    >
-      <Box sx={{ overflow: "hidden" }}>
-        <Image
-          src={item}
-          alt="cover"
-          ratio="3/4"
-          width="200"
-          height={200}
-          // layout="responsive"
-          // loading="lazy"
-          priority
-        />
-        {/* <m.div variants={varHover(1.1)} transition={varTranHover()}>
-        </m.div> */}
-      </Box>
-    </Card>
-    // <Link component={RouterLink} href={"#"} underline="none">
-    // </Link>
-  );
-}
-
-ImageItem.propTypes = {
-  item: PropTypes.string,
 };
 
 function SocialLink({ name, link, color, icon }) {
