@@ -12,7 +12,8 @@ import Stack from "@mui/material/Stack";
 import { RouterLink } from "@/routes/components";
 
 // import Label from "@/components/partials/label";
-import Image from "next/legacy/image";
+// import Image from "next/legacy/image";
+import Image from "@/components/partials/image/image";
 import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
 import ProductPrice from "../common/product-price";
@@ -119,7 +120,7 @@ export default function ProductGrid({ product, sx, ...other }) {
 
       <Box sx={{ position: "relative", mb: 2 }}>
         <Fab
-          onClick={() => handleAddToCart(product.id)}
+          // onClick={() => handleAddToCart(product.id)}
           className="add-to-cart"
           color="primary"
           size="small"
@@ -140,27 +141,28 @@ export default function ProductGrid({ product, sx, ...other }) {
         </Fab>
 
         <Image
-          src={product.image}
+          src={
+            product.image !== "null"
+              ? product.image
+              : "https://cdn.shopify.com/s/files/1/0147/9445/7136/products/image_2e8f9eb4-d566-4c72-91cd-ea5149e3525a.jpg?v=1673878789"
+          }
           style={{
             objectFit: "cover",
             flexShrink: 0,
             borderRadius: 1.5,
             bgcolor: "background.neutral",
             borderRadius: 5,
+            height: "150px",
+            width: "150",
           }}
-          height={150}
-          width={150}
-          // layout="fixed" // Mengubah layout menjadi "fixed"
-          // loading="lazy"
-          alt="product cover"
-          priority
         />
       </Box>
 
       <Stack spacing={0.5}>
         <TextMaxLine variant="caption" line={1} sx={{ color: "text.disabled" }}>
-          {Array.isArray(product.category) &&
-            product.category.map((item) => item.name + " ")}
+          {/* {Array.isArray(product.category) &&
+            product.category.map((item) => item.name + " ")} */}
+          {product?.category}
         </TextMaxLine>
 
         <Link
@@ -181,11 +183,11 @@ export default function ProductGrid({ product, sx, ...other }) {
           price={product.price_in_currency}
           priceSale={product.price_in_currency}
         />
-
+        {/* 
         <ProductRating
           ratingNumber={product.rating.avg}
           label={`${product.delivery_weight} sold`}
-        />
+        /> */}
       </Stack>
 
       <Backdrop
