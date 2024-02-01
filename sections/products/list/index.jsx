@@ -107,7 +107,7 @@ export default function ProductListCard({
         )}
       </InfiniteScroll>
 
-      <Pagination
+      {/* <Pagination
         count={10}
         color="primary"
         sx={{
@@ -117,7 +117,7 @@ export default function ProductListCard({
             justifyContent: "center",
           },
         }}
-      />
+      /> */}
     </>
   );
 }

@@ -11,7 +11,7 @@ import Stack from "@mui/material/Stack";
 
 import { RouterLink } from "@/routes/components";
 
-import Label from "@/components/partials/label";
+// import Label from "@/components/partials/label";
 import Image from "next/legacy/image";
 import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
