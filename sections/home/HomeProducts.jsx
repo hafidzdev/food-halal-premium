@@ -8,7 +8,7 @@ import Container from "@mui/material/Container";
 import { useBoolean } from "@/hooks/use-boolean";
 
 import ProductsList from "./common/ProductsList";
-import { GetProductData } from "@/services/Product";
+import { GetProductData, GetAllProducts } from "@/services/Product";
 import { useSearchParams } from "next/navigation";
 
 // ----------------------------------------------------------------------
@@ -32,6 +32,7 @@ export default function HomeProducts() {
 
   const params = new URLSearchParams(searchParams);
   const queryInArray = Array.from(params.values());
+
   const resultString = queryInArray
     .flatMap((item) =>
       item.split("+").map((category) => `&category=${category}`)
@@ -41,9 +42,9 @@ export default function HomeProducts() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const newData = await GetProductData(resultString, 20, 1);
+        const newData = await GetAllProducts();
 
-        setProduct([...newData.response]);
+        setProduct([...newData]);
         setPage(2);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -52,12 +53,12 @@ export default function HomeProducts() {
       }
     };
     getData();
-  }, [resultString]);
+  }, []);
 
   const fetchProduct = async () => {
     try {
-      const newData = await GetProductData(resultString, 20, page);
-      return newData.response;
+      const newData = await GetAllProducts();
+      return newData;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
