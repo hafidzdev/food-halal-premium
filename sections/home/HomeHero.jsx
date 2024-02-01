@@ -100,8 +100,8 @@ export default function HomeHero() {
                 display: "block",
               }}
               layout="responsive"
-              // loading="lazy"
-              priority
+              loading="lazy"
+              // priority
             />
           </Grid>
 
