@@ -78,7 +78,7 @@ export default function HomeProducts() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 5 }}>
+    <Container maxWidth="xl" sx={{ py: 5 }}>
       <Box
         sx={{
           flexGrow: 1,

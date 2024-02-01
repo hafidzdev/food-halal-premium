@@ -153,7 +153,7 @@ export default function ProductGrid({ product, sx, ...other }) {
             bgcolor: "background.neutral",
             borderRadius: 5,
             height: "150px",
-            width: "150",
+            width: "150px",
           }}
         />
       </Box>
