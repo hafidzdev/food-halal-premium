@@ -1,102 +1,237 @@
-/* eslint-disable react/no-unescaped-entities */
+import { useRef } from "react";
+import { m } from "framer-motion";
+import PropTypes from "prop-types";
+
 import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
+import { useTheme, Button } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import { alpha, useTheme } from "@mui/material/styles";
 
+import { RouterLink } from "@/routes/components";
 import { useResponsive } from "@/hooks/use-responsive";
+import useBoundingClientRect from "@/hooks/useBoundingClientRect";
 
-import { bgGradient } from "@/theme/css";
-
-import Image from "next/legacy/image";
+import Image from "@/components/partials/image";
+import Iconify from "@/components/partials/Iconify";
+import { varHover, varTranHover } from "@/components/partials/animate";
+import Carousel, {
+  useCarousel,
+  CarouselArrows,
+} from "@/components/partials/carousel";
 
 // ----------------------------------------------------------------------
 
-export default function HomeHero() {
+export default function HomeHero({ entity }) {
   const theme = useTheme();
 
   const mdUp = useResponsive("up", "md");
 
+  const containerRef = useRef(null);
+
+  const container = useBoundingClientRect(containerRef);
+
+  const offsetLeft = container?.left;
+
+  const carousel = useCarousel({
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    speed: 500,
+    infinite: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    // cssEase: "linear",
+    responsive: [
+      {
+        breakpoint: theme.breakpoints.values.xl,
+        settings: { slidesToShow: 5 },
+      },
+      {
+        breakpoint: theme.breakpoints.values.lg,
+        settings: { slidesToShow: 2 },
+      },
+      {
+        breakpoint: theme.breakpoints.values.sm,
+        settings: { slidesToShow: 2 },
+      },
+    ],
+  });
+
   return (
     <Box
       sx={{
-        ...bgGradient({
-          color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: "",
-        }),
         overflow: "hidden",
+        position: "relative",
+        py: { xs: 8, md: 10 },
       }}
     >
       <Container
         sx={{
-          py: 10,
-          display: { md: "flex" },
-          alignItems: { md: "center" },
-          height: { md: `100vh` },
+          mb: { md: 0 },
+          left: { md: 0 },
+          right: { md: 0 },
+          position: { md: "absolute" },
+          height: { md: "calc(100% - 320px)" },
         }}
       >
-        <Grid container columnSpacing={{ xs: 0, md: 10 }}>
-          <Grid
-            xs={12}
-            md={6}
-            lg={5}
-            sx={{
-              textAlign: { xs: "center", md: "left" },
-            }}
-          >
-            <Typography variant="h3" sx={{ my: 3 }}>
-              Halal Food Premium E-Commerce Platform
-            </Typography>
-
-            <p style={{ color: "text.secondary" }}>
-              Welcome to our exclusive e-commerce platform, where we bring the
-              essence of Japan's finest and Halal-certified premium cuisine
-              right to your doorstep.
-            </p>
-
-            <Stack
-              spacing={3}
-              direction={{ xs: "column", sm: "row" }}
-              alignItems={{ xs: "center", md: "unset" }}
-              justifyContent={{ xs: "center", md: "unset" }}
-              sx={{ mt: 5 }}
-            >
-              <Button
-                variant="contained"
-                color="inherit"
-                size="large"
-                href="/get-started"
-              >
-                Get Started
-              </Button>
-
-              {/* <Stack direction="row" alignItems="center" sx={{ typography: 'h6' }}>
-                <Fab size="medium" sx={{ mr: 1 }}>
-                  <Iconify width={24} icon="carbon:play" />
-                </Fab>
-                See Examples
-              </Stack> */}
-            </Stack>
+        <Grid container spacing={4} justifyContent="center">
+          <Grid xs={12} md={4}>
+            <Image
+              alt="services"
+              src={entity?.logo}
+              sx={{ height: "350px", borderRadius: 2 }}
+            />
           </Grid>
 
-          {mdUp && (
-            <Grid xs={12} md={6} lg={7}>
-              <Image
-                height={150}
-                width={250}
-                alt="marketing market"
-                src="https://previews.123rf.com/images/kaisorn/kaisorn1608/kaisorn160800032/61904824-halal-food-on-a-wooden-background-vector-halal-food-top-view.jpg"
-                layout="responsive"
-                // loading="lazy"
-                priority
-              />
-            </Grid>
-          )}
+          <Grid xs={12} md={7}>
+            <Stack
+              alignItems={{ xs: "center", md: "flex-start" }}
+              sx={{
+                pt: { md: 0, xs: 3 },
+                textAlign: { xs: "center", md: "unset" },
+              }}
+            >
+              <Typography variant="h3">{entity?.name}</Typography>
+
+              <Typography variant="subtitle1" sx={{ color: "text.primary" }}>
+                {entity?.address}
+              </Typography>
+
+              <Stack direction="row" flexWrap="wrap" spacing={1} sx={{ my: 2 }}>
+                <SocialLink
+                  name={"Instagram"}
+                  link={entity?.socialMediaLink?.instagram}
+                  icon={"carbon:logo-instagram"}
+                  color={"#E02D69"}
+                />
+                <SocialLink
+                  name={"Facebook"}
+                  link={entity?.socialMediaLink?.facebook}
+                  icon={"carbon:logo-facebook"}
+                  color={"#1877F2"}
+                />{" "}
+                <SocialLink
+                  name={"Line"}
+                  link={entity?.socialMediaLink?.line}
+                  icon={"carbon:checkmark-outline"}
+                  color={"#05a500"}
+                />
+              </Stack>
+
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "text.secondary",
+                  textAlign: {
+                    xs: "left",
+                    sm: "left",
+                  },
+                  mt: 1,
+                }}
+              >
+                {entity?.description}
+              </Typography>
+            </Stack>
+
+            <Box ref={containerRef} />
+          </Grid>
         </Grid>
       </Container>
+
+      <Box
+        sx={{
+          mt: mdUp ? 30 : 0,
+          pl: `${offsetLeft}px`,
+          width: { md: `calc(100% + 100px)` },
+        }}
+      >
+        <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
+          {entity?.images.map((item) => (
+            <Box
+              key={item.id}
+              sx={{
+                ml: "-1px",
+                py: 8,
+                pr: { xs: 2, md: 4 },
+                pl: { xs: 2, md: 0 },
+                color: "common.white",
+              }}
+            >
+              <ImageItem key={item.id} item={item} />
+            </Box>
+          ))}
+        </Carousel>
+
+        <CarouselArrows
+          spacing={2}
+          justifyContent="center"
+          onNext={carousel.onNext}
+          onPrev={carousel.onPrev}
+          sx={{ width: 1 }}
+        />
+      </Box>
     </Box>
   );
 }
+
+HomeHero.propTypes = {
+  entity: PropTypes.object,
+};
+
+// ----------------------------------------------------------------------
+
+function ImageItem({ item }) {
+  return (
+    <Link component={RouterLink} href={"#"} underline="none">
+      <Card
+        component={m.div}
+        whileHover="hover"
+        sx={{
+          cursor: "pointer",
+          "&:hover": {
+            boxShadow: (theme) => theme.customShadows.z24,
+          },
+        }}
+      >
+        <Box sx={{ overflow: "hidden" }}>
+          <m.div variants={varHover(1.1)} transition={varTranHover()}>
+            <Image src={item} alt="cover" ratio="3/4" />
+          </m.div>
+        </Box>
+      </Card>
+    </Link>
+  );
+}
+
+ImageItem.propTypes = {
+  item: PropTypes.string,
+};
+
+function SocialLink({ name, link, color, icon }) {
+  return (
+    <Link href={`${link}`} color="inherit" target={"_blank"}>
+      <Button
+        key={link}
+        size="small"
+        variant="contained"
+        startIcon={<Iconify icon={icon} sx={{ color: color }} />}
+        color="inherit"
+        sx={{
+          flexShrink: 0,
+        }}
+      >
+        {name}
+      </Button>
+    </Link>
+  );
+}
+
+SocialLink.propTypes = {
+  link: PropTypes.string,
+  icon: PropTypes.string,
+  color: PropTypes.string,
+  name: PropTypes.string,
+};

@@ -159,7 +159,7 @@ export default function Footer() {
             variant="caption"
             sx={{ color: "text.secondary", marginX: "auto" }}
           >
-            Food Halal Premium © 2023. All rights reserved
+            Shop Manager © 2023. All rights reserved
           </Typography>
 
           <Stack direction="row" spacing={3} justifyContent="center">
