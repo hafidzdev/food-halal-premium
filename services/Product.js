@@ -14,6 +14,27 @@ export async function GetProductData(category, limit, page) {
   return data;
 }
 
+export async function GetAllProducts() {
+  try {
+    const res = await fetch(
+      "https://shop-pcfpjwad6a-uc.a.run.app/product?&page=1&limit=100",
+      {
+        cache: "no-cache",
+      }
+    );
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error("Failed to fetch product data");
+    }
+
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    throw error;
+  }
+}
+
 export async function GetProductDetail(productSlug) {
   try {
     const res = await fetch(
