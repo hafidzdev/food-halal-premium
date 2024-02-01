@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { m } from "framer-motion";
+// import { m } from "framer-motion";
 import PropTypes from "prop-types";
 
 import Box from "@mui/material/Box";
@@ -11,14 +11,14 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-import { RouterLink } from "@/routes/components";
+// import { RouterLink } from "@/routes/components";
 import { useResponsive } from "@/hooks/use-responsive";
 import useBoundingClientRect from "@/hooks/useBoundingClientRect";
 
 import Image from "next/image";
 
 import Iconify from "@/components/partials/Iconify";
-import { varHover, varTranHover } from "@/components/partials/animate";
+// import { varHover, varTranHover } from "@/components/partials/animate";
 import Carousel, {
   useCarousel,
   CarouselArrows,
@@ -195,33 +195,33 @@ HomeHero.propTypes = {
 
 function ImageItem({ item }) {
   return (
-    <Link component={RouterLink} href={"#"} underline="none">
-      <Card
-        component={m.div}
-        whileHover="hover"
-        sx={{
-          cursor: "pointer",
-          "&:hover": {
-            boxShadow: (theme) => theme.customShadows.z24,
-          },
-        }}
-      >
-        <Box sx={{ overflow: "hidden" }}>
-          <m.div variants={varHover(1.1)} transition={varTranHover()}>
-            <Image
-              src={item}
-              alt="cover"
-              ratio="3/4"
-              width="200"
-              height={200}
-              // layout="responsive"
-              // loading="lazy"
-              priority
-            />
-          </m.div>
-        </Box>
-      </Card>
-    </Link>
+    <Card
+      // component={m.div}
+      // whileHover="hover"
+      sx={{
+        cursor: "pointer",
+        "&:hover": {
+          boxShadow: (theme) => theme.customShadows.z24,
+        },
+      }}
+    >
+      <Box sx={{ overflow: "hidden" }}>
+        <Image
+          src={item}
+          alt="cover"
+          ratio="3/4"
+          width="200"
+          height={200}
+          // layout="responsive"
+          // loading="lazy"
+          priority
+        />
+        {/* <m.div variants={varHover(1.1)} transition={varTranHover()}>
+        </m.div> */}
+      </Box>
+    </Card>
+    // <Link component={RouterLink} href={"#"} underline="none">
+    // </Link>
   );
 }
 
