@@ -1,9 +1,7 @@
-import { useRef } from "react";
-// import { m } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import { useTheme, Button } from "@mui/material";
@@ -11,32 +9,26 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-// import { RouterLink } from "@/routes/components";
 import { useResponsive } from "@/hooks/use-responsive";
 import useBoundingClientRect from "@/hooks/useBoundingClientRect";
-
-import Image from "next/image";
-
 import Iconify from "@/components/partials/Iconify";
-// import { varHover, varTranHover } from "@/components/partials/animate";
 import Carousel, {
   useCarousel,
   CarouselArrows,
 } from "@/components/partials/carousel";
 
+import Image from "next/image";
 import ImageList from "./common/ImageList";
+import { GetEntityInfo } from "@/services/Entity";
 
 // ----------------------------------------------------------------------
 
-export default function HomeHero({ entity }) {
+export default function HomeHero() {
   const theme = useTheme();
-
   const mdUp = useResponsive("up", "md");
 
   const containerRef = useRef(null);
-
   const container = useBoundingClientRect(containerRef);
-
   const offsetLeft = container?.left;
 
   const carousel = useCarousel({
@@ -62,6 +54,21 @@ export default function HomeHero({ entity }) {
       },
     ],
   });
+
+  const [entity, setEntity] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await GetEntityInfo();
+        setEntity(data);
+      } catch (error) {
+        console.error("Error in fetchData:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <Box
@@ -188,10 +195,6 @@ export default function HomeHero({ entity }) {
     </Box>
   );
 }
-
-HomeHero.propTypes = {
-  entity: PropTypes.object,
-};
 
 function SocialLink({ name, link, color, icon }) {
   return (
