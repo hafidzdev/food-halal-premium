@@ -89,20 +89,22 @@ export default function HomeHero() {
       >
         <Grid container spacing={6} justifyContent="center">
           <Grid xs={12} md={4}>
-            <Image
-              alt="Logo Company"
-              src={entity?.logo}
-              width={350}
-              height={350}
-              style={{
-                borderRadius: 2,
-                mx: "auto",
-                display: "block",
-              }}
-              layout="responsive"
-              // loading="lazy"
-              priority
-            />
+            {entity?.logo && (
+              <Image
+                alt="Logo Company"
+                src={entity.logo}
+                width={350}
+                height={350}
+                style={{
+                  borderRadius: 2,
+                  mx: "auto",
+                  display: "block",
+                }}
+                layout="responsive"
+                // loading="lazy"
+                // priority
+              />
+            )}
           </Grid>
 
           <Grid xs={12} md={7}>
@@ -168,9 +170,9 @@ export default function HomeHero() {
         }}
       >
         <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-          {entity?.images.map((item) => (
+          {entity?.images.map((item, index) => (
             <Box
-              key={item.id}
+              key={index}
               sx={{
                 ml: "-1px",
                 py: 8,
@@ -179,18 +181,18 @@ export default function HomeHero() {
                 color: "common.white",
               }}
             >
-              <ImageList key={item.id} item={item} />
+              <ImageList item={item} />
             </Box>
           ))}
         </Carousel>
 
-        {/* <CarouselArrows
+        <CarouselArrows
           spacing={2}
           justifyContent="center"
           onNext={carousel.onNext}
           onPrev={carousel.onPrev}
           sx={{ width: 1 }}
-        /> */}
+        />
       </Box>
     </Box>
   );
