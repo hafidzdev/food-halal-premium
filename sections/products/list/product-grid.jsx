@@ -144,7 +144,7 @@ export default function ProductGrid({ product, sx, ...other }) {
           src={
             product.image !== "null"
               ? product.image
-              : "https://cdn.shopify.com/s/files/1/0147/9445/7136/products/image_2e8f9eb4-d566-4c72-91cd-ea5149e3525a.jpg?v=1673878789"
+              : "/assets/images/no-image-product.webp"
           }
           style={{
             objectFit: "cover",
@@ -167,7 +167,7 @@ export default function ProductGrid({ product, sx, ...other }) {
 
         <Link
           component={RouterLink}
-          href={`/product/${product.slug}`}
+          href={`/product/${product.id}`}
           color="inherit"
         >
           <TextMaxLine
@@ -179,10 +179,7 @@ export default function ProductGrid({ product, sx, ...other }) {
           </TextMaxLine>
         </Link>
 
-        <ProductPrice
-          price={product.price_in_currency}
-          priceSale={product.price_in_currency}
-        />
+        <ProductPrice price={product.price} priceSale={0} />
         {/* 
         <ProductRating
           ratingNumber={product.rating.avg}
@@ -212,43 +209,18 @@ export default function ProductGrid({ product, sx, ...other }) {
 
 ProductGrid.propTypes = {
   product: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    slug: PropTypes.string,
-    brand: PropTypes.string,
-    weight: PropTypes.number,
-    measure: PropTypes.string,
-    barcode: PropTypes.string,
-    delivery_weight: PropTypes.number,
+    barcode: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     image: PropTypes.string,
-    discount: PropTypes.number,
-    quantity: PropTypes.number,
-    sell_price: PropTypes.number,
-    currency: PropTypes.string,
-    price_in_currency: PropTypes.number,
-    category: PropTypes.string,
-    favorite: PropTypes.shape({
-      favorite: PropTypes.bool,
-      total: PropTypes.number,
-      reaction_id: PropTypes.string,
-    }),
-    rating: PropTypes.shape({
-      avg: PropTypes.number,
-      count: PropTypes.number,
-      star_5: PropTypes.number,
-      star_4: PropTypes.number,
-      star_3: PropTypes.number,
-      star_2: PropTypes.number,
-      star_1: PropTypes.number,
-    }),
-    store_info: PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      slug: PropTypes.string,
-      location: PropTypes.string,
-      latitude: PropTypes.string,
-      longitude: PropTypes.string,
-    }),
+    createdAt: PropTypes.string.isRequired,
+    sku: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    category: PropTypes.string.isRequired,
+    inStock: PropTypes.number.isRequired,
+    updatedAt: PropTypes.string.isRequired,
+    availableForSale: PropTypes.bool.isRequired,
   }),
   sx: PropTypes.object,
 };

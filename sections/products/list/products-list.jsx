@@ -138,7 +138,11 @@ export default function ProductList({ product, ...other }) {
       </Fab>
 
       <Image
-        src={product.image}
+        src={
+          product.image !== "null"
+            ? product.image
+            : "/assets/images/no-image-product.webp"
+        }
         style={{
           objectFit: "cover",
           flexShrink: 0,
@@ -161,8 +165,9 @@ export default function ProductList({ product, ...other }) {
             line={1}
             sx={{ color: "text.disabled" }}
           >
-            {Array.isArray(product.category) &&
-              product.category.map((item) => item.name + " ")}
+            {/* {Array.isArray(product.category) &&
+              product.category.map((item) => item.name + " ")} */}
+            {product?.category}
           </TextMaxLine>
 
           <Link
@@ -176,18 +181,15 @@ export default function ProductList({ product, ...other }) {
           </Link>
         </Stack>
 
-        <ProductRating
-          ratingNumber={product?.rating?.avg}
-          label={`${product?.currency} sold`}
-        />
+        <ProductRating ratingNumber={0} label="No Review" />
 
         <TextMaxLine variant="body2" line={1} sx={{ color: "text.secondary" }}>
           {product?.brand}
         </TextMaxLine>
 
         <ProductPrice
-          price={product?.price_in_currency}
-          priceSale={product?.price_in_currency}
+          price={product?.price}
+          priceSale={0}
           sx={{ typography: "h6" }}
         />
       </Stack>
@@ -214,48 +216,17 @@ export default function ProductList({ product, ...other }) {
 
 ProductList.propTypes = {
   product: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    slug: PropTypes.string,
-    brand: PropTypes.string,
-    weight: PropTypes.number,
-    measure: PropTypes.string,
-    barcode: PropTypes.string,
-    delivery_weight: PropTypes.number,
+    barcode: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     image: PropTypes.string,
-    discount: PropTypes.number,
-    quantity: PropTypes.number,
-    sell_price: PropTypes.number,
-    currency: PropTypes.string,
-    price_in_currency: PropTypes.number,
-    category: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        slug: PropTypes.string,
-        type: PropTypes.string,
-      })
-    ),
-    favorite: PropTypes.shape({
-      favorite: PropTypes.bool,
-      total: PropTypes.number,
-      reaction_id: PropTypes.string,
-    }),
-    rating: PropTypes.shape({
-      avg: PropTypes.number,
-      count: PropTypes.number,
-      star_5: PropTypes.number,
-      star_4: PropTypes.number,
-      star_3: PropTypes.number,
-      star_2: PropTypes.number,
-      star_1: PropTypes.number,
-    }),
-    store_info: PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      slug: PropTypes.string,
-      location: PropTypes.string,
-      latitude: PropTypes.string,
-      longitude: PropTypes.string,
-    }),
+    createdAt: PropTypes.string.isRequired,
+    sku: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    category: PropTypes.string.isRequired,
+    inStock: PropTypes.number.isRequired,
+    updatedAt: PropTypes.string.isRequired,
+    availableForSale: PropTypes.bool.isRequired,
   }),
 };
