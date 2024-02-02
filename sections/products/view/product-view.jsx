@@ -20,11 +20,13 @@ export default function ProductView({ product }) {
           <Grid item xs={12} md={6} lg={5}>
             <ProductDetailsInfo
               name={product.name}
-              price={product.sell_price}
+              price={product.price}
+              barcode={product.barcode}
               caption={product.description}
-              priceSale={product.sell_price}
-              ratingNumber={product.rating.avg}
-              totalReviews={product.rating.count}
+              priceSale={product.price}
+              ratingNumber={5}
+              totalReviews={5}
+              inStock={product.inStock}
             />
           </Grid>
         </Grid>
@@ -32,12 +34,12 @@ export default function ProductView({ product }) {
         <Grid container columnSpacing={{ md: 8 }}>
           <Grid item xs={12} md={6} lg={7}>
             <ProductDetailsDescription
-              weight={product.weight}
-              measure={product.measure}
-              discount={product.discount}
-              quantity={product.quantity}
-              storeName={product.store_info.name}
-              composition={product.composition}
+              weight={0}
+              measure=""
+              discount={0}
+              quantity={product.inStock}
+              storeName=""
+              composition=""
             />
           </Grid>
         </Grid>
@@ -49,50 +51,16 @@ export default function ProductView({ product }) {
 ProductView.propTypes = {
   product: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    slug: PropTypes.string.isRequired,
-    brand: PropTypes.string.isRequired,
-    weight: PropTypes.number.isRequired,
-    measure: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string.isRequired,
+    inStock: PropTypes.number.isRequired,
+    availableForSale: PropTypes.bool.isRequired,
+    price: PropTypes.number.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    description: PropTypes.string,
     barcode: PropTypes.string.isRequired,
-    delivery_weight: PropTypes.number,
-    image: PropTypes.arrayOf(PropTypes.string).isRequired,
-    discount: PropTypes.number.isRequired,
-    quantity: PropTypes.number.isRequired,
-    sell_price: PropTypes.number.isRequired,
-    currency: PropTypes.string.isRequired,
-    price_in_currency: PropTypes.number.isRequired,
-    category: PropTypes.arrayOf(PropTypes.object).isRequired,
-    favorite: PropTypes.shape({
-      favorite: PropTypes.bool.isRequired,
-      total: PropTypes.number.isRequired,
-      reaction_id: PropTypes.string,
-    }).isRequired,
-    rating: PropTypes.shape({
-      avg: PropTypes.number.isRequired,
-      count: PropTypes.number.isRequired,
-      star_5: PropTypes.number.isRequired,
-      star_4: PropTypes.number.isRequired,
-      star_3: PropTypes.number.isRequired,
-      star_2: PropTypes.number.isRequired,
-      star_1: PropTypes.number.isRequired,
-    }).isRequired,
-    store_info: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      slug: PropTypes.string.isRequired,
-      location: PropTypes.string.isRequired,
-      latitude: PropTypes.string.isRequired,
-      longitude: PropTypes.string.isRequired,
-    }).isRequired,
-    storefront: PropTypes.arrayOf(PropTypes.string).isRequired,
-    size: PropTypes.shape({
-      length: PropTypes.number.isRequired,
-      width: PropTypes.number.isRequired,
-      height: PropTypes.number.isRequired,
-    }).isRequired,
-    description: PropTypes.string.isRequired,
-    composition: PropTypes.string,
-    review: PropTypes.arrayOf(PropTypes.object).isRequired,
+    sku: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    image: PropTypes.string,
   }).isRequired,
 };

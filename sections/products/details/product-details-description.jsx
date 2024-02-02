@@ -50,7 +50,11 @@ export default function ProductDetailsDescription({
   );
 }
 
-// ProductDetailsDescription.propTypes = {
-//   description: PropTypes.string,
-//   specifications: PropTypes.array,
-// };
+ProductDetailsDescription.propTypes = {
+  weight: PropTypes.number,
+  measure: PropTypes.string,
+  discount: PropTypes.number,
+  quantity: PropTypes.number,
+  storeName: PropTypes.string,
+  composition: PropTypes.string,
+};

@@ -20,11 +20,12 @@ import FilterStock from "./filter-stock";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const CATEGORY_OPTIONS = [
-  { id: 1, name: "Frozen Foods", slug: "frozen-foods" },
-  { id: 2, name: "Drinks", slug: "drinks" },
+  { id: 1, name: "Frozen Foods", slug: "Frozen food" },
+  { id: 2, name: "Drinks", slug: "Drinks" },
   { id: 3, name: "Meat", slug: "meat" },
   { id: 4, name: "Spices", slug: "spices" },
   { id: 5, name: "Seafood", slug: "seafood" },
+  { id: 6, name: "Sauce & Oil", slug: "Sauce/Oil" },
 ];
 
 const OFFER_OPTIONS = ["Cashback", "Gratis Ongkir", "COD", "Diskon"];

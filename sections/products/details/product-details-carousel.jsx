@@ -68,9 +68,9 @@ const StyledThumbnailsContainer = styled("div")(({ length, theme }) => ({
 export default function ProductDetailsCarousel({ images }) {
   const theme = useTheme();
 
-  const slides = images.map((slide) => ({
-    src: slide,
-  }));
+  const slides = images
+    ? [{ src: images }]
+    : [{ src: "/assets/images/no-image-product.webp" }];
 
   const carouselLarge = useCarousel({
     rtl: false,
@@ -118,9 +118,9 @@ export default function ProductDetailsCarousel({ images }) {
           asNavFor={carouselThumb.nav}
           ref={carouselLarge.carouselRef}
         >
-          {slides.map((slide) => (
+          {slides.map((slide, index) => (
             <Image
-              key={slide.src}
+              key={index}
               alt="product"
               src={slide.src}
               ratio="1/1"
@@ -190,5 +190,5 @@ export default function ProductDetailsCarousel({ images }) {
 }
 
 ProductDetailsCarousel.propTypes = {
-  images: PropTypes.array,
+  images: PropTypes.string,
 };

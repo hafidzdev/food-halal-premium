@@ -8,41 +8,23 @@ import Container from "@mui/material/Container";
 import { useBoolean } from "@/hooks/use-boolean";
 
 import ProductsList from "./common/ProductsList";
-import { GetProductData, GetAllProducts } from "@/services/Product";
+import { GetAllProducts } from "@/services/Product";
 import { useSearchParams } from "next/navigation";
 
 // ----------------------------------------------------------------------
-
-// ----------------------------------------------------------------------
+const initialLimitProduct = 18;
 
 export default function HomeProducts() {
-  const searchParams = useSearchParams();
-
   const [product, setProduct] = useState([]);
   const [hasMore, sethasMore] = useState(true);
   const [page, setPage] = useState(2);
 
-  //   const mobileOpen = useBoolean();
-
-  //   const [sort, setSort] = useState("latest");
-
   const loading = useBoolean(true);
-
-  const [viewMode, setViewMode] = useState("grid");
-
-  const params = new URLSearchParams(searchParams);
-  const queryInArray = Array.from(params.values());
-
-  const resultString = queryInArray
-    .flatMap((item) =>
-      item.split("+").map((category) => `&category=${category}`)
-    )
-    .join("");
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const newData = await GetAllProducts();
+        const newData = await GetAllProducts("", initialLimitProduct, 1);
 
         setProduct([...newData]);
         setPage(2);
@@ -57,7 +39,7 @@ export default function HomeProducts() {
 
   const fetchProduct = async () => {
     try {
-      const newData = await GetAllProducts();
+      const newData = await GetAllProducts("", initialLimitProduct, page);
       return newData;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -70,7 +52,10 @@ export default function HomeProducts() {
     const resultFormServer = await fetchProduct();
 
     setProduct((currentData) => [...currentData, ...resultFormServer]);
-    if (resultFormServer.length === 0 || resultFormServer.length < 20) {
+    if (
+      resultFormServer.length === 0 ||
+      resultFormServer.length < initialLimitProduct
+    ) {
       sethasMore(false);
     }
 
@@ -91,7 +76,7 @@ export default function HomeProducts() {
           next={fetchData}
           hasMore={hasMore}
           loading={loading.value}
-          viewMode={viewMode}
+          viewMode="grid"
           products={product}
         />
       </Box>
