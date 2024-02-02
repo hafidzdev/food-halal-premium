@@ -14,7 +14,7 @@ import useBoundingClientRect from "@/hooks/useBoundingClientRect";
 import Iconify from "@/components/partials/Iconify";
 import Carousel, { useCarousel } from "@/components/partials/carousel";
 
-import Image from "@/components/partials/image/image";
+import Image from "next/legacy/image";
 import ImageList from "./common/ImageList";
 import { GetEntityInfo } from "@/services/Entity";
 
@@ -90,8 +90,8 @@ export default function HomeHero() {
               <Image
                 alt="Logo Company"
                 src={entity.logo}
-                // width={350}
-                // height={350}
+                width={350}
+                height={350}
                 style={{
                   borderRadius: 2,
                   mx: "auto",
