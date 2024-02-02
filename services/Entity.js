@@ -3,10 +3,7 @@
 export async function GetEntityInfo() {
   try {
     const res = await fetch(
-      `https://shop-pcfpjwad6a-uc.a.run.app/entity/qcaTz5BI0BkByjGW2gtI`,
-      {
-        cache: "no-cache",
-      }
+      `${process.env.NEXT_PUBLIC_HOST_NAME}entity/qcaTz5BI0BkByjGW2gtI`
     );
 
     const data = await res.json();

@@ -33,6 +33,7 @@ export async function GetCart() {
     const res = await fetchWithToken(
       `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/cart?shared=false`,
       {
+        headers: { entity: process.env.NEXT_PUBLIC_ENTITY_NAME },
         cache: "no-store",
       }
     );
@@ -150,6 +151,33 @@ export async function GetAddress() {
     console.error("Error finding cart:", error.message);
   }
 }
+
+// export async function CreateAddress(productId) {
+//   try {
+//     const res = await fetchWithToken(
+//       `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/shipping-address`,
+//       {
+//         method: "post",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           product_id: productId,
+//           quantity: 1,
+//         }),
+//       }
+//     );
+//     const data = await res.json();
+
+//     if (!res.ok) {
+//       return { status: res.status, message: data.detail[0].msg };
+//     }
+
+//     return { status: res.status, message: data.response };
+//   } catch (error) {
+//     console.error("Error adding to cart:", error.message);
+//   }
+// }
 
 export async function UpdateMainAddress(addressId) {
   try {

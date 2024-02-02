@@ -3,19 +3,15 @@
 
 import { useEffect, useState } from "react";
 
-import {
-  Box,
-  TextField,
-  Typography,
-  Stack,
-  InputAdornment,
-  IconButton,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { getSession, signIn } from "next-auth/react";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase";
 import Iconify from "@/components/partials/Iconify";
 import LoadingButton from "@mui/lab/LoadingButton";
 
@@ -58,18 +54,22 @@ function Page() {
     let password = data.get("password");
 
     try {
-      const res = await signInWithEmailAndPassword(auth, email, password);
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+        authType: "sign-in",
+        callbackUrl: `${window.location.origin}`,
+      });
+      const gettingError = JSON.parse(res.error);
 
-      if (res) {
-        const loginExternalAPI = await signIn("credentials", {
-          redirect: false,
-          firebaseToken: res.user.accessToken,
-          callbackUrl: `${window.location.origin}`,
-        });
-        if (loginExternalAPI) router.push(redirectUrl);
+      if (res.ok) {
+        router.push(redirectUrl);
+      } else {
+        setError(gettingError.errors);
       }
     } catch (err) {
-      setError(err.message);
+      setError(err);
     } finally {
       setLoading(false);
     }
@@ -86,8 +86,8 @@ function Page() {
           boxShadow: (theme) => theme.customShadows.z24,
         }}
       >
-        <div>
-          <Typography variant="h3" paragraph sx={{ color: "text.primary" }}>
+        <Box>
+          <Typography variant="h3" sx={{ color: "text.primary" }}>
             Login
           </Typography>
           <Typography
@@ -105,7 +105,7 @@ function Page() {
               Get started
             </Typography>
           </Link>
-        </div>
+        </Box>
         {error !== "" ? (
           <Typography variant="body2" color="error.main">
             {error}

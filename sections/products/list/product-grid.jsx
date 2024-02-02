@@ -226,13 +226,7 @@ ProductGrid.propTypes = {
     sell_price: PropTypes.number,
     currency: PropTypes.string,
     price_in_currency: PropTypes.number,
-    category: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        slug: PropTypes.string,
-        type: PropTypes.string,
-      })
-    ),
+    category: PropTypes.string,
     favorite: PropTypes.shape({
       favorite: PropTypes.bool,
       total: PropTypes.number,

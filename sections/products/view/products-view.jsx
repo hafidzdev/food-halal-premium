@@ -20,7 +20,7 @@ import Iconify from "@/components/partials/Iconify";
 
 import ProductsFilters from "../filters";
 import ProductListCard from "../list";
-import { GetProductData } from "@/services/Product";
+import { GetAllProducts } from "@/services/Product";
 import { useSearchParams } from "next/navigation";
 
 // ----------------------------------------------------------------------
@@ -64,9 +64,9 @@ export default function ProductsView() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const newData = await GetProductData(resultString, 20, 1);
-
-        setProduct([...newData.response]);
+        const newData = await GetAllProducts(resultString, 20, 1);
+        console.log("getting: ", newData);
+        setProduct([...newData]);
         setPage(2);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -79,8 +79,8 @@ export default function ProductsView() {
 
   const fetchProduct = async () => {
     try {
-      const newData = await GetProductData(resultString, 20, page);
-      return newData.response;
+      const newData = await GetAllProducts(resultString, 20, page);
+      return newData;
     } catch (error) {
       console.error("Error fetching data:", error);
     }

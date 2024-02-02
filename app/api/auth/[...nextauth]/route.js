@@ -1,41 +1,41 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-async function refreshAccessToken(token) {
-  try {
-    const payload = {
-      refresh: token.refreshToken,
-    };
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_HOST_NAME}user/v2/login/refresh`,
-      {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+// async function refreshAccessToken(token) {
+//   try {
+//     const payload = {
+//       refresh: token.refreshToken,
+//     };
+//     const response = await fetch(
+//       `${process.env.NEXT_PUBLIC_HOST_NAME}user/v2/login/refresh`,
+//       {
+//         method: "POST",
+//         body: JSON.stringify(payload),
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
 
-    const refreshedTokens = await response.json();
+//     const refreshedTokens = await response.json();
 
-    if (!response.ok) {
-      throw refreshedTokens;
-    }
+//     if (!response.ok) {
+//       throw refreshedTokens;
+//     }
 
-    return {
-      ...token,
-      accessToken: refreshedTokens.tokens.access,
-      accessTokenExpires: new Date(refreshedTokens.tokens.access_exp).getTime(),
-      refreshToken: refreshedTokens.tokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
-    };
-  } catch (error) {
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
-  }
-}
+//     return {
+//       ...token,
+//       accessToken: refreshedTokens.tokens.access,
+//       accessTokenExpires: new Date(refreshedTokens.tokens.access_exp).getTime(),
+//       refreshToken: refreshedTokens.tokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
+//     };
+//   } catch (error) {
+//     return {
+//       ...token,
+//       error: "RefreshAccessTokenError",
+//     };
+//   }
+// }
 
 export const authOptions = {
   providers: [
@@ -43,16 +43,18 @@ export const authOptions = {
       id: "credentials",
       name: "food-halal-premium",
       credentials: {
-        firebaseToken: { type: "text" },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+        authType: { type: "text" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const payload = {
-          token: credentials.firebaseToken,
-          project_id: "hararu-web-react",
+          email: credentials.email,
+          password: credentials.password,
         };
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_HOST_NAME}user/v2/multifirebase`,
+          `${process.env.NEXT_PUBLIC_HOST_NAME}user/${credentials.authType}`,
           {
             method: "POST",
             body: JSON.stringify(payload),
@@ -64,7 +66,9 @@ export const authOptions = {
 
         const user = await res.json();
         if (!res.ok) {
-          throw new Error(user.message);
+          throw new Error(
+            JSON.stringify({ errors: user.message, status: false })
+          );
         }
         // If no error and we have user data, return it
         if (res.ok && user) {
@@ -84,48 +88,39 @@ export const authOptions = {
     error: "/signin",
   },
   callbacks: {
-    async jwt({ token, user, account, trigger, session }) {
-      if (account && user) {
-        var accessExp = new Date(user.tokens.access_exp).getTime();
-        const { tokens, ...withoutTokens } = user;
-        const { user_entities, ...withoutEntities } = withoutTokens.user;
+    async jwt({ token, user }) {
+      if (user) {
+        const { stsTokenManager, ...withoutTokens } = user.message;
 
-        return {
-          accessToken: user.tokens.access,
-          accessTokenExpires: accessExp,
-          refreshToken: user.tokens.refresh,
-          user: withoutEntities,
-        };
+        token.accessToken = user.message.stsTokenManager.accessToken;
+        token.accessTokenExpires = user.message.stsTokenManager.expirationTime;
+        token.refreshToken = user.message.stsTokenManager.refreshToken;
+        token.user = withoutTokens;
       }
+      // if (account && user) {
+      //   var accessExp = new Date(
+      //     user.message.stsTokenManager.expirationTime
+      //   ).getTime();
+      //   const { stsTokenManager, ...withoutTokens } = user.message;
 
-      // When update session do this
-      if (trigger === "update") {
-        if (session?.first_name) token.user.first_name = session?.first_name;
-        if (session?.last_name) token.user.last_name = session?.last_name;
-        if (session?.country) token.user.country = session?.country;
-        if (session?.address) token.user.address = session?.address;
-        if (session?.mobile_phone)
-          token.user.mobile_phone = session?.mobile_phone;
-        if (session?.currency) token.user.currency = session?.currency;
-        if (session?.image_url) token.user.image_url = session?.image_url;
+      //   return {
+      //     accessToken: user.message.stsTokenManager.accessToken,
+      //     accessTokenExpires: accessExp,
+      //     refreshToken: user.message.stsTokenManager.refreshToken,
+      //     user: withoutTokens,
+      //   };
+      // }
 
-        return token;
+      let currentDate = new Date().getTime();
+      if (currentDate > token.accessTokenExpires) {
+        throw Error("Expired token");
       }
-
-      // Return previous token if the access token has not expired yet
-      let currentDate = new Date();
-      if (currentDate.getTime() < token.accessTokenExpires) {
-        return token;
-      }
-
-      // Access token has expired, try to update it
-      return refreshAccessToken(token);
+      return token;
     },
 
     async session({ session, token }) {
       session.user = token.user;
       session.accessToken = token.accessToken;
-      session.error = token.error;
 
       return session;
     },

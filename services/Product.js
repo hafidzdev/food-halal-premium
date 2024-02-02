@@ -17,10 +17,7 @@ export async function GetProductData(category, limit, page) {
 export async function GetAllProducts() {
   try {
     const res = await fetch(
-      "https://shop-pcfpjwad6a-uc.a.run.app/product?&page=1&limit=100",
-      {
-        cache: "no-cache",
-      }
+      `${process.env.NEXT_PUBLIC_HOST_NAME}product?&page=1&limit=100`
     );
 
     const data = await res.json();
@@ -38,10 +35,7 @@ export async function GetAllProducts() {
 export async function GetProductDetail(productSlug) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/product-entity/${productSlug}`,
-      {
-        cache: "force-cache",
-      }
+      `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/product-entity/${productSlug}`
     );
 
     const data = await res.json();

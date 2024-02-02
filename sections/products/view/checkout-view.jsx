@@ -30,7 +30,6 @@ export default function CheckoutView({
     purchaseShipping: "",
     purchaseId: "",
   });
-  // const [address, setAddress] = useState(addressList || []);
 
   const totalSubTotalPrice = Array.isArray(cart)
     ? cart?.reduce((accumulator, item) => accumulator + item.sub_total_price, 0)
@@ -49,7 +48,6 @@ export default function CheckoutView({
       <Typography variant="h3" sx={{ mb: 5 }}>
         Checkout
       </Typography>
-
       <Grid container spacing={{ xs: 5, md: 8 }}>
         <Grid xs={12} md={8}>
           <Stack
@@ -65,7 +63,7 @@ export default function CheckoutView({
               />
             </div>
 
-            {purchase.purchaseShipAddress !== "" && (
+            {purchase.purchaseShipAddress && (
               <div>
                 <StepLabel title="Shipping Method" step="2" />
                 {deliveryList.length < 1 ? (
@@ -82,7 +80,7 @@ export default function CheckoutView({
               </div>
             )}
 
-            {purchase.purchaseShipDelivery !== "" && (
+            {purchase.purchaseShipDelivery && (
               <div>
                 <StepLabel title="Select Payment" step="2" />
                 {paymentList.length < 1 ? (

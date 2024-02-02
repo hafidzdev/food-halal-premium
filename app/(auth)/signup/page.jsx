@@ -14,9 +14,7 @@ import { LoadingButton } from "@mui/lab";
 
 import Link from "next/link";
 import { getSession, signIn } from "next-auth/react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase";
 
 function Page() {
   const [loading, setLoading] = useState(false);
@@ -52,18 +50,22 @@ function Page() {
     let password = data.get("password");
 
     try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+        authType: "sign-up",
+        callbackUrl: `${window.location.origin}`,
+      });
+      const gettingError = JSON.parse(res.error);
 
-      if (res) {
-        const loginExternalAPI = await signIn("credentials", {
-          redirect: false,
-          firebaseToken: res.user.accessToken,
-          callbackUrl: `${window.location.origin}`,
-        });
-        if (loginExternalAPI) router.push("/");
+      if (res.ok) {
+        router.push("/");
+      } else {
+        setError(gettingError.errors);
       }
     } catch (err) {
-      setError(err.message);
+      setError(err);
     } finally {
       setLoading(false);
     }
