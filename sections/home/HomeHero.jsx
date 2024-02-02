@@ -12,10 +12,7 @@ import Typography from "@mui/material/Typography";
 import { useResponsive } from "@/hooks/use-responsive";
 import useBoundingClientRect from "@/hooks/useBoundingClientRect";
 import Iconify from "@/components/partials/Iconify";
-import Carousel, {
-  useCarousel,
-  CarouselArrows,
-} from "@/components/partials/carousel";
+import Carousel, { useCarousel } from "@/components/partials/carousel";
 
 import Image from "next/image";
 import ImageList from "./common/ImageList";
@@ -46,11 +43,11 @@ export default function HomeHero() {
       },
       {
         breakpoint: theme.breakpoints.values.lg,
-        settings: { slidesToShow: 2 },
+        settings: { slidesToShow: 3 },
       },
       {
         breakpoint: theme.breakpoints.values.sm,
-        settings: { slidesToShow: 2 },
+        settings: { slidesToShow: 3 },
       },
     ],
   });
@@ -185,14 +182,6 @@ export default function HomeHero() {
             </Box>
           ))}
         </Carousel>
-
-        <CarouselArrows
-          spacing={2}
-          justifyContent="center"
-          onNext={carousel.onNext}
-          onPrev={carousel.onPrev}
-          sx={{ width: 1 }}
-        />
       </Box>
     </Box>
   );

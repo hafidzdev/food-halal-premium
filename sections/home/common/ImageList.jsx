@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import Image from "next/image";
+import Image from "@/components/partials/image/image";
 import { Card, Box } from "@mui/material";
 
 const ImageList = ({ item }) => {
@@ -17,11 +17,11 @@ const ImageList = ({ item }) => {
           src={item}
           alt="cover"
           ratio="3/4"
-          width="200"
-          height={200}
-          // layout="responsive"
-          // loading="lazy"
-          priority
+          // width="200"
+          // height={200}
+          // // layout="responsive"
+          // // loading="lazy"
+          // priority
         />
       </Box>
     </Card>
