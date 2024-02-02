@@ -14,7 +14,7 @@ import useBoundingClientRect from "@/hooks/useBoundingClientRect";
 import Iconify from "@/components/partials/Iconify";
 import Carousel, { useCarousel } from "@/components/partials/carousel";
 
-import Image from "next/image";
+import Image from "@/components/partials/image/image";
 import ImageList from "./common/ImageList";
 import { GetEntityInfo } from "@/services/Entity";
 
@@ -47,7 +47,7 @@ export default function HomeHero() {
       },
       {
         breakpoint: theme.breakpoints.values.sm,
-        settings: { slidesToShow: 3 },
+        settings: { slidesToShow: 2 },
       },
     ],
   });
@@ -90,14 +90,14 @@ export default function HomeHero() {
               <Image
                 alt="Logo Company"
                 src={entity.logo}
-                width={350}
-                height={350}
+                // width={350}
+                // height={350}
                 style={{
                   borderRadius: 2,
                   mx: "auto",
                   display: "block",
                 }}
-                layout="responsive"
+                // layout="responsive"
                 // loading="lazy"
                 // priority
               />
@@ -119,24 +119,30 @@ export default function HomeHero() {
               </Typography>
 
               <Stack direction="row" flexWrap="wrap" spacing={1} sx={{ my: 2 }}>
-                <SocialLink
-                  name={"Instagram"}
-                  link={entity?.socialMediaLink?.instagram}
-                  icon={"carbon:logo-instagram"}
-                  color={"#E02D69"}
-                />
-                <SocialLink
-                  name={"Facebook"}
-                  link={entity?.socialMediaLink?.facebook}
-                  icon={"carbon:logo-facebook"}
-                  color={"#1877F2"}
-                />{" "}
-                <SocialLink
-                  name={"Line"}
-                  link={entity?.socialMediaLink?.line}
-                  icon={"carbon:checkmark-outline"}
-                  color={"#05a500"}
-                />
+                {entity?.socialMediaLink?.instagram && (
+                  <SocialLink
+                    name={"Instagram"}
+                    link={entity?.socialMediaLink?.instagram}
+                    icon={"carbon:logo-instagram"}
+                    color={"#E02D69"}
+                  />
+                )}
+                {entity?.socialMediaLink?.facebook && (
+                  <SocialLink
+                    name={"Facebook"}
+                    link={entity?.socialMediaLink?.facebook}
+                    icon={"carbon:logo-facebook"}
+                    color={"#1877F2"}
+                  />
+                )}
+                {entity?.socialMediaLink?.line && (
+                  <SocialLink
+                    name={"Line"}
+                    link={entity?.socialMediaLink?.line}
+                    icon={"carbon:checkmark-outline"}
+                    color={"#05a500"}
+                  />
+                )}
               </Stack>
 
               <Typography
