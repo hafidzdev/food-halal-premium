@@ -37,6 +37,7 @@ const SORT_OPTIONS = [
 ];
 
 // ----------------------------------------------------------------------
+const initialLimitProduct = 20;
 
 export default function ProductsView() {
   const searchParams = useSearchParams();
@@ -53,19 +54,16 @@ export default function ProductsView() {
 
   const [viewMode, setViewMode] = useState("grid");
 
-  const params = new URLSearchParams(searchParams);
-  const queryInArray = Array.from(params.values());
-  const resultString = queryInArray
-    .flatMap((item) =>
-      item.split("+").map((category) => `&category=${category}`)
-    )
-    .join("");
+  const resultString = searchParams.get("fcategory");
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const newData = await GetAllProducts(resultString, 20, 1);
-        console.log("getting: ", newData);
+        const newData = await GetAllProducts(
+          resultString,
+          initialLimitProduct,
+          1
+        );
         setProduct([...newData]);
         setPage(2);
       } catch (error) {
@@ -79,7 +77,11 @@ export default function ProductsView() {
 
   const fetchProduct = async () => {
     try {
-      const newData = await GetAllProducts(resultString, 20, page);
+      const newData = await GetAllProducts(
+        resultString,
+        initialLimitProduct,
+        page
+      );
       return newData;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -92,7 +94,10 @@ export default function ProductsView() {
     const resultFormServer = await fetchProduct();
 
     setProduct((currentData) => [...currentData, ...resultFormServer]);
-    if (resultFormServer.length === 0 || resultFormServer.length < 20) {
+    if (
+      resultFormServer.length === 0 ||
+      resultFormServer.length < initialLimitProduct
+    ) {
       sethasMore(false);
     }
 
