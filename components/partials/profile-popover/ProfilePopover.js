@@ -39,7 +39,7 @@ export default function ProfilePopover({ sx }) {
           }}
         >
           <Avatar
-            src={profile?.providerData[0]?.photoURL}
+            src={profile?.providerData?.[0]?.photoURL || ""}
             alt="My profile"
             sx={{ width: 26, height: 26 }}
           />
