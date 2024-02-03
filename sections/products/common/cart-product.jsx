@@ -44,6 +44,7 @@ export default function CartProduct({ productCart }) {
         sx={{
           flexGrow: 1,
           width: { md: `calc(100% - ${0}px)` },
+          mb: 3,
         }}
       >
         <Box
@@ -60,7 +61,6 @@ export default function CartProduct({ productCart }) {
             <Box
               sx={{
                 position: "relative",
-                mb: 2,
               }}
               key={index}
             >

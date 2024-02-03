@@ -66,7 +66,7 @@ export default function CartDetailsView() {
       }}
     >
       <Grid container justifyContent="center" spacing={{ xs: 5, md: 8 }}>
-        <Grid xs={12} md={6}>
+        <Grid item xs={12} md={6}>
           <Link
             component={RouterLink}
             color="inherit"
