@@ -22,6 +22,8 @@ import HeaderShadow from "../common/header-shadow";
 import SettingMode from "@/components/partials/mode/SettingMode";
 import ProfilePopover from "@/components/partials/profile-popover/ProfilePopover";
 
+import Image from "next/legacy/image";
+
 // ----------------------------------------------------------------------
 const mainNav = [
   {
@@ -57,13 +59,24 @@ export default function Header({ headerOnDark }) {
 
   const renderContent = (
     <>
-      <Box sx={{ lineHeight: 0, position: "relative" }}>
-        {/* <Logo /> */}
-        <Typography
-          variant="h4"
-          component="div"
-          sx={{ flexGrow: 1, display: "flex", alignItems: "baseline" }}
-        >
+      <Box
+        sx={{
+          lineHeight: 0,
+          position: "relative",
+          flexGrow: 1,
+          display: "flex",
+          mt: 1,
+        }}
+      >
+        <Image
+          alt="Logo"
+          src="https://firebasestorage.googleapis.com/v0/b/staging-xetia-io-01.appspot.com/o/entity-info%2FWhatsApp%20Image%202024-01-29%20at%2013.36.25.jpeg?alt=media&token=64f18e64-2b26-4223-bf1a-16c550e48f09"
+          width={"40"}
+          height={"40"}
+          priority
+          style={{ borderRadius: 2 }}
+        />
+        <Typography variant="h5" component="div" sx={{ ml: 2, mt: 0.5 }}>
           {"Shop Manager"}
         </Typography>
       </Box>
