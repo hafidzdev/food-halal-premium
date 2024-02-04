@@ -11,3 +11,27 @@
 .position-inherit {
   position: inherit !important;
 }
+
+.hexagon-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 70px;
+  width: 70px;
+  position: absolute;
+  bottom: 15px;
+  border-radius: 45px;
+  color: white;
+  background-color: #fa541c;
+  background-image: linear-gradient(331deg, #fa541c 0%, #b3200e 100%);
+  -webkit-clip-path: polygon(
+    50% 0%,
+    95% 25%,
+    95% 75%,
+    50% 100%,
+    5% 75%,
+    5% 25%
+  );
+  clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+}
