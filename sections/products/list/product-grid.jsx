@@ -2,7 +2,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useCart } from "@/context/CartContext";
-import { AddToCart, GetCart } from "@/services/Purchase";
+import { AddToCart, GetAllCart } from "@/services/Purchase";
 
 import { Box } from "@mui/material";
 import Fab from "@mui/material/Fab";
@@ -19,9 +19,9 @@ import ProductPrice from "../common/product-price";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
-import CircularProgress from "@mui/material/CircularProgress";
-import Backdrop from "@mui/material/Backdrop";
 import Typography from "@mui/material/Typography";
+
+import { AddProductCartDialog } from "@/components/partials/modal";
 
 // ----------------------------------------------------------------------
 
@@ -29,8 +29,17 @@ export default function ProductGrid({ product, sx, ...other }) {
   const [, setCart] = useCart();
   const router = useRouter();
 
+  const [openCartDialog, setOpenCartDialog] = useState({
+    isOpen: false,
+    product: {},
+  });
   const [snackbars, setSnackbars] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const handleOpenCartModal = (product) =>
+    setOpenCartDialog({ isOpen: true, product });
+  const handleCloseCartModal = () =>
+    setOpenCartDialog({ isOpen: false, product: {} });
 
   const handleCloseSnackbar = (id) => {
     setSnackbars((prevSnackbars) =>
@@ -50,8 +59,8 @@ export default function ProductGrid({ product, sx, ...other }) {
 
       const addProductToCart = await AddToCart(productId);
       if (addProductToCart.status === 200) {
-        const getCart = await GetCart();
-        setCart(getCart);
+        const getAllCart = await GetAllCart();
+        setCart(getAllCart);
         setSnackbars((prevSnackbars) => [
           ...prevSnackbars,
           {
@@ -101,7 +110,7 @@ export default function ProductGrid({ product, sx, ...other }) {
     >
       <Box sx={{ position: "relative", mb: 2 }}>
         <Fab
-          // onClick={() => handleAddToCart(product.id)}
+          onClick={() => handleOpenCartModal(product)}
           className="add-to-cart"
           color="primary"
           size="small"
@@ -173,12 +182,10 @@ export default function ProductGrid({ product, sx, ...other }) {
         /> */}
       </Stack>
 
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <AddProductCartDialog
+        open={openCartDialog}
+        onClose={handleCloseCartModal}
+      />
 
       {snackbars.map((snackbar) => (
         <SnackbarMessage

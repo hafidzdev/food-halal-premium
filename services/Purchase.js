@@ -28,12 +28,11 @@ async function fetchWithToken(url, options = {}) {
 // ************
 // 		CART
 // ************
-export async function GetCart() {
+export async function GetAllCart() {
   try {
     const res = await fetchWithToken(
-      `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/cart?shared=false`,
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart?page=1&limit=20`,
       {
-        headers: { entity: process.env.NEXT_PUBLIC_ENTITY_NAME },
         cache: "no-store",
       }
     );

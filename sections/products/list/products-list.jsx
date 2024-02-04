@@ -2,7 +2,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useCart } from "@/context/CartContext";
-import { AddToCart, GetCart } from "@/services/Purchase";
+import { AddToCart, GetAllCart } from "@/services/Purchase";
 
 import Fab from "@mui/material/Fab";
 import Link from "@mui/material/Link";
@@ -50,8 +50,8 @@ export default function ProductList({ product, ...other }) {
 
       const addProductToCart = await AddToCart(productId);
       if (addProductToCart.status === 200) {
-        const getCart = await GetCart();
-        setCart(getCart);
+        const getAllCart = await GetAllCart();
+        setCart(getAllCart);
         setSnackbars((prevSnackbars) => [
           ...prevSnackbars,
           {
