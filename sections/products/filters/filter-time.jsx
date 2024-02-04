@@ -7,13 +7,11 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 
 import Iconify from "@/components/partials/Iconify";
 
-// ----------------------------------------------------------------------
-
-export default function FilterTime({ departureDay, onChangeDepartureDay, sx }) {
+export default function FilterTime({ date, onChangeDate, sx }) {
   return (
     <MobileDatePicker
-      value={departureDay}
-      onChange={onChangeDepartureDay}
+      value={date}
+      onChange={onChangeDate}
       slots={{
         textField: ({
           inputProps,
@@ -31,7 +29,7 @@ export default function FilterTime({ departureDay, onChangeDepartureDay, sx }) {
             inputProps={{
               ...inputProps,
               ...inputOther,
-              placeholder: "Departure day",
+              placeholder: "Date",
             }}
             startAdornment={
               <InputAdornment position="start">
@@ -58,6 +56,6 @@ export default function FilterTime({ departureDay, onChangeDepartureDay, sx }) {
 
 FilterTime.propTypes = {
   sx: PropTypes.object,
-  onChangeDepartureDay: PropTypes.func,
-  departureDay: PropTypes.instanceOf(Date),
+  onChangeDate: PropTypes.func,
+  date: PropTypes.instanceOf(Date),
 };
