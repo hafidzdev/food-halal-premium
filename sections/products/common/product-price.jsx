@@ -1,14 +1,14 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 
-import { fCurrency } from '@/utils/format-number';
+import { fCurrency } from "@/utils/format-number";
 
 export default function ProductPrice({ price, priceSale = 0, sx, ...other }) {
   return (
     <Stack direction="row" sx={{ typography: "subtitle2", ...sx }} {...other}>
-      {fCurrency(price)}
+      {"¥" + price}
 
       <Box
         component="span"
