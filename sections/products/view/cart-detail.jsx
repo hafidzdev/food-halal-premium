@@ -36,7 +36,7 @@ const productCart = [
     image:
       "https://cdn.shopify.com/s/files/1/0147/9445/7136/products/image_2e8f9eb4-d566-4c72-91cd-ea5149e3525a.jpg?v=1673878789",
     amount: 1,
-    price: "$100",
+    price: "100",
   },
   {
     id: 2,
@@ -44,7 +44,7 @@ const productCart = [
     image:
       "https://cdn.shopify.com/s/files/1/0147/9445/7136/products/image_2e8f9eb4-d566-4c72-91cd-ea5149e3525a.jpg?v=1673878789",
     amount: 1,
-    price: "$100",
+    price: "100",
   },
   {
     id: 3,
@@ -52,7 +52,15 @@ const productCart = [
     image:
       "https://cdn.shopify.com/s/files/1/0147/9445/7136/products/image_2e8f9eb4-d566-4c72-91cd-ea5149e3525a.jpg?v=1673878789",
     amount: 1,
-    price: "$100",
+    price: "100",
+  },
+  {
+    id: 3,
+    name: "Product 3",
+    image:
+      "https://cdn.shopify.com/s/files/1/0147/9445/7136/products/image_2e8f9eb4-d566-4c72-91cd-ea5149e3525a.jpg?v=1673878789",
+    amount: 1,
+    price: "100",
   },
 ];
 

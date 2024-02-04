@@ -1,7 +1,15 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { Box, Link, Paper, Stack, useTheme, IconButton } from "@mui/material";
-
+import {
+  Box,
+  Link,
+  Paper,
+  Stack,
+  useTheme,
+  IconButton,
+  Typography,
+  Divider,
+} from "@mui/material";
 import { RouterLink } from "@/routes/components";
 import Image from "@/components/partials/image";
 import TextMaxLine from "@/components/partials/text-max-line";
@@ -44,7 +52,7 @@ export default function CartProduct({ productCart }) {
         sx={{
           flexGrow: 1,
           width: { md: `calc(100% - ${0}px)` },
-          mb: 3,
+          mb: 2,
         }}
       >
         <Box
@@ -99,13 +107,22 @@ export default function CartProduct({ productCart }) {
                   />
 
                   <Stack spacing={0.5}>
-                    <TextMaxLine
+                    {/* <TextMaxLine
+                      variant="caption"
+                      line={1}
+                      sx={{ color: "text.disabled" }}
+                    >
+                      {"Category"}
+                    </TextMaxLine> */}
+
+                    <Typography
                       variant="body2"
                       line={1}
                       sx={{ fontWeight: "fontWeightMedium" }}
                     >
-                      {product?.name}
-                    </TextMaxLine>
+                      ABC Kecap Manis Botol 600ml
+                    </Typography>
+                    <Divider />
 
                     <ProductPrice price={product?.price} />
                   </Stack>
@@ -114,10 +131,10 @@ export default function CartProduct({ productCart }) {
                     direction="row"
                     alignItems="center"
                     justifyContent={"space-between"}
-                    sx={{ mt: 1 }}
+                    sx={{ mt: 0 }}
                   >
                     <IconButton onClick={(e) => handleIncrement(product.id, e)}>
-                      <Iconify icon="carbon:add-alt" width="16" height="16" />
+                      <Iconify icon="carbon:add-alt" width="10" height="10" />
                     </IconButton>
                     <span style={{ margin: "0 10px" }}>
                       {productQuantity[product.id] || 0}
@@ -128,8 +145,8 @@ export default function CartProduct({ productCart }) {
                     >
                       <Iconify
                         icon="simple-line-icons:minus"
-                        width="16"
-                        height="16"
+                        width="10"
+                        height="10"
                       />
                     </IconButton>
                   </Stack>
