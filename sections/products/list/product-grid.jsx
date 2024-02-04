@@ -4,25 +4,24 @@ import PropTypes from "prop-types";
 import { useCart } from "@/context/CartContext";
 import { AddToCart, GetCart } from "@/services/Purchase";
 
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
-
 import { RouterLink } from "@/routes/components";
 
 // import Label from "@/components/partials/label";
-// import Image from "next/legacy/image";
 import Image from "@/components/partials/image/image";
 import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
 import ProductPrice from "../common/product-price";
-import ProductRating from "../common/product-rating";
+// import ProductRating from "../common/product-rating";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
+import Typography from "@mui/material/Typography";
 
 // ----------------------------------------------------------------------
 
@@ -100,24 +99,6 @@ export default function ProductGrid({ product, sx, ...other }) {
       }}
       {...other}
     >
-      {/* {product.label === "new" && (
-        <Label
-          color="info"
-          sx={{ position: "absolute", m: 1, top: 0, right: 0, zIndex: 9 }}
-        >
-          NEW
-        </Label>
-      )}
-
-      {product.label === "sale" && (
-        <Label
-          color="error"
-          sx={{ position: "absolute", m: 1, top: 0, right: 0, zIndex: 9 }}
-        >
-          SALE
-        </Label>
-      )} */}
-
       <Box sx={{ position: "relative", mb: 2 }}>
         <Fab
           // onClick={() => handleAddToCart(product.id)}
@@ -140,22 +121,27 @@ export default function ProductGrid({ product, sx, ...other }) {
           <Iconify icon="carbon:shopping-cart-plus" />
         </Fab>
 
-        <Image
-          src={
-            product.image !== "null"
-              ? product.image
-              : "/assets/images/no-image-product.webp"
-          }
-          style={{
-            objectFit: "cover",
-            flexShrink: 0,
-            borderRadius: 1.5,
-            bgcolor: "background.neutral",
-            borderRadius: 5,
-            height: "150px",
-            width: "150px",
-          }}
-        />
+        <Link
+          component={RouterLink}
+          href={`/product/${product.id}`}
+          color="inherit"
+        >
+          <Image
+            src={
+              product.image !== "null"
+                ? product.image
+                : "/assets/images/no-image-product.webp"
+            }
+            style={{
+              objectFit: "cover",
+              flexShrink: 0,
+              borderRadius: "0.5rem",
+              bgcolor: "background.neutral",
+              height: "150px",
+              width: "150px",
+            }}
+          />
+        </Link>
       </Box>
 
       <Stack spacing={0.5}>
@@ -170,13 +156,13 @@ export default function ProductGrid({ product, sx, ...other }) {
           href={`/product/${product.id}`}
           color="inherit"
         >
-          <TextMaxLine
+          <Typography
             variant="body2"
             line={1}
             sx={{ fontWeight: "fontWeightMedium" }}
           >
             {product?.name}
-          </TextMaxLine>
+          </Typography>
         </Link>
 
         <ProductPrice price={product.price} priceSale={0} />

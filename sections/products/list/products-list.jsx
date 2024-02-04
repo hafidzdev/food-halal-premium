@@ -11,11 +11,12 @@ import Stack from "@mui/material/Stack";
 import { RouterLink } from "@/routes/components";
 
 // import Label from "@/components/partials/label";
-import Image from "next/legacy/image";
+import Image from "@/components/partials/image/image";
+
 import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
 import ProductPrice from "../common/product-price";
-import ProductRating from "../common/product-rating";
+// import ProductRating from "../common/product-rating";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
@@ -98,26 +99,8 @@ export default function ProductList({ product, ...other }) {
       }}
       {...other}
     >
-      {/* {product.label === "new" && (
-        <Label
-          color="info"
-          sx={{ position: "absolute", m: 1, top: 0, left: 0, zIndex: 9 }}
-        >
-          NEW
-        </Label>
-      )}
-
-      {product.label === "sale" && (
-        <Label
-          color="error"
-          sx={{ position: "absolute", m: 1, top: 0, left: 0, zIndex: 9 }}
-        >
-          SALE
-        </Label>
-      )} */}
-
       <Fab
-        onClick={() => handleAddToCart(product.id)}
+        // onClick={() => handleAddToCart(product.id)}
         className="add-to-cart"
         color="primary"
         size="small"
@@ -137,26 +120,30 @@ export default function ProductList({ product, ...other }) {
         <Iconify icon="carbon:shopping-cart-plus" />
       </Fab>
 
-      <Image
-        src={
-          product.image !== "null"
-            ? product.image
-            : "/assets/images/no-image-product.webp"
-        }
-        style={{
-          objectFit: "cover",
-          flexShrink: 0,
-          borderRadius: 1.5,
-          bgcolor: "background.neutral",
-          borderRadius: 5,
-        }}
-        height={100}
-        width={100}
-        // layout="fixed" // Mengubah layout menjadi "fixed"
-        // loading="lazy"
-        alt="cover"
-        priority
-      />
+      <Link
+        component={RouterLink}
+        href={`/product/${product.id}`}
+        color="inherit"
+      >
+        <Image
+          src={
+            product.image !== "null"
+              ? product.image
+              : "/assets/images/no-image-product.webp"
+          }
+          style={{
+            objectFit: "cover",
+            flexShrink: 0,
+            borderRadius: 1.5,
+            bgcolor: "background.neutral",
+            borderRadius: 5,
+          }}
+          height={100}
+          width={100}
+          alt="cover"
+          priority
+        />
+      </Link>
 
       <Stack spacing={1} sx={{ ml: 3 }}>
         <Stack spacing={0.5}>
@@ -165,8 +152,6 @@ export default function ProductList({ product, ...other }) {
             line={1}
             sx={{ color: "text.disabled" }}
           >
-            {/* {Array.isArray(product.category) &&
-              product.category.map((item) => item.name + " ")} */}
             {product?.category}
           </TextMaxLine>
 
@@ -181,11 +166,11 @@ export default function ProductList({ product, ...other }) {
           </Link>
         </Stack>
 
-        <ProductRating ratingNumber={0} label="No Review" />
+        {/* <ProductRating ratingNumber={0} label="No Review" /> */}
 
-        <TextMaxLine variant="body2" line={1} sx={{ color: "text.secondary" }}>
+        {/* <TextMaxLine variant="body2" line={1} sx={{ color: "text.secondary" }}>
           {product?.brand}
-        </TextMaxLine>
+        </TextMaxLine> */}
 
         <ProductPrice
           price={product?.price}
