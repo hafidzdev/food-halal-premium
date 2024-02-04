@@ -9,7 +9,7 @@ import { useBoolean } from "@/hooks/use-boolean";
 
 import ProductsList from "./common/ProductsList";
 import { GetAllProducts } from "@/services/Product";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 
 // ----------------------------------------------------------------------
 const initialLimitProduct = 18;
@@ -68,6 +68,7 @@ export default function HomeProducts() {
         sx={{
           flexGrow: 1,
           pl: { md: 8 },
+          ml: { md: 3.5, sm: 2 },
           width: { md: `calc(100% - ${100}px)` },
         }}
       >
