@@ -97,7 +97,7 @@ export default function HomeHero() {
                   mx: "auto",
                   display: "block",
                 }}
-                // layout="responsive"
+                layout="responsive"
                 // loading="lazy"
                 // priority
               />
