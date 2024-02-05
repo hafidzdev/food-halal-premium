@@ -15,12 +15,12 @@ const getSession = async () => {
 
 async function fetchWithToken(url, options = {}) {
   const userSession = await getSession();
-
+  console.log(userSession.accessToken);
   return fetch(url, {
     ...options,
     headers: {
       ...options.headers,
-      Authorization: `Bearer ${userSession.accessToken}`,
+      Authorization: `${userSession.accessToken}`,
     },
   });
 }
@@ -38,10 +38,8 @@ export async function GetAllCart() {
     );
 
     const data = await res.json();
-    const cartItems = Array.isArray(data?.response)
-      ? data?.response[0]?.cart_item
-      : [];
-
+    const cartItems = Array.isArray(data?.data) ? data?.data : [];
+    console.log(data);
     if (!res.ok) {
       return [];
     }
@@ -53,28 +51,52 @@ export async function GetAllCart() {
   }
 }
 
-export async function AddToCart(productId) {
+export async function AddProductToCart(cartId, productId, amount) {
   try {
     const res = await fetchWithToken(
-      `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/cart`,
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart-product/${cartId}`,
       {
         method: "post",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          product_id: productId,
-          quantity: 1,
+          productId,
+          amount,
         }),
       }
     );
     const data = await res.json();
 
     if (!res.ok) {
-      return { status: res.status, message: data.detail[0].msg };
+      return { status: res.status, message: data.data };
     }
 
-    return { status: res.status, message: data.response };
+    return { status: res.status, data: data.data };
+  } catch (error) {
+    console.error("Error adding to cart:", error.message);
+  }
+}
+
+export async function CreateShopCart(allData) {
+  try {
+    const res = await fetchWithToken(
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...allData }),
+      }
+    );
+    const data = await res.json();
+
+    if (!res.ok) {
+      return { status: res.status, message: data.message };
+    }
+
+    return { status: res.status, data: data.data };
   } catch (error) {
     console.error("Error adding to cart:", error.message);
   }
