@@ -18,20 +18,22 @@ export default function FilterCategory({
 
   return (
     <Stack {...other}>
-      {options.map((option) => (
+      {options?.map((option, index) => (
         <FormControlLabel
-          key={option.slug}
+          key={index}
           control={
             <Checkbox
               size="small"
-              value={option.slug}
-              checked={filterCategory.includes(option.slug)}
+              value={option?.categoryName}
+              checked={filterCategory.includes(option?.categoryName)}
               onChange={() =>
-                router.push(pathname + "?" + onChangeCategory(option.slug))
+                router.push(
+                  pathname + "?" + onChangeCategory(option?.categoryName)
+                )
               }
             />
           }
-          label={option.name}
+          label={option?.categoryName}
         />
       ))}
     </Stack>

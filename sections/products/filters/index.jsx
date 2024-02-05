@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from "prop-types";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 import Stack from "@mui/material/Stack";
 import Drawer from "@mui/material/Drawer";
@@ -18,15 +18,7 @@ import FilterOffer from "./filter-offer";
 import FilterPrice from "./filter-price";
 import FilterStock from "./filter-stock";
 import { useRouter, useSearchParams } from "next/navigation";
-
-const CATEGORY_OPTIONS = [
-  { id: 1, name: "Frozen Foods", slug: "Frozen food" },
-  { id: 2, name: "Drinks", slug: "Drinks" },
-  { id: 3, name: "Meat", slug: "meat" },
-  { id: 4, name: "Spices", slug: "spices" },
-  { id: 5, name: "Seafood", slug: "seafood" },
-  { id: 6, name: "Sauce & Oil", slug: "Sauce/Oil" },
-];
+import { GetAllCategory } from "@/services/Category";
 
 const OFFER_OPTIONS = ["Cashback", "Gratis Ongkir", "COD", "Diskon"];
 
@@ -143,6 +135,21 @@ export default function ProductsFilters({ open, onClose }) {
     router.push("/product");
   }, []);
 
+  const [category, setCategory] = useState([]);
+
+  useEffect(() => {
+    async function fetchCategory() {
+      try {
+        const dataCategory = await GetAllCategory();
+        setCategory(dataCategory);
+      } catch (error) {
+        console.error("Error fetching category:", error);
+      }
+    }
+
+    fetchCategory();
+  }, []);
+
   const renderContent = (
     <Stack
       spacing={3}
@@ -156,7 +163,7 @@ export default function ProductsFilters({ open, onClose }) {
         <FilterCategory
           filterCategory={filters.filterCategory}
           onChangeCategory={handleChangeCategory}
-          options={CATEGORY_OPTIONS}
+          options={category}
           sx={{ mt: 2 }}
         />
       </Block>
