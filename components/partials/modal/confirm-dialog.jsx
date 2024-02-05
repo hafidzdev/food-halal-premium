@@ -55,7 +55,7 @@ const ConfirmDialog = ({ open, onClose, onAgree, title, description }) => {
             autoFocus
             sx={{ mt: 2, mx: 1 }}
           >
-            Jadikan Alamat Utama
+            Setuju
           </Button>
         </Box>
       </Box>
