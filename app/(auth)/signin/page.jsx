@@ -14,8 +14,11 @@ import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Iconify from "@/components/partials/Iconify";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { useCart } from "@/context/CartContext";
+import { GetAllCart } from "@/services/Purchase";
 
 function Page() {
+  const [, setCart] = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -64,6 +67,8 @@ function Page() {
       const gettingError = JSON.parse(res.error);
 
       if (res.ok) {
+        const cart = await GetAllCart();
+        setCart(cart);
         router.push(redirectUrl);
       } else {
         setError(gettingError.errors);

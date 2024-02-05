@@ -2,7 +2,7 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-import { DeleteCart, GetCart, UpdateCart } from "@/services/Purchase";
+import { DeleteCart, GetAllCart, UpdateCart } from "@/services/Purchase";
 import { useCart } from "@/context/CartContext";
 
 import Stack from "@mui/material/Stack";
@@ -47,8 +47,8 @@ export default function CartItem({ product, wishlist }) {
 
       const updateCartQty = await UpdateCart(product.id, event.target.value);
       if (updateCartQty.status === 200) {
-        const getCart = await GetCart();
-        setCart(getCart);
+        const getAllCart = await GetAllCart();
+        setCart(getAllCart);
         setQuantity(event.target.value);
 
         setSnackbars((prevSnackbars) => [
@@ -89,8 +89,8 @@ export default function CartItem({ product, wishlist }) {
       const deleteCart = await DeleteCart(product.id);
 
       if (deleteCart.status === 200) {
-        const getCart = await GetCart();
-        setCart(getCart);
+        const getAllCart = await GetAllCart();
+        setCart(getAllCart);
       }
     } catch (error) {
       console.error(`Deleting cart unsuccessfull: ${error.message}`);

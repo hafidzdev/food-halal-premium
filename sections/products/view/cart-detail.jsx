@@ -1,70 +1,23 @@
-"use client";
-import {
-  Container,
-  Grid,
-  Button,
-  Stack,
-  Typography,
-  Link,
-} from "@mui/material";
+import PropTypes from "prop-types";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 import CartInfo from "../common/cart-info";
+import Link from "next/link";
 import CartPrice from "../common/cart-price";
 import CartProduct from "../common/cart-product";
-import Iconify from "@/components/partials/Iconify";
 
-import { RouterLink } from "@/routes/components";
+import { GetProductInCart } from "@/services/Purchase";
+import { ModalPlaceCartOrder } from "@/components/partials/modal";
 
 // ----------------------------------------------------------------------
 
-const userCart = {
-  name: "Agus Setiawan",
-  phone_number: "081776554338",
-  address: "Shinjuku, Japan",
-  postal_code: "5670006",
-  payment_type: "COD",
-  delivery_type: "Delivery",
-  delivery_condition: "Standart",
-  email: "agus@xetia.io",
-  note: "lorem ipsum dolor si atmet",
-};
+export default async function CartDetailsView({ cartId, cart }) {
+  const productInCart = await GetProductInCart(cartId);
 
-const productCart = [
-  {
-    id: 1,
-    name: "Product 1",
-    image:
-      "https://cdn.shopify.com/s/files/1/0147/9445/7136/products/image_2e8f9eb4-d566-4c72-91cd-ea5149e3525a.jpg?v=1673878789",
-    amount: 1,
-    price: "100",
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    image:
-      "https://cdn.shopify.com/s/files/1/0147/9445/7136/products/image_2e8f9eb4-d566-4c72-91cd-ea5149e3525a.jpg?v=1673878789",
-    amount: 1,
-    price: "100",
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    image:
-      "https://cdn.shopify.com/s/files/1/0147/9445/7136/products/image_2e8f9eb4-d566-4c72-91cd-ea5149e3525a.jpg?v=1673878789",
-    amount: 1,
-    price: "100",
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    image:
-      "https://cdn.shopify.com/s/files/1/0147/9445/7136/products/image_2e8f9eb4-d566-4c72-91cd-ea5149e3525a.jpg?v=1673878789",
-    amount: 1,
-    price: "100",
-  },
-];
-
-export default function CartDetailsView() {
   return (
     <Container
       sx={{
@@ -75,18 +28,10 @@ export default function CartDetailsView() {
     >
       <Grid container justifyContent="center" spacing={{ xs: 5, md: 8 }}>
         <Grid item xs={12} md={6}>
-          <Link
-            component={RouterLink}
-            color="inherit"
-            underline="none"
-            href="/cart"
-            marginTop={10}
-          >
-            <Button
-              variant="text"
-              startIcon={<Iconify icon="carbon:arrow-left" />}
-              sx={{ ml: -2 }}
-            />
+          <Link underline="none" href="/cart" marginTop={10}>
+            <Button variant="text" color="primary" sx={{ ml: -2 }}>
+              Back
+            </Button>
           </Link>
           <Stack
             direction="row"
@@ -99,14 +44,20 @@ export default function CartDetailsView() {
             </Typography>
           </Stack>
 
-          {/* Cart User */}
-          <CartInfo userCart={userCart} />
-          {/* Cart Price */}
-          <CartPrice productCart={productCart} />
-          {/* Cart Product */}
-          <CartProduct productCart={productCart} />
+          <CartInfo cart={cart} />
+
+          <CartPrice productCart={productInCart} />
+
+          <CartProduct productCart={productInCart} />
+
+          <ModalPlaceCartOrder cartId={cartId} />
         </Grid>
       </Grid>
     </Container>
   );
 }
+
+CartDetailsView.propTypes = {
+  cartId: PropTypes.string.isRequired,
+  cart: PropTypes.object.isRequired,
+};

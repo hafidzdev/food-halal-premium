@@ -35,8 +35,6 @@ export default function CheckoutView({
     ? cart?.reduce((accumulator, item) => accumulator + item.sub_total_price, 0)
     : 0;
 
-  console.log("purchase: ", purchase);
-  // console.log("select delv: ", purchase);
   return (
     <Container
       sx={{

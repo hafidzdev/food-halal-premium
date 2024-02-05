@@ -1,20 +1,18 @@
-"use client";
-
 import PropTypes from "prop-types";
-import { Box, Card, Typography, Stack, Divider, useTheme } from "@mui/material";
+import { Box, Card, Typography, Stack, Divider } from "@mui/material";
 
 const CartPrice = ({ productCart }) => {
-  const theme = useTheme();
-  const isLight = theme.palette.mode === "light";
+  const totalPrice = productCart.reduce(
+    (sum, item) => sum + item.price * item.amount,
+    0
+  );
 
   return (
     <Card
       sx={{
         boxShadow: 2,
-        boxShadow: isLight
-          ? "0px 4px 10px rgba(0, 0, 0, 0.1)"
-          : "0px 4px 10px rgba(0, 0, 0, 0.5)",
-        backgroundColor: isLight ? "#DFE3E8" : "",
+        boxShadow: `0px 4px 10px rgba(0, 0, 0, 0.3)`,
+        bgcolor: "action.focus",
         my: 2,
       }}
     >
@@ -25,18 +23,20 @@ const CartPrice = ({ productCart }) => {
         }}
       >
         <Stack spacing={1}>
-          {productCart.map((product, index) => (
+          {productCart.map((product) => (
             <Stack
-              key={index}
+              key={product.productId}
               spacing={1}
               direction="row"
               alignItems="center"
               justifyContent="space-between"
             >
-              <Typography variant="body1">{product.name}</Typography>
+              <Typography variant="body1">{product.productName}</Typography>
               <Typography variant="body1">{product.amount}</Typography>
-              <Typography variant="body1">{product.price}</Typography>
-              <Typography variant="body1">{product.price}</Typography>
+              <Typography variant="body1">{"¥" + product.price}</Typography>
+              <Typography variant="body1">
+                {"¥" + product.amount * product.price}
+              </Typography>
             </Stack>
           ))}
         </Stack>
@@ -49,7 +49,7 @@ const CartPrice = ({ productCart }) => {
             justifyContent="space-between"
           >
             <Typography variant="subtitle1">Price</Typography>
-            <Typography variant="subtitle1">{"$300"}</Typography>
+            <Typography variant="subtitle1">{"¥" + totalPrice}</Typography>
           </Stack>
           <Stack
             spacing={1}
@@ -58,7 +58,9 @@ const CartPrice = ({ productCart }) => {
             justifyContent="space-between"
           >
             <Typography variant="subtitle1">Total</Typography>
-            <Typography variant="subtitle1">{"$310 + Tax"}</Typography>
+            <Typography variant="subtitle1">
+              {"¥" + totalPrice} + Tax
+            </Typography>
           </Stack>
         </Stack>
       </Box>
@@ -67,11 +69,7 @@ const CartPrice = ({ productCart }) => {
 };
 
 CartPrice.propTypes = {
-  productCart: PropTypes.shape({
-    name: PropTypes.string,
-    amount: PropTypes.string,
-    price: PropTypes.string,
-  }),
+  productCart: PropTypes.object.isRequired,
 };
 
 export default CartPrice;

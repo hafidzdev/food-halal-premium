@@ -9,7 +9,7 @@ import ThemeProvider from "@/theme";
 import { LocalizationProvider } from "@/locales";
 import { SettingsProvider } from "@/components/settings";
 import CartProvider from "@/context/CartContext";
-import { GetCart } from "@/services/Purchase";
+import { GetAllCart } from "@/services/Purchase";
 // import { MotionLazy } from "@/components/partials/animate/motion-lazy";
 
 export const dynamic = "force-dynamic";
@@ -36,7 +36,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const session = await getServerSession();
-  const cart = await GetCart();
+  const cart = await GetAllCart();
 
   return (
     <html lang="en" className={primaryFont.className}>

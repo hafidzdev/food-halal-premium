@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import PropTypes from "prop-types";
 import {
@@ -12,7 +14,6 @@ import {
 } from "@mui/material";
 import { RouterLink } from "@/routes/components";
 import Image from "@/components/partials/image";
-import TextMaxLine from "@/components/partials/text-max-line";
 import ProductPrice from "./product-price";
 import Iconify from "@/components/partials/Iconify";
 
@@ -98,7 +99,7 @@ export default function CartProduct({ productCart }) {
                   }}
                 >
                   <Image
-                    src={product?.image}
+                    src={product?.productImage}
                     sx={{
                       mb: 2,
                       borderRadius: 1.5,
@@ -120,7 +121,7 @@ export default function CartProduct({ productCart }) {
                       line={1}
                       sx={{ fontWeight: "fontWeightMedium" }}
                     >
-                      ABC Kecap Manis Botol 600ml
+                      {product?.productName}
                     </Typography>
                     <Divider />
 
@@ -137,7 +138,7 @@ export default function CartProduct({ productCart }) {
                       <Iconify icon="carbon:add-alt" width="10" height="10" />
                     </IconButton>
                     <span style={{ margin: "0 10px" }}>
-                      {productQuantity[product.id] || 0}
+                      {product?.amount || 0}
                     </span>
                     <IconButton
                       onClick={(e) => handleDecrement(product.id, e)}

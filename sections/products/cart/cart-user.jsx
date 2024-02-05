@@ -14,11 +14,19 @@ import {
 } from "@mui/material";
 import Iconify from "@/components/partials/Iconify";
 import { RouterLink } from "@/routes/components";
+import { ConfirmDialog } from "@/components/partials/modal";
+import { DeleteCart, GetAllCart } from "@/services/Purchase";
+import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
+import { useCart } from "@/context/CartContext";
 
 const CartUser = ({ cart }) => {
+  const [, setCart] = useCart();
+
   const theme = useTheme();
   const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(null);
+  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
+  const [snackbars, setSnackbars] = useState([]);
 
   const handleOpen = useCallback((event) => {
     setOpen(event.currentTarget);
@@ -28,7 +36,51 @@ const CartUser = ({ cart }) => {
     setOpen(null);
   }, []);
 
-  const { name, code } = cart;
+  const handleDelete = useCallback(() => {
+    handleClose();
+    handleOpenConfirmDelete();
+  }, []);
+
+  const handleOpenConfirmDelete = useCallback(() => {
+    setOpenConfirmDelete(true);
+  }, []);
+  const handleCloseConfirmDelete = useCallback(() => {
+    setOpenConfirmDelete(false);
+  }, []);
+
+  const handleConfirmation = useCallback(async () => {
+    const res = await DeleteCart(id);
+
+    if (res?.status === 200) {
+      const getAllCart = await GetAllCart();
+      setCart(getAllCart);
+      setSnackbars((prevSnackbars) => [
+        ...prevSnackbars,
+        {
+          id: Date.now(),
+          message: "Successfully delete your cart",
+          severity: "success",
+        },
+      ]);
+    } else {
+      setSnackbars((prevSnackbars) => [
+        ...prevSnackbars,
+        {
+          id: Date.now(),
+          message: res?.message,
+          severity: "error",
+        },
+      ]);
+    }
+  }, []);
+
+  const handleCloseSnackbar = (id) => {
+    setSnackbars((prevSnackbars) =>
+      prevSnackbars.filter((snackbar) => snackbar.id !== id)
+    );
+  };
+
+  const { id, receiveName, paymentType } = cart;
 
   return (
     <>
@@ -52,8 +104,8 @@ const CartUser = ({ cart }) => {
         >
           <Stack direction="row" alignItems="center" flexGrow={1}>
             <Box component="span">
-              {name}
-              <Typography variant="body2">{code}</Typography>
+              {receiveName}
+              <Typography variant="body2">{paymentType}</Typography>
             </Box>
           </Stack>
 
@@ -70,24 +122,43 @@ const CartUser = ({ cart }) => {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <MenuItem onClick={handleClose}>
-          <Iconify icon="carbon:accessibility-color-filled" sx={{ mr: 2 }} />{" "}
-          <Link
-            component={RouterLink}
-            color="inherit"
-            underline="none"
-            href={"/cart/detail"}
-          >
+        <Link
+          component={RouterLink}
+          color="inherit"
+          underline="none"
+          href={`/cart/${id}`}
+        >
+          <MenuItem onClick={handleClose}>
+            <Iconify icon="carbon:accessibility-color-filled" sx={{ mr: 2 }} />{" "}
             Details
-          </Link>
-        </MenuItem>
+          </MenuItem>
+        </Link>
 
         <Divider sx={{ borderStyle: "dashed", mt: 0.5 }} />
 
-        <MenuItem onClick={handleClose} sx={{ color: "error.main" }}>
+        <MenuItem onClick={handleDelete} sx={{ color: "error.main" }}>
           <Iconify icon="carbon:trash-can" sx={{ mr: 2 }} /> Delete
         </MenuItem>
       </Popover>
+
+      <ConfirmDialog
+        open={openConfirmDelete}
+        onClose={handleCloseConfirmDelete}
+        onAgree={handleConfirmation}
+        title="Menghapus Keranjang"
+        description={`Apakah Anda yakin ingin menghapus keranjang "${receiveName}"? Anda tidak dapat memulihkannya kembali.`}
+      />
+
+      {snackbars.map((snackbar) => (
+        <SnackbarMessage
+          key={snackbar.id}
+          open={true}
+          autoHideDuration={4000}
+          onClose={() => handleCloseSnackbar(snackbar.id)}
+          message={snackbar.message}
+          severity={snackbar.severity}
+        />
+      ))}
     </>
   );
 };

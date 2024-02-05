@@ -2,7 +2,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useCart } from "@/context/CartContext";
-import { AddToCart, GetCart } from "@/services/Purchase";
+import { AddProductToCart, GetAllCart } from "@/services/Purchase";
 
 import Fab from "@mui/material/Fab";
 import Link from "@mui/material/Link";
@@ -17,20 +17,30 @@ import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
 import ProductPrice from "../common/product-price";
 // import ProductRating from "../common/product-rating";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
-import CircularProgress from "@mui/material/CircularProgress";
-import Backdrop from "@mui/material/Backdrop";
+
+import { AddProductCartDialog } from "@/components/partials/modal";
 
 // ----------------------------------------------------------------------
 
 export default function ProductList({ product, ...other }) {
+  const { status } = useSession();
   const [, setCart] = useCart();
   const router = useRouter();
 
+  const [openCartDialog, setOpenCartDialog] = useState({
+    isOpen: false,
+    product: {},
+  });
   const [snackbars, setSnackbars] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const handleOpenCartModal = (product) =>
+    setOpenCartDialog({ isOpen: true, product });
+  const handleCloseCartModal = () =>
+    setOpenCartDialog({ isOpen: false, product: {} });
 
   const handleCloseSnackbar = (id) => {
     setSnackbars((prevSnackbars) =>
@@ -48,10 +58,10 @@ export default function ProductList({ product, ...other }) {
         return;
       }
 
-      const addProductToCart = await AddToCart(productId);
+      const addProductToCart = await AddProductToCart(productId);
       if (addProductToCart.status === 200) {
-        const getCart = await GetCart();
-        setCart(getCart);
+        const getAllCart = await GetAllCart();
+        setCart(getAllCart);
         setSnackbars((prevSnackbars) => [
           ...prevSnackbars,
           {
@@ -100,7 +110,11 @@ export default function ProductList({ product, ...other }) {
       {...other}
     >
       <Fab
-        // onClick={() => handleAddToCart(product.id)}
+        onClick={() =>
+          status === "unauthenticated"
+            ? router.push("/signin")
+            : handleOpenCartModal(product)
+        }
         className="add-to-cart"
         color="primary"
         size="small"
@@ -179,12 +193,10 @@ export default function ProductList({ product, ...other }) {
         />
       </Stack>
 
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <AddProductCartDialog
+        open={openCartDialog}
+        onClose={handleCloseCartModal}
+      />
 
       {snackbars.map((snackbar) => (
         <SnackbarMessage
