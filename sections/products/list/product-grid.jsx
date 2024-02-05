@@ -2,7 +2,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useCart } from "@/context/CartContext";
-import { AddToCart, GetAllCart } from "@/services/Purchase";
+import { AddProductToCart, GetAllCart } from "@/services/Purchase";
 
 import { Box } from "@mui/material";
 import Fab from "@mui/material/Fab";
@@ -16,7 +16,7 @@ import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
 import ProductPrice from "../common/product-price";
 // import ProductRating from "../common/product-rating";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
 import Typography from "@mui/material/Typography";
@@ -26,6 +26,7 @@ import { AddProductCartDialog } from "@/components/partials/modal";
 // ----------------------------------------------------------------------
 
 export default function ProductGrid({ product, sx, ...other }) {
+  const { status } = useSession();
   const [, setCart] = useCart();
   const router = useRouter();
 
@@ -57,7 +58,7 @@ export default function ProductGrid({ product, sx, ...other }) {
         return;
       }
 
-      const addProductToCart = await AddToCart(productId);
+      const addProductToCart = await AddProductToCart(productId);
       if (addProductToCart.status === 200) {
         const getAllCart = await GetAllCart();
         setCart(getAllCart);
@@ -110,7 +111,11 @@ export default function ProductGrid({ product, sx, ...other }) {
     >
       <Box sx={{ position: "relative", mb: 2 }}>
         <Fab
-          onClick={() => handleOpenCartModal(product)}
+          onClick={() =>
+            status === "unauthenticated"
+              ? router.push("/signin")
+              : handleOpenCartModal(product)
+          }
           className="add-to-cart"
           color="primary"
           size="small"
