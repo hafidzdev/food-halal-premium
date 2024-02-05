@@ -1,12 +1,19 @@
-import { memo, useEffect, useState } from "react";
+"use client";
+
+import { memo, useState } from "react";
 import PropTypes from "prop-types";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Grid, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Iconify from "../Iconify";
 import { AllProductCart } from ".";
 import { LoadingButton } from "@mui/lab";
@@ -34,15 +41,16 @@ const AddProductCartDialog = memo(({ open, onClose }) => {
     setOrder(1);
     onClose();
   };
+
   const handleAgree = async () => {
     try {
       setLoading(true);
       setError(null);
 
       const res = await AddProductToCart(idCart, product?.id, order);
-      console.log(res);
-      if (res.status === 200) {
-        onClose();
+
+      if (res?.status === 200) {
+        onClose("success");
       } else {
         setError(`Error ${res?.status}: ${res?.message}`);
       }
@@ -52,9 +60,17 @@ const AddProductCartDialog = memo(({ open, onClose }) => {
       setLoading(false);
     }
   };
+
   return (
     <Dialog open={open.isOpen} fullWidth={false} maxWidth="sm">
-      <DialogTitle>Add Product to Cart</DialogTitle>
+      <DialogTitle>
+        Add Product to Cart
+        {error && (
+          <Typography color="error" variant="body2">
+            {error}
+          </Typography>
+        )}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText>
           Anda akan menambahkan produk ini ke dalam cart:
