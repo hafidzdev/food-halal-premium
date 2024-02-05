@@ -7,7 +7,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Container from "@mui/material/Container";
 import { Stack, Box, Typography } from "@mui/material";
 
-// import { useCart } from "@/context/CartContext";
+import { useCart } from "@/context/CartContext";
 // import { RouterLink } from "@/routes/components";
 
 import Iconify from "@/components/partials/Iconify";
@@ -16,59 +16,27 @@ import Iconify from "@/components/partials/Iconify";
 // import CartSummary from "../cart/cart-summary";
 import CartUser from "../cart/cart-user";
 import { CreateCart } from "@/components/partials/modal";
+import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
 
 // ----------------------------------------------------------------------
 
-const cartData = [
-  {
-    id: 1,
-    name: "Agus Setiawan",
-    code: "9999CB9999CB",
-  },
-  {
-    id: 2,
-    name: "Agus Setiawan",
-    code: "9999CB9999CB",
-  },
-  {
-    id: 2,
-    name: "Agus Setiawan",
-    code: "9999CB9999CB",
-  },
-  {
-    id: 2,
-    name: "Agus Setiawan",
-    code: "9999CB9999CB",
-  },
-  {
-    id: 2,
-    name: "Agus Setiawan",
-    code: "9999CB9999CB",
-  },
-  {
-    id: 2,
-    name: "Agus Setiawan",
-    code: "9999CB9999CB",
-  },
-  {
-    id: 2,
-    name: "Agus Setiawan",
-    code: "9999CB9999CB",
-  },
-  {
-    id: 2,
-    name: "Agus Setiawan",
-    code: "9999CB9999CB",
-  },
-];
-
 export default function CartView() {
-  // const [cart] = useCart();
+  const [cart] = useCart();
 
   const [open, setOpen] = useState(false);
+  const [openModalCreateCart, setOpenModalCreateCart] = useState({
+    isOpen: false,
+    isSuccess: "",
+  });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleOpenSuccessAlert = (msg) => {
+    handleClose();
+    setOpenModalCreateCart({ isOpen: true, isSuccess: msg });
+  };
+  const handleCloseSuccessAlert = () =>
+    setOpenModalCreateCart({ isOpen: false, isSuccess: "" });
 
   return (
     <Container
@@ -110,14 +78,26 @@ export default function CartView() {
               },
             }}
           >
-            {cartData.map((cart) => (
-              <CartUser key={cart.id} cart={cart} />
+            {cart.map((item) => (
+              <CartUser key={item.id} cart={item} />
             ))}
           </Box>
         </Grid>
       </Grid>
 
-      <CreateCart open={open} onClose={handleClose} />
+      <CreateCart
+        open={open}
+        onClose={handleClose}
+        setResult={handleOpenSuccessAlert}
+      />
+
+      <SnackbarMessage
+        open={openModalCreateCart.isOpen}
+        autoHideDuration={4000}
+        onClose={handleCloseSuccessAlert}
+        message={openModalCreateCart.isSuccess}
+        severity="success"
+      />
     </Container>
   );
 }
