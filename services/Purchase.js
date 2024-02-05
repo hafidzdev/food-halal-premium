@@ -15,7 +15,7 @@ const getSession = async () => {
 
 async function fetchWithToken(url, options = {}) {
   const userSession = await getSession();
-  console.log(userSession.accessToken);
+
   return fetch(url, {
     ...options,
     headers: {
@@ -39,7 +39,7 @@ export async function GetAllCart() {
 
     const data = await res.json();
     const cartItems = Array.isArray(data?.data) ? data?.data : [];
-    console.log(data);
+
     if (!res.ok) {
       return [];
     }
@@ -74,7 +74,7 @@ export async function AddProductToCart(cartId, productId, amount) {
 
     return { status: res.status, data: data.data };
   } catch (error) {
-    console.error("Error adding to cart:", error.message);
+    return { status: "", message: error.message };
   }
 }
 
@@ -132,7 +132,7 @@ export async function UpdateCart(cartId, quantity) {
 export async function DeleteCart(cartId) {
   try {
     const res = await fetchWithToken(
-      `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/cart/${cartId}`,
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart/${cartId}`,
       {
         method: "delete",
         headers: {
@@ -143,10 +143,70 @@ export async function DeleteCart(cartId) {
     const data = await res.json();
 
     if (!res.ok) {
-      return { status: res.status, message: data };
+      return { status: res.status, message: data.message };
     }
 
-    return { status: res.status, message: data.response };
+    return { status: res.status, message: data.message };
+  } catch (error) {
+    return { status: "", message: error.message };
+  }
+}
+
+export async function GetDetailCart(cartId) {
+  try {
+    const res = await fetchWithToken(
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart/${cartId}`
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return false;
+    }
+
+    return data.data;
+  } catch (error) {
+    // console.error("Error finding cart:", error.message);
+    return false;
+  }
+}
+
+export async function GetProductInCart(cartId) {
+  try {
+    const res = await fetchWithToken(
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart-product/${cartId}`
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return [];
+    }
+
+    return data.data;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function PlaceCartOrder(cartId) {
+  try {
+    const res = await fetchWithToken(
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart/place-order/${cartId}`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+
+    if (!res.ok) {
+      return { status: res.status, message: data.message };
+    }
+
+    return { status: res.status, data: data.data };
   } catch (error) {
     console.error("Error adding to cart:", error.message);
   }
