@@ -92,14 +92,14 @@ export default function HomeProducts() {
     slidesToScroll: 1,
     ...CarouselDots({
       sx: {
-        mt: 5,
+        mt: 3,
       },
     }),
     responsive: [
       {
         // Down md
-        breakpoint: theme.breakpoints.values.md,
-        settings: { slidesToShow: 2, slidesToScroll: 3 },
+        breakpoint: theme.breakpoints.values.xs,
+        settings: { slidesToShow: 2, slidesToScroll: 1 },
       },
       {
         // Down sm
@@ -150,7 +150,7 @@ export default function HomeProducts() {
         sx={{
           flexGrow: 1,
           pl: { md: 8 },
-          ml: { md: 3.5, sm: 2 },
+          ml: { md: 3.5, sm: 2, xs: 1 },
           width: { md: `calc(100% - ${100}px)` },
         }}
       >

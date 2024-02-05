@@ -26,11 +26,12 @@ export default function CategoriesGrid({ category }) {
         "&:hover": {
           boxShadow: (theme) => `0 0 0 2px ${theme.palette.text.primary}`,
         },
+        mb: 3,
       }}
     >
-      <Typography variant="subtitle2" line={1}>
+      <TextMaxLine variant="subtitle2" line={1}>
         {categoryName}
-      </Typography>
+      </TextMaxLine>
 
       <Typography variant="caption" sx={{ color: "text.disabled" }}>
         {count}

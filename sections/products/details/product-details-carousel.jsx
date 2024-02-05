@@ -124,7 +124,7 @@ export default function ProductDetailsCarousel({ images }) {
               alt="product"
               src={slide.src}
               ratio="1/1"
-              onClick={() => lightbox.onOpen(slide.src)}
+              // onClick={() => lightbox.onOpen(slide.src)}
               sx={{ cursor: "zoom-in" }}
             />
           ))}
