@@ -1,24 +1,18 @@
-import { memo, useEffect, useState } from "react";
+"use client";
+
+import { memo, useState } from "react";
 import PropTypes from "prop-types";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import {
   Alert,
+  Button,
+  Collapse,
   FormControl,
-  Grid,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
   Stack,
   Typography,
 } from "@mui/material";
-import Iconify from "../Iconify";
-import { GetAllCart } from "@/services/Purchase";
 import { useCart } from "@/context/CartContext";
 import { CreateCart } from ".";
 
@@ -40,8 +34,10 @@ const AllProductCart = memo(({ selectedCart }) => {
     setOpenModalCreateCart({ isOpen: true, isSuccess: "" });
   const handleCloseCreateModal = () =>
     setOpenModalCreateCart({ isOpen: false, isSuccess: "" });
-  const handleSuccessCreateModal = (msg) =>
-    setOpenModalCreateCart({ isOpen: false, isSuccess: msg });
+  const handleOpenSuccessAlert = (msg) =>
+    setOpenModalCreateCart({ isOpen: true, isSuccess: msg });
+  const handleCloseSuccessAlert = () =>
+    setOpenModalCreateCart((prev) => ({ ...prev, isSuccess: "" }));
 
   if (cart.length === 0) {
     return (
@@ -63,7 +59,7 @@ const AllProductCart = memo(({ selectedCart }) => {
         <CreateCart
           open={openModalCreateCart.isOpen}
           onClose={handleCloseCreateModal}
-          setResult={handleSuccessCreateModal}
+          setResult={handleOpenSuccessAlert}
         />
       </>
     );
@@ -97,22 +93,26 @@ const AllProductCart = memo(({ selectedCart }) => {
           Creat New Cart
         </Button>
       </Stack>
-      <Alert
-        severity="success"
-        sx={{
-          visibility:
-            openModalCreateCart.isSuccess !== "" ? "visible" : "hidden",
-        }}
-      >
-        {openModalCreateCart.isSuccess}
-      </Alert>
+      <Collapse in={openModalCreateCart.isSuccess !== ""}>
+        <Alert
+          severity="success"
+          sx={{ mt: 1 }}
+          onClose={handleCloseSuccessAlert}
+        >
+          {openModalCreateCart.isSuccess}
+        </Alert>
+      </Collapse>
       <CreateCart
         open={openModalCreateCart.isOpen}
         onClose={handleCloseCreateModal}
-        setResult={handleSuccessCreateModal}
+        setResult={handleOpenSuccessAlert}
       />
     </>
   );
 });
+
+AllProductCart.propTypes = {
+  selectedCart: PropTypes.func.isRequired,
+};
 
 export default AllProductCart;
