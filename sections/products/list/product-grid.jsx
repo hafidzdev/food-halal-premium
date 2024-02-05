@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useCart } from "@/context/CartContext";
-import { AddProductToCart, GetAllCart } from "@/services/Purchase";
 
 import { Box } from "@mui/material";
 import Fab from "@mui/material/Fab";
@@ -16,7 +14,7 @@ import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
 import ProductPrice from "../common/product-price";
 // import ProductRating from "../common/product-rating";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
 import Typography from "@mui/material/Typography";
@@ -27,75 +25,38 @@ import { AddProductCartDialog } from "@/components/partials/modal";
 
 export default function ProductGrid({ product, sx, ...other }) {
   const { status } = useSession();
-  const [, setCart] = useCart();
   const router = useRouter();
 
   const [openCartDialog, setOpenCartDialog] = useState({
     isOpen: false,
     product: {},
+    isSuccess: "",
   });
   const [snackbars, setSnackbars] = useState([]);
-  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (openCartDialog.isSuccess === "success") {
+      setSnackbars((prevSnackbars) => [
+        ...prevSnackbars,
+        {
+          id: Date.now(),
+          message: "Successfully added item to cart",
+          severity: "success",
+        },
+      ]);
+    }
+  }, [openCartDialog.isSuccess]);
 
   const handleOpenCartModal = (product) =>
-    setOpenCartDialog({ isOpen: true, product });
-  const handleCloseCartModal = () =>
-    setOpenCartDialog({ isOpen: false, product: {} });
+    setOpenCartDialog({ isOpen: true, product, isSuccess: "" });
+
+  const handleCloseCartModal = (successRes) =>
+    setOpenCartDialog({ isOpen: false, product: {}, isSuccess: successRes });
 
   const handleCloseSnackbar = (id) => {
     setSnackbars((prevSnackbars) =>
       prevSnackbars.filter((snackbar) => snackbar.id !== id)
     );
-  };
-
-  const handleAddToCart = async (productId) => {
-    try {
-      setLoading(true);
-      const session = await getSession();
-
-      if (!session) {
-        router.push("/signin");
-        return;
-      }
-
-      const addProductToCart = await AddProductToCart(productId);
-      if (addProductToCart.status === 200) {
-        const getAllCart = await GetAllCart();
-        setCart(getAllCart);
-        setSnackbars((prevSnackbars) => [
-          ...prevSnackbars,
-          {
-            id: Date.now(),
-            message: "Successfully added item to cart",
-            severity: "success",
-          },
-        ]);
-      } else {
-        setSnackbars((prevSnackbars) => [
-          ...prevSnackbars,
-          {
-            id: Date.now(),
-            message: "Failed add product to cart",
-            severity: "error",
-          },
-        ]);
-      }
-    } catch (error) {
-      console.error(
-        "An error occurred while processing the request:",
-        error.message
-      );
-      setSnackbars((prevSnackbars) => [
-        ...prevSnackbars,
-        {
-          id: Date.now(),
-          message: "An error occurred while processing the request",
-          severity: "error",
-        },
-      ]);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
