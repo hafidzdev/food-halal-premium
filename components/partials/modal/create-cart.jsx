@@ -1,5 +1,7 @@
+"use client";
+
 import PropTypes from "prop-types";
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import {
   Box,
   Dialog,
@@ -10,8 +12,11 @@ import {
   TextField,
   Typography,
   Stack,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
-import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 
 import { alpha } from "@mui/material/styles";
 
@@ -23,7 +28,7 @@ import { CreateShopCart, GetAllCart } from "@/services/Purchase";
 import { LoadingButton } from "@mui/lab";
 import { useCart } from "@/context/CartContext";
 
-function CreateCart({ open, onClose, setResult }) {
+const CreateCart = memo(({ open, onClose, setResult }) => {
   const { data: session } = useSession();
   const [, setCart] = useCart();
 
@@ -58,7 +63,7 @@ function CreateCart({ open, onClose, setResult }) {
       if (res.status === 200) {
         const getAllCart = await GetAllCart();
         setCart(getAllCart);
-        setResult("Success create new cart");
+        setResult(`Success create new cart "${allData.receiveName}"`);
       } else {
         setError(`Error ${res?.status}: ${res?.message}`);
       }
@@ -226,11 +231,12 @@ function CreateCart({ open, onClose, setResult }) {
       </DialogContent>
     </Dialog>
   );
-}
+});
 
 CreateCart.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  setResult: PropTypes.func.isRequired,
 };
 
 export default CreateCart;
