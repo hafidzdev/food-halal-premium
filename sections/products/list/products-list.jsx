@@ -48,56 +48,6 @@ export default function ProductList({ product, ...other }) {
     );
   };
 
-  const handleAddToCart = async (productId) => {
-    try {
-      setLoading(true);
-      const session = await getSession();
-
-      if (!session) {
-        router.push("/signin");
-        return;
-      }
-
-      const addProductToCart = await AddProductToCart(productId);
-      if (addProductToCart.status === 200) {
-        const getAllCart = await GetAllCart();
-        setCart(getAllCart);
-        setSnackbars((prevSnackbars) => [
-          ...prevSnackbars,
-          {
-            id: Date.now(),
-            message: "Successfully added item to cart",
-            severity: "success",
-          },
-        ]);
-      } else {
-        setSnackbars((prevSnackbars) => [
-          ...prevSnackbars,
-          {
-            id: Date.now(),
-            message: "Failed add product to cart",
-            severity: "error",
-          },
-        ]);
-      }
-    } catch (error) {
-      console.error(
-        "An error occurred while processing the request:",
-        error.message
-      );
-      setSnackbars((prevSnackbars) => [
-        ...prevSnackbars,
-        {
-          id: Date.now(),
-          message: "An error occurred while processing the request",
-          severity: "error",
-        },
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <Stack
       direction="row"
@@ -189,6 +139,7 @@ export default function ProductList({ product, ...other }) {
         <ProductPrice
           price={product?.price}
           priceSale={0}
+          inStock={product?.inStock}
           sx={{ typography: "h6" }}
         />
       </Stack>

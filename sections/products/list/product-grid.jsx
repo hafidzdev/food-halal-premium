@@ -140,7 +140,11 @@ export default function ProductGrid({ product, sx, ...other }) {
           </Typography>
         </Link>
 
-        <ProductPrice price={product.price} priceSale={0} />
+        <ProductPrice
+          price={product.price}
+          priceSale={0}
+          inStock={product.inStock}
+        />
         {/* 
         <ProductRating
           ratingNumber={product.rating.avg}
