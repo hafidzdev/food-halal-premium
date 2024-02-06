@@ -24,46 +24,69 @@ import Iconify from "../Iconify";
 import { useResponsive } from "@/hooks/use-responsive";
 import FilterTime from "@/sections/products/filters/filter-time";
 import { useSession } from "next-auth/react";
-import { CreateShopCart, GetAllCart } from "@/services/Purchase";
+import { CreateShopCart, GetAllCart, UpdateCart } from "@/services/Purchase";
 import { LoadingButton } from "@mui/lab";
 import { useCart } from "@/context/CartContext";
 
-const CreateCart = memo(({ open, onClose, setResult }) => {
+const filterKeys = (responseObject) => {
+  return {
+    receiveName: responseObject?.receiveName,
+    phoneNumber: responseObject?.phoneNumber?.toString(),
+    deliveryAddress: responseObject?.deliveryAddress,
+    postalCode: responseObject?.postalCode?.toString(),
+    paymentType: responseObject?.paymentType,
+    deliveryType: responseObject?.deliveryType,
+    deliveryCondition: responseObject?.deliveryCondition,
+    emailAddress: responseObject?.emailAddress,
+    receiveTime: responseObject?.receiveTime,
+    note: responseObject?.note,
+  };
+};
+
+const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
   const { data: session } = useSession();
   const [, setCart] = useCart();
+  const initializeData = cartId ? filterKeys(editValue) : {};
 
+  const [formData, setFormData] = useState(initializeData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [date, setDate] = useState(null);
   const mdUp = useResponsive("up", "md");
 
+  const handleChangeData = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
 
     const allData = {
-      receiveName: data.get("name"),
-      phoneNumber: data.get("phone"),
-      deliveryAddress: data.get("address"),
-      postalCode: data.get("postCode"),
-      paymentType: data.get("paymentType"),
-      deliveryType: data.get("deliveryType"),
-      deliveryCondition: data.get("delivaryCondition"),
+      ...formData,
       emailAddress: session?.user?.email,
       receiveTime: date,
-      note: data.get("note"),
     };
 
     try {
       setLoading(true);
       setError(null);
 
-      const res = await CreateShopCart(allData);
+      const res = cartId
+        ? await UpdateCart(cartId, allData)
+        : await CreateShopCart(allData);
 
       if (res.status === 200) {
         const getAllCart = await GetAllCart();
         setCart(getAllCart);
-        setResult(`Success create new cart "${allData.receiveName}"`);
+        setResult(
+          `Success ${cartId ? "update" : "create new"} cart "${
+            allData?.receiveName
+          }"`
+        );
       } else {
         setError(`Error ${res?.status}: ${res?.message}`);
       }
@@ -74,6 +97,12 @@ const CreateCart = memo(({ open, onClose, setResult }) => {
     }
   };
 
+  const handleCloseDialog = () => {
+    setError(null);
+    setFormData({});
+    onClose();
+  };
+
   const handleChangeDate = useCallback((newValue) => {
     setDate(newValue);
   }, []);
@@ -82,7 +111,7 @@ const CreateCart = memo(({ open, onClose, setResult }) => {
     <Dialog open={open} fullWidth={true} maxWidth="sm">
       <IconButton
         size="large"
-        onClick={onClose}
+        onClick={handleCloseDialog}
         sx={{
           top: 10,
           right: mdUp ? 5 : 25,
@@ -111,7 +140,7 @@ const CreateCart = memo(({ open, onClose, setResult }) => {
         <Box component="form" noValidate onSubmit={handleOnSubmit}>
           <Stack spacing={2.5} marginBottom={6}>
             <TextField
-              name="name"
+              name="receiveName"
               label="Name"
               placeholder="Enter Your Name"
               variant="outlined"
@@ -123,27 +152,35 @@ const CreateCart = memo(({ open, onClose, setResult }) => {
                   },
                 },
               }}
+              value={formData?.receiveName || ""}
+              onChange={handleChangeData}
             />
             <TextField
-              name="phone"
+              name="phoneNumber"
               label="Phone Number"
               placeholder="Phone Number"
               variant="outlined"
               InputLabelProps={{ shrink: true }}
+              value={formData?.phoneNumber || ""}
+              onChange={handleChangeData}
             />
             <TextField
-              name="address"
+              name="deliveryAddress"
               label="Address"
               placeholder="Enter Address"
               variant="outlined"
               InputLabelProps={{ shrink: true }}
+              value={formData?.deliveryAddress || ""}
+              onChange={handleChangeData}
             />{" "}
             <TextField
-              name="postCode"
+              name="postalCode"
               label="Post Code"
               placeholder="Enter Post Code"
               variant="outlined"
               InputLabelProps={{ shrink: true }}
+              value={formData?.postalCode || ""}
+              onChange={handleChangeData}
             />
             <FormControl fullWidth variant="outlined">
               <InputLabel htmlFor="option-field">Payment Type</InputLabel>
@@ -151,7 +188,8 @@ const CreateCart = memo(({ open, onClose, setResult }) => {
                 name="paymentType"
                 label="Payment Type"
                 id="option-field"
-                defaultValue="cod"
+                value={formData?.paymentType || ""}
+                onChange={handleChangeData}
               >
                 <MenuItem value="cod">COD</MenuItem>
                 <MenuItem value="transfer">Transfer</MenuItem>
@@ -163,7 +201,8 @@ const CreateCart = memo(({ open, onClose, setResult }) => {
                 name="deliveryType"
                 label="option-field-label2"
                 id="option-field"
-                defaultValue="pos"
+                value={formData?.deliveryType || ""}
+                onChange={handleChangeData}
               >
                 <MenuItem value="pos">POS</MenuItem>
                 <MenuItem value="pickup">Pickup</MenuItem>
@@ -176,10 +215,11 @@ const CreateCart = memo(({ open, onClose, setResult }) => {
                 Delivery Condition
               </InputLabel>
               <Select
-                name="delivaryCondition"
+                name="deliveryCondition"
                 label="option-field-label3"
                 id="option-field"
-                defaultValue="standard"
+                value={formData?.deliveryCondition || ""}
+                onChange={handleChangeData}
               >
                 <MenuItem value="standard">Standard</MenuItem>
                 <MenuItem value="refrigerated">Refrigerated</MenuItem>
@@ -197,7 +237,7 @@ const CreateCart = memo(({ open, onClose, setResult }) => {
               <FilterTime date={date} onChangeDate={handleChangeDate} />
             </Box>
             <TextField
-              name="email"
+              name="emailAddress"
               label="Email"
               value={session?.user?.email}
               variant="outlined"
@@ -212,6 +252,8 @@ const CreateCart = memo(({ open, onClose, setResult }) => {
               InputLabelProps={{ shrink: true }}
               multiline
               rows={4}
+              value={formData?.note || ""}
+              onChange={handleChangeData}
             />
           </Stack>
           <Box
@@ -246,6 +288,8 @@ CreateCart.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   setResult: PropTypes.func.isRequired,
+  cartId: PropTypes.string,
+  editValue: PropTypes.object,
 };
 
 export default CreateCart;
