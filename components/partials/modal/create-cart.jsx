@@ -186,7 +186,16 @@ const CreateCart = memo(({ open, onClose, setResult }) => {
                 <MenuItem value="frozen">Frozen</MenuItem>
               </Select>
             </FormControl>
-            <FilterTime date={date} onChangeDate={handleChangeDate} />
+            <Box
+              sx={{
+                py: 0.5,
+                px: 1.5,
+                borderRadius: 1,
+                bgcolor: (theme) => alpha(theme.palette.grey[500], 0.08),
+              }}
+            >
+              <FilterTime date={date} onChangeDate={handleChangeDate} />
+            </Box>
             <TextField
               name="email"
               label="Email"
