@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-import { Box, Stack, Container, useTheme } from "@mui/material";
+import { Box, Container, useTheme } from "@mui/material";
 import { useBoolean } from "@/hooks/use-boolean";
 
 import CategoriesList from "./common/CategoriesList";
@@ -15,6 +15,7 @@ import Carousel, {
 } from "@/components/partials/carousel";
 import { GetAllProducts } from "@/services/Product";
 import { GetAllCategory } from "@/services/Category";
+import { useSearchParams } from "next/navigation";
 
 // ----------------------------------------------------------------------
 const initialLimitProduct = 18;
@@ -28,6 +29,9 @@ export default function HomeProducts() {
   const [product, setProduct] = useState([]);
   const [hasMore, sethasMore] = useState(true);
   const [page, setPage] = useState(2);
+
+  const searchParams = useSearchParams();
+  const resultString = searchParams.get("fcategory");
 
   const loading = useBoolean(true);
 
@@ -47,7 +51,11 @@ export default function HomeProducts() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const newData = await GetAllProducts("", initialLimitProduct, 1);
+        const newData = await GetAllProducts(
+          resultString,
+          initialLimitProduct,
+          1
+        );
 
         setProduct([...newData]);
         setPage(2);
@@ -62,7 +70,11 @@ export default function HomeProducts() {
 
   const fetchProduct = async () => {
     try {
-      const newData = await GetAllProducts("", initialLimitProduct, page);
+      const newData = await GetAllProducts(
+        resultString,
+        initialLimitProduct,
+        page
+      );
       return newData;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -109,6 +121,12 @@ export default function HomeProducts() {
     ],
   });
 
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckedChange = (newCheckedValue) => {
+    setIsChecked(newCheckedValue);
+  };
+
   return (
     <Container maxWidth="xl" sx={{ pb: 5, pt: { md: 2, xs: 0, sm: 0 } }}>
       {/* Categories */}
@@ -130,7 +148,11 @@ export default function HomeProducts() {
           }}
         >
           {category?.map((category, index) => (
-            <CategoriesList category={category} key={index} />
+            <CategoriesList
+              category={category}
+              key={index}
+              onChecked={handleCheckedChange}
+            />
           ))}
         </Box>
       ) : (

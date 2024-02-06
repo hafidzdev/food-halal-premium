@@ -2,14 +2,57 @@ import PropTypes from "prop-types";
 
 import { Stack, Typography, alpha, useTheme } from "@mui/material";
 import TextMaxLine from "@/components/partials/text-max-line";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useState, useCallback, useEffect } from "react";
 
 // ----------------------------------------------------------------------
+
+const getSelected = (selectedItem, item) => {
+  return selectedItem.includes(item)
+    ? selectedItem.filter((value) => value !== item)
+    : [...selectedItem, item];
+};
 
 export default function CategoriesGrid({ category }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === "light";
 
   const { categoryName, count } = category;
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const searchParams = useSearchParams();
+  let fCategory = searchParams.get("fcategory");
+  let filterCategoryArray = fCategory && fCategory.split("+");
+
+  const defaultValues = {
+    filterCategory: filterCategoryArray || [],
+  };
+
+  const [filters, setFilters] = useState(defaultValues);
+
+  const handleChangeCategory = useCallback(
+    (name) => {
+      const isExist = getSelected(filters.filterCategory, name);
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        filterCategory: isExist,
+      }));
+
+      const current = new URLSearchParams(Array.from(searchParams.entries()));
+      if (isExist.length === 0) {
+        current.delete("fcategory");
+      } else {
+        current.set("fcategory", isExist.join("+"));
+      }
+
+      const search = current.toString();
+
+      return search;
+    },
+    [filters, searchParams]
+  );
 
   return (
     <Stack
@@ -28,6 +71,9 @@ export default function CategoriesGrid({ category }) {
         },
         mb: 3,
       }}
+      onChange={() =>
+        router.push(pathname + "?" + handleChangeCategory(categoryName))
+      }
     >
       <TextMaxLine variant="subtitle2" line={1}>
         {categoryName}
