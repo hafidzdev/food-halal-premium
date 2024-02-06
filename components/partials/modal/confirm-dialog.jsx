@@ -67,8 +67,8 @@ ConfirmDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onAgree: PropTypes.func.isRequired,
-  title: PropTypes.bool,
-  description: PropTypes.bool,
+  title: PropTypes.string,
+  description: PropTypes.string,
 };
 
 export default ConfirmDialog;
