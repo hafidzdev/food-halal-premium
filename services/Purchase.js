@@ -98,34 +98,31 @@ export async function CreateShopCart(allData) {
 
     return { status: res.status, data: data.data };
   } catch (error) {
-    console.error("Error adding to cart:", error.message);
+    return { status: "", message: error.message };
   }
 }
 
-export async function UpdateCart(cartId, quantity) {
+export async function UpdateCart(cartId, allData) {
   try {
     const res = await fetchWithToken(
-      `${process.env.NEXT_PUBLIC_HOST_NAME}product/v1/cart/${cartId}`,
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart/${cartId}`,
       {
         method: "put",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          cart_id: cartId,
-          quantity,
-        }),
+        body: JSON.stringify({ ...allData }),
       }
     );
     const data = await res.json();
 
     if (!res.ok) {
-      return { status: res.status, message: data.detail };
+      return { status: res.status, message: data.message };
     }
 
-    return { status: res.status, message: data.response };
+    return { status: res.status, data: data.data };
   } catch (error) {
-    console.error("Error adding to cart:", error.message);
+    return { status: "", message: error.message };
   }
 }
 
