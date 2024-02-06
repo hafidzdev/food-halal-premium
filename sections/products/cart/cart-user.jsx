@@ -93,119 +93,117 @@ const CartUser = ({ cart }) => {
 
   return (
     <>
-      <Link
-        component={RouterLink}
-        color="inherit"
-        underline="none"
-        href={`/cart/${id}`}
+      <Card
+        sx={{
+          bgcolor: (theme) =>
+            theme.palette.mode === "light" ? "grey.200" : "",
+          "&:hover": {
+            boxShadow: (theme) => theme.customShadows.z24,
+          },
+        }}
       >
-        <Card
+        <IconButton
+          onClick={handleOpen}
           sx={{
-            bgcolor: (theme) =>
-              theme.palette.mode === "light" ? "grey.200" : "",
-            "&:hover": {
-              boxShadow: (theme) => theme.customShadows.z24,
-            },
+            position: "absolute",
+            right: 16,
+            top: 16,
+            pointerEvents: "auto",
           }}
         >
-          <IconButton
-            onClick={handleOpen}
-            sx={{ position: "absolute", right: 16, top: 16 }}
-          >
-            <Iconify icon="carbon:overflow-menu-vertical" />
-          </IconButton>
+          <Iconify icon="carbon:overflow-menu-vertical" />
+        </IconButton>
 
-          <Stack sx={{ p: 3, pb: 0 }}>
-            <Stack spacing={0.5} sx={{ mt: 3, mb: 2 }}>
-              <Typography variant="h6" line={1}>
-                {receiveName}
-              </Typography>
+        <Stack sx={{ p: 3, pb: 0 }}>
+          <Stack spacing={0.5} sx={{ mt: 3, mb: 2 }}>
+            <Typography variant="h6" line={1}>
+              {receiveName}
+            </Typography>
 
-              <Typography variant="body2" sx={{ color: "info.main" }}>
-                {emailAddress}
-              </Typography>
+            <Typography variant="body2" sx={{ color: "info.main" }}>
+              {emailAddress}
+            </Typography>
 
-              <Stack
-                direction="row"
-                alignItems="center"
-                sx={{ typography: "body2", color: "text.secondary" }}
-              >
-                <Iconify icon="carbon:phone" width={18} sx={{ mr: 0.5 }} />
-                {phoneNumber}
-              </Stack>
+            <Stack
+              direction="row"
+              alignItems="center"
+              sx={{ typography: "body2", color: "text.secondary" }}
+            >
+              <Iconify icon="carbon:phone" width={18} sx={{ mr: 0.5 }} />
+              {phoneNumber}
             </Stack>
-
-            <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              Delivery Address: {deliveryAddress}
-            </Typography>
-            <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              Postal Code: {postalCode}
-            </Typography>
           </Stack>
 
-          <Divider sx={{ borderStyle: "dashed", my: 2 }} />
+          <Typography variant="caption" sx={{ color: "text.secondary" }}>
+            Delivery Address: {deliveryAddress}
+          </Typography>
+          <Typography variant="caption" sx={{ color: "text.secondary" }}>
+            Postal Code: {postalCode}
+          </Typography>
+        </Stack>
 
-          <Grid
-            container
-            spacing={1.5}
-            sx={{
-              p: 4,
-              pt: 0,
-              mt: 1,
-              typography: "body2",
-              color: "text.secondary",
-              textTransform: "capitalize",
-            }}
-          >
-            <Grid xs={6} marginY={0.5}>
-              <Stack
-                direction="row"
-                alignItems="center"
-                sx={{ typography: "body2" }}
-              >
-                <Iconify icon="carbon:time" sx={{ mr: 1 }} />
-                {fDate(receiveTime)}
-              </Stack>
-            </Grid>
+        <Divider sx={{ borderStyle: "dashed", my: 2 }} />
 
-            <Grid xs={6} marginY={0.5}>
-              <Stack
-                direction="row"
-                alignItems="center"
-                sx={{ typography: "body2", ml: 4 }}
-              >
-                <Iconify icon="carbon:purchase" sx={{ mr: 1 }} />
-
-                {paymentType}
-              </Stack>
-            </Grid>
-
-            <Grid xs={6} marginY={0.5}>
-              <Stack
-                direction="row"
-                alignItems="center"
-                sx={{ typography: "body2" }}
-              >
-                <Iconify icon="carbon:delivery" sx={{ mr: 1 }} />
-
-                {deliveryType}
-              </Stack>
-            </Grid>
-
-            <Grid xs={6} marginY={0.5}>
-              <Stack
-                direction="row"
-                alignItems="center"
-                sx={{ typography: "body2", ml: 4 }}
-              >
-                <Iconify icon="carbon:delivery-parcel" sx={{ mr: 1 }} />
-
-                {deliveryCondition}
-              </Stack>
-            </Grid>
+        <Grid
+          container
+          spacing={1.5}
+          sx={{
+            p: 4,
+            pt: 0,
+            mt: 1,
+            typography: "body2",
+            color: "text.secondary",
+            textTransform: "capitalize",
+          }}
+        >
+          <Grid xs={6} marginY={0.5}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              sx={{ typography: "body2" }}
+            >
+              <Iconify icon="carbon:time" sx={{ mr: 1 }} />
+              {fDate(receiveTime)}
+            </Stack>
           </Grid>
-        </Card>
-      </Link>
+
+          <Grid xs={6} marginY={0.5}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              sx={{ typography: "body2", ml: 4 }}
+            >
+              <Iconify icon="carbon:purchase" sx={{ mr: 1 }} />
+
+              {paymentType}
+            </Stack>
+          </Grid>
+
+          <Grid xs={6} marginY={0.5}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              sx={{ typography: "body2" }}
+            >
+              <Iconify icon="carbon:delivery" sx={{ mr: 1 }} />
+
+              {deliveryType}
+            </Stack>
+          </Grid>
+
+          <Grid xs={6} marginY={0.5}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              sx={{ typography: "body2", ml: 4 }}
+            >
+              <Iconify icon="carbon:delivery-parcel" sx={{ mr: 1 }} />
+
+              {deliveryCondition}
+            </Stack>
+          </Grid>
+        </Grid>
+      </Card>
 
       <Popover
         open={Boolean(open)}
