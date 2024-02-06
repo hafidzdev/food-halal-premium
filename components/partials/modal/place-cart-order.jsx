@@ -82,7 +82,7 @@ function ModalPlaceCartOrder({ cartId }) {
         <DialogTitle id="alert-dialog-title">
           {openModal.isSuccess
             ? "Yeayy.. Complete Your Order"
-            : "Oopps Someting Wrong!"}
+            : "Oopps.. Something went Wrong!"}
         </DialogTitle>
         <DialogContent>
           {openModal.isSuccess ? (
