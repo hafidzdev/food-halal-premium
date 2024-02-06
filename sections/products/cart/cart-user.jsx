@@ -13,11 +13,12 @@ import {
 } from "@mui/material";
 import Iconify from "@/components/partials/Iconify";
 import { RouterLink } from "@/routes/components";
-import { ConfirmDialog } from "@/components/partials/modal";
+import { ConfirmDialog, CreateCart } from "@/components/partials/modal";
 import { DeleteCart, GetAllCart } from "@/services/Purchase";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
 import { useCart } from "@/context/CartContext";
 import { fDate } from "@/utils/format-time";
+import { useBoolean } from "@/hooks/use-boolean";
 
 const CartUser = ({ cart }) => {
   const [, setCart] = useCart();
@@ -25,6 +26,7 @@ const CartUser = ({ cart }) => {
   const [open, setOpen] = useState(null);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [snackbars, setSnackbars] = useState([]);
+  const editDialog = useBoolean(false);
 
   const handleOpen = useCallback((event) => {
     setOpen(event.currentTarget);
@@ -71,6 +73,18 @@ const CartUser = ({ cart }) => {
       ]);
     }
   }, []);
+
+  const editIsSuccess = (msg) => {
+    editDialog.onFalse();
+    setSnackbars((prevSnackbars) => [
+      ...prevSnackbars,
+      {
+        id: Date.now(),
+        message: msg,
+        severity: "success",
+      },
+    ]);
+  };
 
   const handleCloseSnackbar = (id) => {
     setSnackbars((prevSnackbars) =>
@@ -134,11 +148,14 @@ const CartUser = ({ cart }) => {
             </Stack>
           </Stack>
 
-          <Typography variant="caption" sx={{ color: "text.secondary" }}>
-            Delivery Address: {deliveryAddress}
+          <Typography
+            variant="caption"
+            sx={{ color: "text.secondary", fontWeight: 700 }}
+          >
+            Delivery Address:
           </Typography>
           <Typography variant="caption" sx={{ color: "text.secondary" }}>
-            Postal Code: {postalCode}
+            {deliveryAddress} - {postalCode}
           </Typography>
         </Stack>
 
@@ -156,7 +173,7 @@ const CartUser = ({ cart }) => {
             textTransform: "capitalize",
           }}
         >
-          <Grid xs={6} marginY={0.5}>
+          <Grid item xs={6} marginY={0.5}>
             <Stack
               direction="row"
               alignItems="center"
@@ -167,7 +184,7 @@ const CartUser = ({ cart }) => {
             </Stack>
           </Grid>
 
-          <Grid xs={6} marginY={0.5}>
+          <Grid item xs={6} marginY={0.5}>
             <Stack
               direction="row"
               alignItems="center"
@@ -179,7 +196,7 @@ const CartUser = ({ cart }) => {
             </Stack>
           </Grid>
 
-          <Grid xs={6} marginY={0.5}>
+          <Grid item xs={6} marginY={0.5}>
             <Stack
               direction="row"
               alignItems="center"
@@ -191,7 +208,7 @@ const CartUser = ({ cart }) => {
             </Stack>
           </Grid>
 
-          <Grid xs={6} marginY={0.5}>
+          <Grid item xs={6} marginY={0.5}>
             <Stack
               direction="row"
               alignItems="center"
@@ -226,10 +243,24 @@ const CartUser = ({ cart }) => {
 
         <Divider sx={{ borderStyle: "dashed", mt: 0.5 }} />
 
+        <MenuItem onClick={() => editDialog.onTrue()}>
+          <Iconify icon="tabler:edit" sx={{ mr: 2 }} /> Edit
+        </MenuItem>
+
+        <Divider sx={{ borderStyle: "dashed", mt: 0.5 }} />
+
         <MenuItem onClick={handleDelete} sx={{ color: "error.main" }}>
           <Iconify icon="carbon:trash-can" sx={{ mr: 2 }} /> Delete
         </MenuItem>
       </Popover>
+
+      <CreateCart
+        open={editDialog.value}
+        onClose={() => editDialog.onFalse()}
+        setResult={editIsSuccess}
+        cartId={id}
+        editValue={cart}
+      />
 
       <ConfirmDialog
         open={openConfirmDelete}
@@ -255,7 +286,7 @@ const CartUser = ({ cart }) => {
 
 CartUser.propTypes = {
   cart: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     receiveName: PropTypes.string,
     emailAddress: PropTypes.string,
     phoneNumber: PropTypes.number,
