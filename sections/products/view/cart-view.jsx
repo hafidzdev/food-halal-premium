@@ -1,22 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Unstable_Grid2";
 import Container from "@mui/material/Container";
 import { Stack, Box, Typography } from "@mui/material";
+import Iconify from "@/components/partials/Iconify";
+import { useBoolean } from "@/hooks/use-boolean";
 
 import { useCart } from "@/context/CartContext";
-// import { RouterLink } from "@/routes/components";
-
-import Iconify from "@/components/partials/Iconify";
-
-// import CartList from "../cart/cart-list";
-// import CartSummary from "../cart/cart-summary";
 import CartUser from "../cart/cart-user";
 import { CreateCart } from "@/components/partials/modal";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
+import CartListSkeleton from "../skeleton/cart-list-skeleton";
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +34,16 @@ export default function CartView() {
   };
   const handleCloseSuccessAlert = () =>
     setOpenModalCreateCart({ isOpen: false, isSuccess: "" });
+
+  const loading = useBoolean(true);
+
+  useEffect(() => {
+    const fakeLoading = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 700));
+      loading.onFalse();
+    };
+    fakeLoading();
+  }, []);
 
   return (
     <Container
@@ -70,17 +77,23 @@ export default function CartView() {
           </Stack>
           <Box
             sx={{
+              columnGap: 4,
               display: "grid",
-              gap: { xs: 3, md: 4 },
+              rowGap: { xs: 4, md: 5 },
               gridTemplateColumns: {
                 xs: "repeat(1, 1fr)",
-                lg: "repeat(4, 1fr)",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(3, 1fr)",
               },
             }}
           >
-            {cart.map((item) => (
-              <CartUser key={item.id} cart={item} />
-            ))}
+            {loading.value
+              ? [...Array(3)].map((_, index) => (
+                  <CartListSkeleton key={index} />
+                ))
+              : cart.length > 0
+              ? cart.map((item, index) => <CartUser key={index} cart={item} />)
+              : "No Matching Data! "}
           </Box>
         </Grid>
       </Grid>
