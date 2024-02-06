@@ -19,6 +19,7 @@ export default function ProductView({ product }) {
 
           <Grid item xs={12} md={6} lg={5}>
             <ProductDetailsInfo
+              product={product}
               name={product.name}
               price={product.price}
               barcode={product.barcode}
