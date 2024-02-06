@@ -3,23 +3,29 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
-import { fCurrency } from "@/utils/format-number";
-
-export default function ProductPrice({ price, priceSale = 0, sx, ...other }) {
+export default function ProductPrice({
+  price,
+  inStock,
+  priceSale = 0,
+  sx,
+  ...other
+}) {
   return (
-    <Stack direction="row" sx={{ typography: "subtitle2", ...sx }} {...other}>
+    <Stack
+      direction="row"
+      spacing={4}
+      sx={{ typography: "subtitle2", ...sx }}
+      {...other}
+    >
       {"¥" + price}
 
       <Box
         component="span"
         sx={{
-          ml: 0.5,
           color: "text.disabled",
-          textDecoration: "line-through",
-          fontWeight: "fontWeightMedium",
         }}
       >
-        {priceSale > 0 && fCurrency(priceSale)}
+        Stock: {inStock}
       </Box>
     </Stack>
   );
@@ -27,6 +33,7 @@ export default function ProductPrice({ price, priceSale = 0, sx, ...other }) {
 
 ProductPrice.propTypes = {
   price: PropTypes.number,
+  inStock: PropTypes.number,
   priceSale: PropTypes.number,
   sx: PropTypes.object,
 };
