@@ -12,7 +12,7 @@ const CartPrice = ({ productCart }) => {
       sx={{
         boxShadow: 2,
         boxShadow: `0px 4px 10px rgba(0, 0, 0, 0.3)`,
-        bgcolor: "action.focus",
+        bgcolor: "background.neutral",
         my: 2,
       }}
     >

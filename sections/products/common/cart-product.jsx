@@ -103,7 +103,8 @@ export default function CartProduct({ productCart }) {
                     sx={{
                       mb: 2,
                       borderRadius: 1.5,
-                      // bgcolor: "background.neutral",
+                      width: "100px",
+                      height: "100px",
                     }}
                   />
 
@@ -125,7 +126,10 @@ export default function CartProduct({ productCart }) {
                     </Typography>
                     <Divider />
 
-                    <ProductPrice price={product?.price} />
+                    <ProductPrice
+                      price={product?.price}
+                      inStock={product?.inStock}
+                    />
                   </Stack>
 
                   <Stack
