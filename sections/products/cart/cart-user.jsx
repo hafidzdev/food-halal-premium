@@ -1,15 +1,14 @@
 import { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import {
-  Typography,
+  Grid,
+  Card,
   Popover,
-  Divider,
   Stack,
   MenuItem,
+  Typography,
+  Divider,
   IconButton,
-  Box,
-  Paper,
-  useTheme,
   Link,
 } from "@mui/material";
 import Iconify from "@/components/partials/Iconify";
@@ -18,12 +17,11 @@ import { ConfirmDialog } from "@/components/partials/modal";
 import { DeleteCart, GetAllCart } from "@/services/Purchase";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
 import { useCart } from "@/context/CartContext";
+import { fDate } from "@/utils/format-time";
 
 const CartUser = ({ cart }) => {
   const [, setCart] = useCart();
 
-  const theme = useTheme();
-  const isLight = theme.palette.mode === "light";
   const [open, setOpen] = useState(null);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [snackbars, setSnackbars] = useState([]);
@@ -80,40 +78,134 @@ const CartUser = ({ cart }) => {
     );
   };
 
-  const { id, receiveName, paymentType } = cart;
+  const {
+    id,
+    receiveName,
+    emailAddress,
+    phoneNumber,
+    receiveTime,
+    deliveryAddress,
+    postalCode,
+    paymentType,
+    deliveryType,
+    deliveryCondition,
+  } = cart;
 
   return (
     <>
-      <Paper
-        variant={isLight ? "outlined" : "elevation"}
-        sx={{
-          p: 3,
-          borderRadius: 2,
-          boxShadow: 2,
-          boxShadow: isLight
-            ? "0px 4px 10px rgba(0, 0, 0, 0.1)"
-            : "0px 4px 10px rgba(0, 0, 0, 0.5)",
-          backgroundColor: isLight ? "#DFE3E8" : "",
-        }}
+      <Link
+        component={RouterLink}
+        color="inherit"
+        underline="none"
+        href={`/cart/${id}`}
       >
-        <Stack
-          direction="row"
-          alignItems="center"
-          sx={{ typography: "subtitle1" }}
-          spacing={4}
+        <Card
+          sx={{
+            bgcolor: (theme) =>
+              theme.palette.mode === "light" ? "grey.200" : "",
+            "&:hover": {
+              boxShadow: (theme) => theme.customShadows.z24,
+            },
+          }}
         >
-          <Stack direction="row" alignItems="center" flexGrow={1}>
-            <Box component="span">
-              {receiveName}
-              <Typography variant="body2">{paymentType}</Typography>
-            </Box>
-          </Stack>
-
-          <IconButton onClick={handleOpen}>
+          <IconButton
+            onClick={handleOpen}
+            sx={{ position: "absolute", right: 16, top: 16 }}
+          >
             <Iconify icon="carbon:overflow-menu-vertical" />
           </IconButton>
-        </Stack>
-      </Paper>
+
+          <Stack sx={{ p: 3, pb: 0 }}>
+            <Stack spacing={0.5} sx={{ mt: 3, mb: 2 }}>
+              <Typography variant="h6" line={1}>
+                {receiveName}
+              </Typography>
+
+              <Typography variant="body2" sx={{ color: "info.main" }}>
+                {emailAddress}
+              </Typography>
+
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{ typography: "body2", color: "text.secondary" }}
+              >
+                <Iconify icon="carbon:phone" width={18} sx={{ mr: 0.5 }} />
+                {phoneNumber}
+              </Stack>
+            </Stack>
+
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+              Delivery Address: {deliveryAddress}
+            </Typography>
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+              Postal Code: {postalCode}
+            </Typography>
+          </Stack>
+
+          <Divider sx={{ borderStyle: "dashed", my: 2 }} />
+
+          <Grid
+            container
+            spacing={1.5}
+            sx={{
+              p: 4,
+              pt: 0,
+              mt: 1,
+              typography: "body2",
+              color: "text.secondary",
+              textTransform: "capitalize",
+            }}
+          >
+            <Grid xs={6} marginY={0.5}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{ typography: "body2" }}
+              >
+                <Iconify icon="carbon:time" sx={{ mr: 1 }} />
+                {fDate(receiveTime)}
+              </Stack>
+            </Grid>
+
+            <Grid xs={6} marginY={0.5}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{ typography: "body2", ml: 4 }}
+              >
+                <Iconify icon="carbon:purchase" sx={{ mr: 1 }} />
+
+                {paymentType}
+              </Stack>
+            </Grid>
+
+            <Grid xs={6} marginY={0.5}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{ typography: "body2" }}
+              >
+                <Iconify icon="carbon:delivery" sx={{ mr: 1 }} />
+
+                {deliveryType}
+              </Stack>
+            </Grid>
+
+            <Grid xs={6} marginY={0.5}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{ typography: "body2", ml: 4 }}
+              >
+                <Iconify icon="carbon:delivery-parcel" sx={{ mr: 1 }} />
+
+                {deliveryCondition}
+              </Stack>
+            </Grid>
+          </Grid>
+        </Card>
+      </Link>
 
       <Popover
         open={Boolean(open)}
@@ -165,8 +257,16 @@ const CartUser = ({ cart }) => {
 
 CartUser.propTypes = {
   cart: PropTypes.shape({
-    name: PropTypes.string,
-    code: PropTypes.string,
+    id: PropTypes.number,
+    receiveName: PropTypes.string,
+    emailAddress: PropTypes.string,
+    phoneNumber: PropTypes.number,
+    receiveTime: PropTypes.string,
+    deliveryAddress: PropTypes.string,
+    postalCode: PropTypes.number,
+    paymentType: PropTypes.string,
+    deliveryType: PropTypes.string,
+    deliveryCondition: PropTypes.string,
   }),
 };
 
