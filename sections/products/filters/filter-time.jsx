@@ -29,7 +29,7 @@ export default function FilterTime({ date, onChangeDate, sx }) {
             inputProps={{
               ...inputProps,
               ...inputOther,
-              placeholder: "Date",
+              placeholder: "Receive Date",
             }}
             startAdornment={
               <InputAdornment position="start">
