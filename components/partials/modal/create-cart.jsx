@@ -28,47 +28,33 @@ import { CreateShopCart, GetAllCart, UpdateCart } from "@/services/Purchase";
 import { LoadingButton } from "@mui/lab";
 import { useCart } from "@/context/CartContext";
 
-const filterKeys = (responseObject) => {
-  return {
-    receiveName: responseObject?.receiveName,
-    phoneNumber: responseObject?.phoneNumber?.toString(),
-    deliveryAddress: responseObject?.deliveryAddress,
-    postalCode: responseObject?.postalCode?.toString(),
-    paymentType: responseObject?.paymentType,
-    deliveryType: responseObject?.deliveryType,
-    deliveryCondition: responseObject?.deliveryCondition,
-    emailAddress: responseObject?.emailAddress,
-    receiveTime: responseObject?.receiveTime,
-    note: responseObject?.note,
-  };
-};
-
 const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
   const { data: session } = useSession();
   const [, setCart] = useCart();
-  const initializeData = cartId ? filterKeys(editValue) : {};
 
-  const [formData, setFormData] = useState(initializeData);
+  const datePart = editValue?.receiveTime.split("T")[0];
+  const initializeDate = cartId ? new Date(datePart) : null;
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(initializeDate);
   const mdUp = useResponsive("up", "md");
-
-  const handleChangeData = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    const data = new FormData(e.currentTarget);
 
     const allData = {
-      ...formData,
+      receiveName: data.get("receiveName"),
+      phoneNumber: data.get("phoneNumber"),
+      deliveryAddress: data.get("deliveryAddress"),
+      postalCode: data.get("postalCode"),
+      paymentType: data.get("paymentType"),
+      deliveryType: data.get("deliveryType"),
+      deliveryCondition: data.get("deliveryCondition"),
       emailAddress: session?.user?.email,
       receiveTime: date,
+      note: data.get("note"),
     };
 
     try {
@@ -99,7 +85,6 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
 
   const handleCloseDialog = () => {
     setError(null);
-    setFormData({});
     onClose();
   };
 
@@ -152,8 +137,7 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
                   },
                 },
               }}
-              value={formData?.receiveName || ""}
-              onChange={handleChangeData}
+              defaultValue={editValue?.receiveName || ""}
             />
             <TextField
               name="phoneNumber"
@@ -161,8 +145,7 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
               placeholder="Phone Number"
               variant="outlined"
               InputLabelProps={{ shrink: true }}
-              value={formData?.phoneNumber || ""}
-              onChange={handleChangeData}
+              defaultValue={editValue?.phoneNumber || ""}
             />
             <TextField
               name="deliveryAddress"
@@ -170,8 +153,7 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
               placeholder="Enter Address"
               variant="outlined"
               InputLabelProps={{ shrink: true }}
-              value={formData?.deliveryAddress || ""}
-              onChange={handleChangeData}
+              defaultValue={editValue?.deliveryAddress || ""}
             />{" "}
             <TextField
               name="postalCode"
@@ -179,8 +161,7 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
               placeholder="Enter Post Code"
               variant="outlined"
               InputLabelProps={{ shrink: true }}
-              value={formData?.postalCode || ""}
-              onChange={handleChangeData}
+              defaultValue={editValue?.postalCode || ""}
             />
             <FormControl fullWidth variant="outlined">
               <InputLabel htmlFor="option-field">Payment Type</InputLabel>
@@ -188,8 +169,7 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
                 name="paymentType"
                 label="Payment Type"
                 id="option-field"
-                value={formData?.paymentType || ""}
-                onChange={handleChangeData}
+                defaultValue={editValue?.paymentType || "cod"}
               >
                 <MenuItem value="cod">COD</MenuItem>
                 <MenuItem value="transfer">Transfer</MenuItem>
@@ -201,8 +181,7 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
                 name="deliveryType"
                 label="option-field-label2"
                 id="option-field"
-                value={formData?.deliveryType || ""}
-                onChange={handleChangeData}
+                defaultValue={editValue?.deliveryType || "pos"}
               >
                 <MenuItem value="pos">POS</MenuItem>
                 <MenuItem value="pickup">Pickup</MenuItem>
@@ -218,8 +197,7 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
                 name="deliveryCondition"
                 label="option-field-label3"
                 id="option-field"
-                value={formData?.deliveryCondition || ""}
-                onChange={handleChangeData}
+                defaultValue={editValue?.deliveryCondition || "standard"}
               >
                 <MenuItem value="standard">Standard</MenuItem>
                 <MenuItem value="refrigerated">Refrigerated</MenuItem>
@@ -252,8 +230,7 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
               InputLabelProps={{ shrink: true }}
               multiline
               rows={4}
-              value={formData?.note || ""}
-              onChange={handleChangeData}
+              defaultValue={editValue?.note || ""}
             />
           </Stack>
           <Box

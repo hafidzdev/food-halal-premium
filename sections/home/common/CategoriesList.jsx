@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { Stack, Typography, alpha, useTheme } from "@mui/material";
 import TextMaxLine from "@/components/partials/text-max-line";
 
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback } from "react";
 
 // ----------------------------------------------------------------------
@@ -22,7 +22,6 @@ const CategoriesList = ({ category, onChecked }) => {
   const { categoryName, count } = category;
 
   const router = useRouter();
-  const pathname = usePathname();
 
   const searchParams = useSearchParams();
   let fCategory = searchParams.get("fcategory");
@@ -63,12 +62,8 @@ const CategoriesList = ({ category, onChecked }) => {
     const updatedChecked = !isChecked;
     onChecked(updatedChecked);
 
-    // Prevent scrolling
-    window.scrollTo(0, 0);
-
-    // If you want to update the URL without page navigation, you can use history.replaceState
-    const newUrl = pathname + "?" + handleChangeCategory(categoryName);
-    window.history.replaceState({}, "", newUrl);
+    const newUrl = "/product?" + handleChangeCategory(categoryName);
+    router.push(newUrl);
   };
 
   return (
@@ -91,7 +86,7 @@ const CategoriesList = ({ category, onChecked }) => {
             boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}`,
           },
         }}
-        // onClick={handleStackClick}
+        onClick={handleStackClick}
       >
         <TextMaxLine variant="subtitle2" line={1}>
           {categoryName}
