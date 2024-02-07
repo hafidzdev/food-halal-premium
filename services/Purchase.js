@@ -152,7 +152,10 @@ export async function DeleteCart(cartId) {
 export async function GetDetailCart(cartId) {
   try {
     const res = await fetchWithToken(
-      `${process.env.NEXT_PUBLIC_HOST_NAME}cart/${cartId}`
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart/${cartId}`,
+      {
+        cache: "no-store",
+      }
     );
 
     const data = await res.json();

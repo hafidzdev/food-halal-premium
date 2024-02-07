@@ -75,7 +75,7 @@ export default function CartProduct({ productCart }) {
             >
               <Link
                 component={RouterLink}
-                href={"#"}
+                href={`/product/${product?.productId}`}
                 color="inherit"
                 underline="none"
               >
@@ -109,14 +109,6 @@ export default function CartProduct({ productCart }) {
                   />
 
                   <Stack spacing={0.5}>
-                    {/* <TextMaxLine
-                      variant="caption"
-                      line={1}
-                      sx={{ color: "text.disabled" }}
-                    >
-                      {"Category"}
-                    </TextMaxLine> */}
-
                     <Typography
                       variant="body2"
                       line={1}
@@ -128,7 +120,7 @@ export default function CartProduct({ productCart }) {
 
                     <ProductPrice
                       price={product?.price}
-                      inStock={product?.inStock}
+                      inStock={product?.currentStock}
                     />
                   </Stack>
 
