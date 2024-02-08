@@ -1,11 +1,9 @@
 import PropTypes from "prop-types";
-
 import Stack from "@mui/material/Stack";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { usePathname, useRouter } from "next/navigation";
-
-// ----------------------------------------------------------------------
+import { useState } from "react"; // Import useState
 
 export default function FilterCategory({
   options,
@@ -15,6 +13,15 @@ export default function FilterCategory({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const handleCheckboxChange = (categoryName) => {
+    setSelectedCategory(
+      categoryName === selectedCategory ? null : categoryName
+    );
+    router.push(pathname + "?" + onChangeCategory(categoryName));
+  };
 
   return (
     <Stack {...other}>
@@ -26,11 +33,11 @@ export default function FilterCategory({
               size="small"
               value={option?.categoryName}
               checked={filterCategory.includes(option?.categoryName)}
-              onChange={() =>
-                router.push(
-                  pathname + "?" + onChangeCategory(option?.categoryName)
-                )
+              disabled={
+                selectedCategory !== null &&
+                option?.categoryName !== selectedCategory
               }
+              onChange={() => handleCheckboxChange(option?.categoryName)}
             />
           }
           label={option?.categoryName}
