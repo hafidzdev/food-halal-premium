@@ -62,53 +62,57 @@ export default function CartProduct({ productCart }) {
           display="grid"
           gridTemplateColumns={{
             xs: "repeat(2, 1fr)",
-            sm: "repeat(3, 1fr)",
-            md: "repeat(4, 1fr)",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
           }}
         >
           {productCart?.map((product, index) => (
-            <Box
+            <Paper
+              variant="outlined"
               sx={{
-                position: "relative",
+                p: 1,
+                borderRadius: 2,
+                boxShadow: isLight
+                  ? "0px 4px 10px rgba(0, 0, 0, 0.1)"
+                  : "0px 4px 10px rgba(0, 0, 0, 0.5)",
+
+                transition: (theme) =>
+                  theme.transitions.create("background-color", {
+                    easing: theme.transitions.easing.easeIn,
+                    duration: theme.transitions.duration.shortest,
+                  }),
               }}
               key={index}
             >
-              <Link
-                component={RouterLink}
-                href={`/product/${product?.productId}`}
-                color="inherit"
-                underline="none"
+              <Box
+                sx={{
+                  position: "relative",
+                }}
               >
-                <Paper
-                  variant="outlined"
-                  sx={{
-                    p: 1,
-                    borderRadius: 2,
-                    boxShadow: isLight
-                      ? "0px 4px 10px rgba(0, 0, 0, 0.1)"
-                      : "0px 4px 10px rgba(0, 0, 0, 0.5)",
-                    backgroundColor: isLight ? "#DFE3E8" : "",
-                    transition: (theme) =>
-                      theme.transitions.create("background-color", {
-                        easing: theme.transitions.easing.easeIn,
-                        duration: theme.transitions.duration.shortest,
-                      }),
-                    "&:hover": {
-                      bgcolor: "background.neutral",
-                    },
-                  }}
+                <Link
+                  component={RouterLink}
+                  href={`/product/${product?.productId}`}
+                  color="inherit"
+                  underline="none"
                 >
                   <Image
                     src={product?.productImage}
                     sx={{
                       mb: 2,
-                      borderRadius: 1.5,
-                      width: "100px",
-                      height: "100px",
+                      borderRadius: 1,
+                      width: "100%",
+                      height: "120px",
                     }}
                   />
+                </Link>
 
-                  <Stack spacing={0.5}>
+                <Stack spacing={0.5}>
+                  <Link
+                    component={RouterLink}
+                    href={`/product/${product?.productId}`}
+                    color="inherit"
+                    underline="none"
+                  >
                     <Typography
                       variant="body2"
                       line={1}
@@ -116,40 +120,66 @@ export default function CartProduct({ productCart }) {
                     >
                       {product?.productName}
                     </Typography>
-                    <Divider />
+                  </Link>
 
-                    <ProductPrice
-                      price={product?.price}
-                      inStock={product?.currentStock}
-                    />
-                  </Stack>
+                  <ProductPrice price={product?.price} />
+                </Stack>
 
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    justifyContent={"space-between"}
-                    sx={{ mt: 0 }}
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  <Typography variant="subtitle2">
+                    {product?.inStock > 0 ? product?.inStock : "0"}
+                  </Typography>
+                  <Box
+                    sx={{
+                      // px: 0.75,
+                      border: 1,
+                      lineHeight: 0,
+                      borderRadius: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      borderColor: "grey.600",
+                    }}
                   >
-                    <IconButton onClick={(e) => handleIncrement(product.id, e)}>
-                      <Iconify icon="carbon:add-alt" width="10" height="10" />
-                    </IconButton>
-                    <span style={{ margin: "0 10px" }}>
-                      {product?.amount || 0}
-                    </span>
                     <IconButton
+                      size="small"
+                      color="inherit"
                       onClick={(e) => handleDecrement(product.id, e)}
                       disabled={!productQuantity[product.id]}
                     >
                       <Iconify
                         icon="simple-line-icons:minus"
-                        width="10"
-                        height="10"
+                        width={16}
+                        height={16}
                       />
                     </IconButton>
-                  </Stack>
-                </Paper>
-              </Link>
-            </Box>
+                    <Typography
+                      variant="body2"
+                      component="span"
+                      sx={{
+                        width: 40,
+                        textAlign: "center",
+                        display: "inline-block",
+                      }}
+                    >
+                      {product?.amount || 0}
+                    </Typography>
+                    <IconButton
+                      size="small"
+                      color="inherit"
+                      onClick={(e) => handleIncrement(product.id, e)}
+                    >
+                      <Iconify icon="carbon:add-alt" width={16} height={16} />
+                    </IconButton>
+                  </Box>
+                </Stack>
+              </Box>
+            </Paper>
           ))}
         </Box>
       </Box>

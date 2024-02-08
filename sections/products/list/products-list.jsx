@@ -2,11 +2,11 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useCart } from "@/context/CartContext";
-import { AddProductToCart, GetAllCart } from "@/services/Purchase";
 
 import Fab from "@mui/material/Fab";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
+import { Typography } from "@mui/material";
 
 import { RouterLink } from "@/routes/components";
 
@@ -136,12 +136,16 @@ export default function ProductList({ product, ...other }) {
           {product?.brand}
         </TextMaxLine> */}
 
-        <ProductPrice
-          price={product?.price}
-          priceSale={0}
-          inStock={product?.inStock}
-          sx={{ typography: "h6" }}
-        />
+        <Stack direction="row" justifyContent="flex-start" spacing={2}>
+          <Typography variant="subtitle2" sx={{ mt: 0.5 }}>
+            {product?.inStock > 0 ? product?.inStock : "0"}
+          </Typography>
+          <ProductPrice
+            price={product?.price}
+            priceSale={0}
+            sx={{ typography: "h6" }}
+          />
+        </Stack>
       </Stack>
 
       <AddProductCartDialog

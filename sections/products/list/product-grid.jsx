@@ -140,16 +140,12 @@ export default function ProductGrid({ product, sx, ...other }) {
           </Typography>
         </Link>
 
-        <ProductPrice
-          price={product.price}
-          priceSale={0}
-          inStock={product.inStock}
-        />
-        {/* 
-        <ProductRating
-          ratingNumber={product.rating.avg}
-          label={`${product.delivery_weight} sold`}
-        /> */}
+        <Stack direction="row" justifyContent="flex-start" spacing={2}>
+          <Typography variant="subtitle2">
+            {product?.inStock > 0 ? product?.inStock : "0"}
+          </Typography>
+          <ProductPrice price={product.price} priceSale={0} />
+        </Stack>
       </Stack>
 
       <AddProductCartDialog

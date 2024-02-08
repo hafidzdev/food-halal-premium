@@ -163,9 +163,9 @@ const CartUser = ({ cart }) => {
 
         <Grid
           container
-          spacing={1.5}
+          spacing={1}
           sx={{
-            p: 4,
+            p: 3,
             pt: 0,
             mt: 1,
             typography: "body2",

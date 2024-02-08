@@ -40,6 +40,12 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en" className={primaryFont.className}>
+      <head>
+        <link
+          rel="icon"
+          href="https://firebasestorage.googleapis.com/v0/b/staging-xetia-io-01.appspot.com/o/entity-info%2FWhatsApp%20Image%202024-01-29%20at%2013.36.25.jpeg?alt=media&token=64f18e64-2b26-4223-bf1a-16c550e48f09"
+        />
+      </head>
       <body>
         <SessionProvider session={session}>
           <LocalizationProvider>
