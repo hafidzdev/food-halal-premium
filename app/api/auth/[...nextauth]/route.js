@@ -111,10 +111,10 @@ export const authOptions = {
       //   };
       // }
 
-      let currentDate = new Date().getTime();
-      if (currentDate > token.accessTokenExpires) {
-        throw Error("Expired token");
-      }
+      // let currentDate = new Date().getTime();
+      // if (currentDate > token.accessTokenExpires) {
+      //   throw Error("Expired token");
+      // }
       return token;
     },
 
