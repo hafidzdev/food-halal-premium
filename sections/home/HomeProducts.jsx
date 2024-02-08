@@ -160,7 +160,11 @@ export default function HomeProducts() {
           <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
             {category?.map((category, index) => (
               <Box key={index} sx={{ px: 1.5 }}>
-                <CategoriesGrid category={category} key={index} />
+                <CategoriesGrid
+                  category={category}
+                  key={index}
+                  onChecked={handleCheckedChange}
+                />
               </Box>
             ))}
           </Carousel>

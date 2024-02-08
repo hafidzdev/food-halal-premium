@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 
 import { Stack, Typography, alpha, useTheme } from "@mui/material";
 import TextMaxLine from "@/components/partials/text-max-line";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useState, useCallback, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useCallback } from "react";
 
 // ----------------------------------------------------------------------
 
@@ -13,14 +13,13 @@ const getSelected = (selectedItem, item) => {
     : [...selectedItem, item];
 };
 
-export default function CategoriesGrid({ category }) {
+export default function CategoriesGrid({ category, onChecked }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === "light";
 
   const { categoryName, count } = category;
 
   const router = useRouter();
-  const pathname = usePathname();
 
   const searchParams = useSearchParams();
   let fCategory = searchParams.get("fcategory");
@@ -54,6 +53,17 @@ export default function CategoriesGrid({ category }) {
     [filters, searchParams]
   );
 
+  const isChecked = filters.filterCategory.includes(categoryName);
+
+  const handleStackClick = (event) => {
+    event.preventDefault();
+    const updatedChecked = !isChecked;
+    onChecked(updatedChecked);
+
+    const newUrl = "/product?" + handleChangeCategory(categoryName);
+    router.push(newUrl);
+  };
+
   return (
     <Stack
       spacing={1}
@@ -71,9 +81,7 @@ export default function CategoriesGrid({ category }) {
         },
         mb: 3,
       }}
-      onChange={() =>
-        router.push(pathname + "?" + handleChangeCategory(categoryName))
-      }
+      onClick={handleStackClick}
     >
       <TextMaxLine variant="subtitle2" line={1}>
         {categoryName}

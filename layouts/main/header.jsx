@@ -7,6 +7,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import { useTheme } from "@mui/material/styles";
 import { Typography, Divider, Link, Button } from "@mui/material";
+import { RouterLink } from "@/routes/components";
 
 import { useResponsive } from "@/hooks/use-responsive";
 import useOffSetTop from "@/hooks/use-off-set-top";
@@ -68,21 +69,22 @@ export default function Header({ headerOnDark }) {
           mt: 1,
         }}
       >
-        <Image
-          alt="Logo"
-          src="https://firebasestorage.googleapis.com/v0/b/staging-xetia-io-01.appspot.com/o/entity-info%2FWhatsApp%20Image%202024-01-29%20at%2013.36.25.jpeg?alt=media&token=64f18e64-2b26-4223-bf1a-16c550e48f09"
-          width={"40"}
-          height={"40"}
-          priority
-          style={{ borderRadius: 2 }}
-        />
+        <Link component={RouterLink} href="/">
+          <Image
+            alt="Logo"
+            src="https://firebasestorage.googleapis.com/v0/b/staging-xetia-io-01.appspot.com/o/entity-info%2FWhatsApp%20Image%202024-01-29%20at%2013.36.25.jpeg?alt=media&token=64f18e64-2b26-4223-bf1a-16c550e48f09"
+            width={"40"}
+            height={"40"}
+            priority
+            style={{ borderRadius: 2 }}
+          />
+        </Link>
         <Typography variant="h5" component="div" sx={{ ml: 2, mt: 0.5 }}>
           {"Shop Manager"}
         </Typography>
       </Box>
 
       {mdUp ? (
-        // <Stack >
         <NavBasicDesktop
           flexGrow={1}
           alignItems="center"
@@ -96,7 +98,6 @@ export default function Header({ headerOnDark }) {
           data={navData}
         />
       ) : (
-        // </Stack>
         <Box sx={{ flexGrow: 1 }} />
       )}
 
@@ -126,7 +127,7 @@ export default function Header({ headerOnDark }) {
                 <>
                   <Divider orientation="vertical" sx={{ height: 24 }} />
                   <Stack direction="row" spacing={1}>
-                    <Link href="/signup">
+                    <Link component={RouterLink} href="/signup">
                       <div>
                         <Button
                           color="inherit"
@@ -140,7 +141,7 @@ export default function Header({ headerOnDark }) {
                       </div>
                     </Link>
 
-                    <Link href="/signin">
+                    <Link component={RouterLink} href="/signin">
                       <div>
                         <Button variant="contained">Login</Button>
                       </div>
