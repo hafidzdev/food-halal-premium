@@ -11,8 +11,8 @@ import {
   DialogTitle,
   Grid,
   IconButton,
-  Stack,
   Typography,
+  Box,
 } from "@mui/material";
 import Iconify from "../Iconify";
 import { AllProductCart } from ".";
@@ -103,7 +103,19 @@ const AddProductCartDialog = memo(({ open, onClose }) => {
             :
           </Grid>
           <Grid item xs={9}>
-            <Stack direction="row" alignItems="center" sx={{ mt: 1 }}>
+            <Box
+              sx={{
+                // px: 0.75,
+                border: 1,
+                lineHeight: 0,
+                borderRadius: 1,
+                display: "flex",
+                alignItems: "center",
+                borderColor: "grey.600",
+                mt: 1,
+                width: 100,
+              }}
+            >
               <IconButton
                 color="success"
                 onClick={handleDecrement}
@@ -115,7 +127,17 @@ const AddProductCartDialog = memo(({ open, onClose }) => {
                   height={16}
                 />
               </IconButton>
-              <span style={{ margin: "0 10px" }}>{order}</span>
+              <Typography
+                variant="body2"
+                component="span"
+                sx={{
+                  width: 40,
+                  textAlign: "center",
+                  display: "inline-block",
+                }}
+              >
+                {order}
+              </Typography>
               <IconButton
                 color="success"
                 onClick={handleIncrement}
@@ -123,7 +145,7 @@ const AddProductCartDialog = memo(({ open, onClose }) => {
               >
                 <Iconify icon="carbon:add-alt" width={16} height={16} />
               </IconButton>
-            </Stack>
+            </Box>
           </Grid>
         </Grid>
 
@@ -131,7 +153,12 @@ const AddProductCartDialog = memo(({ open, onClose }) => {
         <AllProductCart selectedCart={handleChooseCart} />
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={handleClose} sx={{ mt: 2, mx: 1 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleClose}
+          sx={{ mt: 2, mx: 1 }}
+        >
           Cancel
         </Button>
         <LoadingButton

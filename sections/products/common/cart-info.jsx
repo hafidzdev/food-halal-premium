@@ -16,31 +16,31 @@ const CartInfo = ({ cart }) => {
         }}
       >
         <Stack direction={"column"} spacing={1} sx={{ mb: 2 }}>
-          <Box component="span" sx={{ typography: "body1" }}>
+          <Box component="span" sx={{ typography: "body2" }}>
             Cart Name: {cart?.receiveName}
           </Box>
-          <Box component="span" sx={{ typography: "body1" }}>
+          <Box component="span" sx={{ typography: "body2" }}>
             Phone Number: {cart?.phoneNumber}
           </Box>
-          <Box component="span" sx={{ typography: "body1" }}>
+          <Box component="span" sx={{ typography: "body2" }}>
             Address: {cart?.deliveryAddress}
           </Box>{" "}
-          <Box component="span" sx={{ typography: "body1" }}>
+          <Box component="span" sx={{ typography: "body2" }}>
             Postal Code: {cart?.postalCode}
           </Box>{" "}
-          <Box component="span" sx={{ typography: "body1" }}>
+          <Box component="span" sx={{ typography: "body2" }}>
             Payment Type: {cart?.paymentType}
           </Box>{" "}
-          <Box component="span" sx={{ typography: "body1" }}>
+          <Box component="span" sx={{ typography: "body2" }}>
             Delivery Type: {cart?.deliveryType}
           </Box>
-          <Box component="span" sx={{ typography: "body1" }}>
+          <Box component="span" sx={{ typography: "body2" }}>
             Delivery Condition: {cart?.deliveryCondition}
           </Box>
-          <Box component="span" sx={{ typography: "body1" }}>
+          <Box component="span" sx={{ typography: "body2" }}>
             Email: {cart?.emailAddress}
           </Box>{" "}
-          <Box component="span" sx={{ typography: "body1" }}>
+          <Box component="span" sx={{ typography: "body2" }}>
             Note: {cart?.note}
           </Box>
         </Stack>

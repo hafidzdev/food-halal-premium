@@ -1,5 +1,9 @@
 import PropTypes from "prop-types";
 import { Box, Card, Stack, Divider } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 
 const CartPrice = ({ productCart }) => {
   const totalPrice = productCart.reduce(
@@ -17,24 +21,70 @@ const CartPrice = ({ productCart }) => {
     >
       <Box
         sx={{
+          p: 2,
+          pb: 0,
+        }}
+      >
+        <Table>
+          <TableBody>
+            {productCart.map((product, index) => (
+              <TableRow key={index}>
+                <TableCell
+                  sx={{
+                    padding: "6px",
+                    borderBottom: "none",
+                    "&:last-child": {
+                      borderBottom: "none",
+                    },
+                  }}
+                >
+                  {product.productName}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    padding: "6px",
+                    borderBottom: "none",
+                    "&:last-child": {
+                      borderBottom: "none",
+                    },
+                  }}
+                >
+                  {product.amount}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    padding: "6px",
+                    borderBottom: "none",
+                    "&:last-child": {
+                      borderBottom: "none",
+                    },
+                  }}
+                >
+                  {"¥" + product.price}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    padding: "6px",
+                    borderBottom: "none",
+                    "&:last-child": {
+                      borderBottom: "none",
+                    },
+                  }}
+                >
+                  {"¥" + product.amount * product.price}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Box>
+      <Divider sx={{ mt: 1 }} />
+      <Box
+        sx={{
           p: 3,
           pb: 0,
         }}
       >
-        <Stack spacing={1}>
-          {productCart.map((product, index) => (
-            <Stack spacing={2} key={index}>
-              <Row
-                label1={product.productName}
-                label2={product.amount}
-                label3={"¥" + product.price}
-                label4={"¥" + product.amount * product.price}
-              />
-            </Stack>
-          ))}
-        </Stack>
-
-        <Divider sx={{ my: 2 }} />
         <Stack spacing={1} sx={{ mb: 2 }}>
           <Stack
             spacing={1}
@@ -42,10 +92,10 @@ const CartPrice = ({ productCart }) => {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Box component="span" sx={{ typography: "body1" }}>
+            <Box component="span" sx={{ typography: "body2" }}>
               Price
             </Box>
-            <Box component="span" sx={{ typography: "body1" }}>
+            <Box component="span" sx={{ typography: "subtitle2" }}>
               {"¥" + totalPrice}
             </Box>
           </Stack>
@@ -55,10 +105,10 @@ const CartPrice = ({ productCart }) => {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Box component="span" sx={{ typography: "body1" }}>
+            <Box component="span" sx={{ typography: "body2" }}>
               Total
             </Box>
-            <Box component="span" sx={{ typography: "body1" }}>
+            <Box component="span" sx={{ typography: "subtitle2" }}>
               {"¥" + totalPrice} + Tax
             </Box>
           </Stack>
@@ -71,33 +121,5 @@ const CartPrice = ({ productCart }) => {
 CartPrice.propTypes = {
   productCart: PropTypes.array,
 };
-
-function Row({ label1, label2, label3, label4, sx, ...other }) {
-  return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      justifyContent="space-between"
-      sx={{ typography: "subtitle2", ...sx }}
-      {...other}
-    >
-      <Box component="span" sx={{ typography: "body1" }}>
-        {label1}
-      </Box>
-
-      <Box component="span" sx={{ typography: "body1" }}>
-        {label2}
-      </Box>
-
-      <Box component="span" sx={{ typography: "body1" }}>
-        {label3}
-      </Box>
-
-      <Box component="span" sx={{ typography: "body1" }}>
-        {label4}
-      </Box>
-    </Stack>
-  );
-}
 
 export default CartPrice;
