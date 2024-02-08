@@ -130,21 +130,11 @@ export default function ProductList({ product, ...other }) {
           </Link>
         </Stack>
 
-        {/* <ProductRating ratingNumber={0} label="No Review" /> */}
-
-        {/* <TextMaxLine variant="body2" line={1} sx={{ color: "text.secondary" }}>
-          {product?.brand}
-        </TextMaxLine> */}
-
-        <Stack direction="row" justifyContent="flex-start" spacing={2}>
-          <Typography variant="subtitle2" sx={{ mt: 0.5 }}>
-            {product?.inStock > 0 ? product?.inStock : "0"}
+        <Stack direction="column" justifyContent="normal" spacing={0.5}>
+          <ProductPrice price={product.price} priceSale={0} />
+          <Typography variant="subtitle2">
+            Stock: {product?.inStock > 0 ? product?.inStock : "0"}
           </Typography>
-          <ProductPrice
-            price={product?.price}
-            priceSale={0}
-            sx={{ typography: "h6" }}
-          />
         </Stack>
       </Stack>
 
