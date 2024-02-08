@@ -140,7 +140,12 @@ export default function ProductGrid({ product, sx, ...other }) {
           </Typography>
         </Link>
 
-        <Stack direction="row" justifyContent="space-between" sx={{ mt: 0.5 }}>
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          spacing={8}
+          sx={{ mt: 0.5 }}
+        >
           <ProductPrice price={product.price} priceSale={0} />
           <Typography variant="subtitle2">
             Stock: {product?.inStock > 0 ? product?.inStock : "0"}
