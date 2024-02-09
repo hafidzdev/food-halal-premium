@@ -189,6 +189,54 @@ export async function GetProductInCart(cartId) {
   }
 }
 
+export async function DeleteProductInCart(cartId, productId) {
+  try {
+    const res = await fetchWithToken(
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart-product/${cartId}/${productId}`,
+      {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+
+    if (!res.ok) {
+      return { status: res.status, message: data.message };
+    }
+
+    return { status: res.status, message: data.message };
+  } catch (error) {
+    return { status: "", message: error.message };
+  }
+}
+
+export async function UpdateProductInCart(allData, amount) {
+  const { id, cartId, productId } = allData;
+  try {
+    const res = await fetchWithToken(
+      `${process.env.NEXT_PUBLIC_HOST_NAME}cart-product/${cartId}/${id}`,
+      {
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId, amount }),
+      }
+    );
+    const data = await res.json();
+
+    if (!res.ok) {
+      return { status: res.status, message: data.message };
+    }
+
+    return { status: res.status, data: data.data };
+  } catch (error) {
+    return { status: "", message: error.message };
+  }
+}
+
 export async function PlaceCartOrder(cartId) {
   try {
     const res = await fetchWithToken(

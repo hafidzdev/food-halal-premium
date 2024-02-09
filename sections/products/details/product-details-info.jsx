@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Rating from "@mui/material/Rating";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import Barcode from "react-barcode";
@@ -28,17 +27,8 @@ import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
 
 // ----------------------------------------------------------------------
 
-export default function ProductDetailsInfo({
-  product,
-  name,
-  price,
-  barcode,
-  ratingNumber,
-  totalReviews,
-  priceSale,
-  caption,
-  inStock,
-}) {
+export default function ProductDetailsInfo({ product }) {
+  const { barcode, description, inStock, name, price } = product;
   const { status } = useSession();
   const router = useRouter();
 
@@ -95,14 +85,14 @@ export default function ProductDetailsInfo({
         <Stack spacing={0.5} direction="row" alignItems="center">
           <Rating
             size="small"
-            value={ratingNumber}
+            value={0}
             defaultValue={0}
             precision={0.5}
             readOnly
           />
 
           <Typography variant="caption" sx={{ color: "text.disabled" }}>
-            ({totalReviews} reviews)
+            ({0} reviews)
           </Typography>
         </Stack>
       </Stack>
@@ -115,7 +105,9 @@ export default function ProductDetailsInfo({
           sx={{ typography: "h5" }}
         />
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {caption && caption !== "null" ? caption : "Without description"}
+          {description && description !== "null"
+            ? description
+            : "Without description"}
         </Typography>
         <Box sx={{ margin: { xs: "auto", md: 0 } }}>
           <Barcode
@@ -138,25 +130,6 @@ export default function ProductDetailsInfo({
         direction={{ xs: "column", md: "row" }}
         alignItems={{ md: "center" }}
       >
-        {/* <TextField
-          select
-          hiddenLabel
-          SelectProps={{
-            native: true,
-          }}
-          sx={{
-            minWidth: 100,
-          }}
-          value={amount}
-          onChange={handleChangeAmount}
-        >
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </TextField> */}
-
         <Stack direction="row" spacing={2} sx={{ my: 3 }}>
           <Button
             component={RouterLink}
@@ -175,7 +148,7 @@ export default function ProductDetailsInfo({
             Add to Cart
           </Button>
 
-          <Button
+          {/* <Button
             component={RouterLink}
             href={""}
             fullWidth={!mdUp}
@@ -189,7 +162,7 @@ export default function ProductDetailsInfo({
             }
           >
             Buy Now
-          </Button>
+          </Button> */}
         </Stack>
       </Stack>
 
@@ -212,12 +185,5 @@ export default function ProductDetailsInfo({
 }
 
 ProductDetailsInfo.propTypes = {
-  caption: PropTypes.string,
-  name: PropTypes.string,
-  price: PropTypes.number,
-  barcode: PropTypes.string,
-  priceSale: PropTypes.number,
-  ratingNumber: PropTypes.number,
-  totalReviews: PropTypes.number,
-  inStock: PropTypes.number,
+  product: PropTypes.object,
 };

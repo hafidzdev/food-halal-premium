@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Box,
@@ -10,41 +10,126 @@ import {
   useTheme,
   IconButton,
   Typography,
-  Divider,
+  Button,
+  CircularProgress,
+  Backdrop,
 } from "@mui/material";
 import { RouterLink } from "@/routes/components";
 import Image from "@/components/partials/image";
 import ProductPrice from "./product-price";
 import Iconify from "@/components/partials/Iconify";
+import { ConfirmDialog } from "@/components/partials/modal";
+import { DeleteProductInCart, UpdateProductInCart } from "@/services/Purchase";
+import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
+import Label from "@/components/partials/label/label";
 
 // ----------------------------------------------------------------------
 
-export default function CartProduct({ productCart }) {
+export default function CartProduct({ productCart, refetchData }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === "light";
 
-  const [productQuantity, setProductQuantity] = useState({});
+  const [openConfirmDelete, setOpenConfirmDelete] = useState({
+    isOpen: false,
+    productId: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [snackbars, setSnackbars] = useState([]);
 
-  const handleIncrement = (productId, e) => {
-    e.preventDefault();
-    setProductQuantity((prevQuantity) => ({
-      ...prevQuantity,
-      [productId]: (prevQuantity[productId] || 0) + 1,
-    }));
+  const handleUpdateAmount = async (product, isUp) => {
+    const newAmount = isUp ? product.amount + 1 : product.amount - 1;
+
+    try {
+      setLoading(true);
+      const res = await UpdateProductInCart(product, newAmount);
+
+      if (res?.status === 200) {
+        refetchData();
+        setSnackbars((prevSnackbars) => [
+          ...prevSnackbars,
+          {
+            id: Date.now(),
+            message: "Successfully update product",
+            severity: "success",
+          },
+        ]);
+      } else {
+        setSnackbars((prevSnackbars) => [
+          ...prevSnackbars,
+          {
+            id: Date.now(),
+            message: res?.message,
+            severity: "error",
+          },
+        ]);
+      }
+    } catch (error) {
+      setSnackbars((prevSnackbars) => [
+        ...prevSnackbars,
+        {
+          id: Date.now(),
+          message: error?.message,
+          severity: "error",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDecrement = (productId, e) => {
-    e.preventDefault();
-    setProductQuantity((prevQuantity) => {
-      const currentQuantity = prevQuantity[productId] || 0;
-      if (currentQuantity > 0) {
-        return {
-          ...prevQuantity,
-          [productId]: currentQuantity - 1,
-        };
+  const handleOpenConfirmDelete = (data) =>
+    setOpenConfirmDelete({ isOpen: true, productId: { ...data } });
+  const handleCloseConfirmDelete = () => {
+    setOpenConfirmDelete((prev) => ({ ...prev, isOpen: false }));
+  };
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      const res = await DeleteProductInCart(
+        openConfirmDelete?.productId?.cartId,
+        openConfirmDelete?.productId?.productId
+      );
+
+      if (res?.status === 200) {
+        refetchData();
+        setSnackbars((prevSnackbars) => [
+          ...prevSnackbars,
+          {
+            id: Date.now(),
+            message: "Successfully product in cart",
+            severity: "success",
+          },
+        ]);
+      } else {
+        setSnackbars((prevSnackbars) => [
+          ...prevSnackbars,
+          {
+            id: Date.now(),
+            message: res?.message,
+            severity: "error",
+          },
+        ]);
       }
-      return prevQuantity;
-    });
+    } catch (error) {
+      setSnackbars((prevSnackbars) => [
+        ...prevSnackbars,
+        {
+          id: Date.now(),
+          message: error?.message,
+          severity: "error",
+        },
+      ]);
+    } finally {
+      setOpenConfirmDelete((prev) => ({ ...prev, productId: "" }));
+      setLoading(false);
+    }
+  };
+
+  const handleCloseSnackbar = (id) => {
+    setSnackbars((prevSnackbars) =>
+      prevSnackbars.filter((snackbar) => snackbar.id !== id)
+    );
   };
 
   return (
@@ -106,7 +191,11 @@ export default function CartProduct({ productCart }) {
                   />
                 </Link>
 
-                <Stack spacing={0.5}>
+                <Label color="success" sx={{ mb: 1 }}>
+                  Stock: {product?.currentStock > 0 ? product?.currentStock : 0}
+                </Label>
+
+                <Stack>
                   <Link
                     component={RouterLink}
                     href={`/product/${product?.productId}`}
@@ -115,7 +204,6 @@ export default function CartProduct({ productCart }) {
                   >
                     <Typography
                       variant="body2"
-                      line={1}
                       sx={{ fontWeight: "fontWeightMedium" }}
                     >
                       {product?.productName}
@@ -132,16 +220,14 @@ export default function CartProduct({ productCart }) {
                     mt: 2,
                   }}
                 >
-                  <Typography variant="subtitle2">
-                    {product?.inStock > 0 ? product?.inStock : "0"}
-                  </Typography>
                   <Box
                     sx={{
-                      // px: 0.75,
+                      width: "100%",
                       border: 1,
                       lineHeight: 0,
                       borderRadius: 1,
                       display: "flex",
+                      justifyContent: "space-evenly",
                       alignItems: "center",
                       borderColor: "grey.600",
                     }}
@@ -149,8 +235,8 @@ export default function CartProduct({ productCart }) {
                     <IconButton
                       size="small"
                       color="inherit"
-                      onClick={(e) => handleDecrement(product.id, e)}
-                      disabled={!productQuantity[product.id]}
+                      onClick={() => handleUpdateAmount(product, false)}
+                      disabled={product?.amount === 1}
                     >
                       <Iconify
                         icon="simple-line-icons:minus"
@@ -172,26 +258,59 @@ export default function CartProduct({ productCart }) {
                     <IconButton
                       size="small"
                       color="inherit"
-                      onClick={(e) => handleIncrement(product.id, e)}
+                      onClick={() => handleUpdateAmount(product, true)}
+                      disabled={product?.amount >= product?.currentStock}
                     >
                       <Iconify icon="carbon:add-alt" width={16} height={16} />
                     </IconButton>
                   </Box>
                 </Stack>
+
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="error"
+                  sx={{ mt: 2 }}
+                  onClick={() => handleOpenConfirmDelete(product)}
+                >
+                  Delete
+                </Button>
               </Box>
             </Paper>
           ))}
         </Box>
       </Box>
+
+      <ConfirmDialog
+        open={openConfirmDelete.isOpen}
+        onClose={handleCloseConfirmDelete}
+        onAgree={handleDelete}
+        title="Menghapus Product"
+        description={`Apakah Anda yakin ingin menghapus product ini didalam keranjang? Anda tidak dapat memulihkannya kembali.`}
+      />
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
+      {snackbars.map((snackbar) => (
+        <SnackbarMessage
+          key={snackbar.id}
+          open={true}
+          autoHideDuration={4000}
+          onClose={() => handleCloseSnackbar(snackbar.id)}
+          message={snackbar.message}
+          severity={snackbar.severity}
+        />
+      ))}
     </>
   );
 }
 
 CartProduct.propTypes = {
-  productCart: PropTypes.shape({
-    name: PropTypes.string,
-    image: PropTypes.string,
-    amount: PropTypes.string,
-    price: PropTypes.string,
-  }),
+  productCart: PropTypes.array.isRequired,
+  refetchData: PropTypes.func.isRequired,
 };
