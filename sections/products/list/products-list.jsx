@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useCart } from "@/context/CartContext";
 
 import Fab from "@mui/material/Fab";
 import Link from "@mui/material/Link";
@@ -10,14 +9,12 @@ import { Typography } from "@mui/material";
 
 import { RouterLink } from "@/routes/components";
 
-// import Label from "@/components/partials/label";
 import Image from "@/components/partials/image/image";
 
 import Iconify from "@/components/partials/Iconify";
 import TextMaxLine from "@/components/partials/text-max-line/text-max-line";
 import ProductPrice from "../common/product-price";
-// import ProductRating from "../common/product-rating";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
 
@@ -27,20 +24,33 @@ import { AddProductCartDialog } from "@/components/partials/modal";
 
 export default function ProductList({ product, ...other }) {
   const { status } = useSession();
-  const [, setCart] = useCart();
   const router = useRouter();
 
   const [openCartDialog, setOpenCartDialog] = useState({
     isOpen: false,
     product: {},
+    isSuccess: "",
   });
   const [snackbars, setSnackbars] = useState([]);
-  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (openCartDialog.isSuccess === "success") {
+      setSnackbars((prevSnackbars) => [
+        ...prevSnackbars,
+        {
+          id: Date.now(),
+          message: "Successfully added item to cart",
+          severity: "success",
+        },
+      ]);
+    }
+  }, [openCartDialog.isSuccess]);
 
   const handleOpenCartModal = (product) =>
-    setOpenCartDialog({ isOpen: true, product });
-  const handleCloseCartModal = () =>
-    setOpenCartDialog({ isOpen: false, product: {} });
+    setOpenCartDialog({ isOpen: true, product, isSuccess: "" });
+
+  const handleCloseCartModal = (successRes) =>
+    setOpenCartDialog({ isOpen: false, product: {}, isSuccess: successRes });
 
   const handleCloseSnackbar = (id) => {
     setSnackbars((prevSnackbars) =>

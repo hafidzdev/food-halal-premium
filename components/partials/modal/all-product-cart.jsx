@@ -19,9 +19,10 @@ import { CreateCart } from ".";
 const AllProductCart = memo(({ selectedCart }) => {
   const [cart] = useCart();
 
-  const [openModalCreateCart, setOpenModalCreateCart] = useState({
+  const [openModalCreateCart, setOpenModalCreateCart] = useState(false);
+  const [successAlert, setSuccessAlert] = useState({
     isOpen: false,
-    isSuccess: "",
+    message: "",
   });
   const [chooseCart, setChooseCart] = useState("");
 
@@ -30,14 +31,12 @@ const AllProductCart = memo(({ selectedCart }) => {
     selectedCart(event.target.value);
   };
 
-  const handleOpenCreateModal = () =>
-    setOpenModalCreateCart({ isOpen: true, isSuccess: "" });
-  const handleCloseCreateModal = () =>
-    setOpenModalCreateCart({ isOpen: false, isSuccess: "" });
+  const handleOpenCreateModal = () => setOpenModalCreateCart(true);
+  const handleCloseCreateModal = () => setOpenModalCreateCart(false);
   const handleOpenSuccessAlert = (msg) =>
-    setOpenModalCreateCart({ isOpen: true, isSuccess: msg });
+    setSuccessAlert({ isOpen: true, message: msg });
   const handleCloseSuccessAlert = () =>
-    setOpenModalCreateCart((prev) => ({ ...prev, isSuccess: "" }));
+    setSuccessAlert({ isOpen: false, message: "" });
 
   if (cart.length === 0) {
     return (
@@ -57,7 +56,7 @@ const AllProductCart = memo(({ selectedCart }) => {
           Don't have a shopping basket yet? Let's create it now
         </Alert>
         <CreateCart
-          open={openModalCreateCart.isOpen}
+          open={openModalCreateCart}
           onClose={handleCloseCreateModal}
           setResult={handleOpenSuccessAlert}
         />
@@ -93,17 +92,17 @@ const AllProductCart = memo(({ selectedCart }) => {
           Creat New Cart
         </Button>
       </Stack>
-      <Collapse in={openModalCreateCart.isSuccess !== ""}>
+      <Collapse in={successAlert.isOpen}>
         <Alert
           severity="success"
           sx={{ mt: 1 }}
           onClose={handleCloseSuccessAlert}
         >
-          {openModalCreateCart.isSuccess}
+          {successAlert.message}
         </Alert>
       </Collapse>
       <CreateCart
-        open={openModalCreateCart.isOpen}
+        open={openModalCreateCart}
         onClose={handleCloseCreateModal}
         setResult={handleOpenSuccessAlert}
       />

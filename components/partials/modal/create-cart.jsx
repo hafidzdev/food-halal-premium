@@ -73,6 +73,7 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
             allData?.receiveName
           }"`
         );
+        handleCloseDialog();
       } else {
         setError(`Error ${res?.status}: ${res?.message}`);
       }

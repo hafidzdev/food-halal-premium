@@ -66,6 +66,7 @@ export default function ProductsView() {
         );
         setProduct([...newData]);
         setPage(2);
+        sethasMore(true);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

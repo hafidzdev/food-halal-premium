@@ -20,7 +20,7 @@ export async function GetAllProducts(category, limit, page) {
     : `${process.env.NEXT_PUBLIC_HOST_NAME}product?limit=${limit}&page=${page}`;
 
   try {
-    const res = await fetch(fixURL);
+    const res = await fetch(fixURL, { cache: "no-store" });
 
     const data = await res.json();
 
