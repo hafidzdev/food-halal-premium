@@ -26,7 +26,7 @@ const NavBottom = () => {
       newValue = window.pageYOffset;
 
       if (oldValue - newValue < 0) {
-        setHideNav(-60);
+        setHideNav(0);
       } else if (oldValue - newValue > 0) {
         setHideNav(0);
       }
