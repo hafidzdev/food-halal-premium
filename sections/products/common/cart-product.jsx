@@ -131,7 +131,7 @@ export default function CartProduct({ productCart, refetchData }) {
       prevSnackbars.filter((snackbar) => snackbar.id !== id)
     );
   };
-  console.log(productCart);
+
   return (
     <>
       <Box

@@ -18,7 +18,6 @@ export default function CheckoutPaymentMethod({
   purchase,
   setPurchase,
 }) {
-  console.log(paymentList);
   return (
     <>
       <RadioGroup

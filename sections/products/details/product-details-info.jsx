@@ -28,7 +28,6 @@ import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
 // ----------------------------------------------------------------------
 
 export default function ProductDetailsInfo({ product }) {
-  console.log(product);
   const { barcode, description, inStock, name, price } = product;
   const { status } = useSession();
   const router = useRouter();
