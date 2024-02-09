@@ -1,22 +1,39 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import Link from "next/link";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import CartInfo from "../common/cart-info";
-import Link from "next/link";
 import CartPrice from "../common/cart-price";
 import CartProduct from "../common/cart-product";
+import Iconify from "@/components/partials/Iconify";
 
 import { GetProductInCart } from "@/services/Purchase";
 import { ModalPlaceCartOrder } from "@/components/partials/modal";
 
 // ----------------------------------------------------------------------
 
-export default async function CartDetailsView({ cartId, cart }) {
-  const productInCart = await GetProductInCart(cartId);
+export default function CartDetailsView({ cartId, cart }) {
+  const [productInCart, setProductInCart] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const productData = await GetProductInCart(cartId);
+      setProductInCart(productData);
+    };
+
+    fetchData();
+  }, [cartId]);
+
+  const refetchData = useCallback(async () => {
+    const updatedProductData = await GetProductInCart(cartId);
+    setProductInCart(updatedProductData);
+  }, []);
 
   return (
     <Container
@@ -29,9 +46,7 @@ export default async function CartDetailsView({ cartId, cart }) {
       <Grid container justifyContent="center" spacing={{ xs: 5, md: 8 }}>
         <Grid item xs={12} md={6}>
           <Link underline="none" href="/cart" marginTop={10}>
-            <Button variant="text" color="primary" sx={{ ml: -2 }}>
-              Back
-            </Button>
+            <Iconify icon="carbon:arrow-left" color="text.primary" />
           </Link>
           <Stack
             direction="row"
@@ -48,7 +63,7 @@ export default async function CartDetailsView({ cartId, cart }) {
 
           <CartPrice productCart={productInCart} />
 
-          <CartProduct productCart={productInCart} />
+          <CartProduct productCart={productInCart} refetchData={refetchData} />
 
           <ModalPlaceCartOrder cartId={cartId} />
         </Grid>
