@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import {
   Box,
@@ -31,7 +31,7 @@ export default function CartProduct({ productCart, refetchData }) {
 
   const [openConfirmDelete, setOpenConfirmDelete] = useState({
     isOpen: false,
-    productId: "",
+    productData: "",
   });
   const [loading, setLoading] = useState(false);
   const [snackbars, setSnackbars] = useState([]);
@@ -78,7 +78,7 @@ export default function CartProduct({ productCart, refetchData }) {
   };
 
   const handleOpenConfirmDelete = (data) =>
-    setOpenConfirmDelete({ isOpen: true, productId: { ...data } });
+    setOpenConfirmDelete({ isOpen: true, productData: { ...data } });
   const handleCloseConfirmDelete = () => {
     setOpenConfirmDelete((prev) => ({ ...prev, isOpen: false }));
   };
@@ -87,8 +87,8 @@ export default function CartProduct({ productCart, refetchData }) {
     try {
       setLoading(true);
       const res = await DeleteProductInCart(
-        openConfirmDelete?.productId?.cartId,
-        openConfirmDelete?.productId?.productId
+        openConfirmDelete?.productData?.cartId,
+        openConfirmDelete?.productData?.id
       );
 
       if (res?.status === 200) {
@@ -121,7 +121,7 @@ export default function CartProduct({ productCart, refetchData }) {
         },
       ]);
     } finally {
-      setOpenConfirmDelete((prev) => ({ ...prev, productId: "" }));
+      setOpenConfirmDelete((prev) => ({ ...prev, productData: "" }));
       setLoading(false);
     }
   };
