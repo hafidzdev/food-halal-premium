@@ -112,6 +112,7 @@ export default function ProductDetailsInfo({ product }) {
         <Box sx={{ margin: { xs: "auto", md: 0 } }}>
           <Barcode
             value={barcode}
+            format="EAN13"
             height={50}
             width={2}
             background={getTheme?.palette?.background?.default || "#ffffff"}
