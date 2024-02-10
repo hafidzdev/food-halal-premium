@@ -97,7 +97,7 @@ export default function CartProduct({ productCart, refetchData }) {
           ...prevSnackbars,
           {
             id: Date.now(),
-            message: "Successfully product in cart",
+            message: "Successfully delete product in cart",
             severity: "success",
           },
         ]);

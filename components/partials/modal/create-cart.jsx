@@ -253,7 +253,7 @@ const CreateCart = memo(({ open, onClose, setResult, cartId, editValue }) => {
               variant="contained"
               color="primary"
             >
-              <span>{loading ? "Loading..." : "Create"}</span>
+              <span>{loading ? "Loading..." : "Submit"}</span>
             </LoadingButton>
           </Box>
         </Box>

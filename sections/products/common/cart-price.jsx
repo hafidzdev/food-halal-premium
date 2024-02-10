@@ -4,8 +4,32 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import CartListSkeleton from "../skeleton/cart-list-skeleton";
+import { useBoolean } from "@/hooks/use-boolean";
+import { useEffect } from "react";
 
 const CartPrice = ({ productCart }) => {
+  const loading = useBoolean(true);
+
+  const isClient = () => typeof window !== "undefined";
+
+  useEffect(() => {
+    const fakeLoading = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 700));
+      loading.onFalse();
+    };
+
+    if (isClient()) {
+      fakeLoading();
+    } else {
+      loading.onFalse();
+    }
+  }, [loading]);
+
+  if (loading.value) {
+    return <CartListSkeleton />;
+  }
+
   const totalPrice = productCart.reduce(
     (sum, item) => sum + item.price * item.amount,
     0

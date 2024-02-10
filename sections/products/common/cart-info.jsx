@@ -1,7 +1,24 @@
 import PropTypes from "prop-types";
 import { Box, Card, Stack } from "@mui/material";
+import CartListSkeleton from "../skeleton/cart-list-skeleton";
+import { useBoolean } from "@/hooks/use-boolean";
+import { useEffect } from "react";
 
 const CartInfo = ({ cart }) => {
+  const loading = useBoolean(true);
+
+  useEffect(() => {
+    const fakeLoading = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 700));
+      loading.onFalse();
+    };
+    fakeLoading();
+  }, []);
+
+  if (loading.value) {
+    return <CartListSkeleton />; // Render skeleton loader while data is loading
+  }
+
   return (
     <Card
       sx={{
