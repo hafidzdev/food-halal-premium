@@ -3,23 +3,8 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  textAlign: "center",
-  width: 400,
-  bgcolor: "background.paper",
-  borderRadius: "1rem",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import IconButton from "@mui/material/IconButton";
+import Iconify from "../Iconify";
 
 const ConfirmDialog = ({ open, onClose, onAgree, title, description }) => {
   const handleClose = () => {
@@ -37,7 +22,42 @@ const ConfirmDialog = ({ open, onClose, onAgree, title, description }) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <Box sx={style}>
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 400,
+          bgcolor: "background.paper",
+          boxShadow: 24,
+          p: 4,
+          borderRadius: 2,
+          textAlign: "center",
+        }}
+      >
+        <IconButton
+          edge="end"
+          color="inherit"
+          onClick={handleClose}
+          aria-label="close"
+          sx={{ position: "absolute", top: -10, right: 0 }}
+        >
+          <Iconify icon="carbon:close-filled" width={20} height={20} />
+        </IconButton>
+
+        <Box
+          sx={{
+            my: 2,
+            color: "primary.main",
+            bgcolor: "background.neutral",
+            borderRadius: "50%",
+            p: 1,
+            display: "inline-block",
+          }}
+        >
+          <Iconify icon="carbon:information-filled" width={50} height={50} />
+        </Box>
         <Typography id="modal-modal-title" variant="h6" component="h2">
           {title}
         </Typography>
@@ -45,8 +65,13 @@ const ConfirmDialog = ({ open, onClose, onAgree, title, description }) => {
           {description}
         </Typography>
         <Box>
-          <Button color="primary" onClick={handleClose} sx={{ mt: 2, mx: 1 }}>
-            Batal
+          <Button
+            variant="contained"
+            color="warning"
+            onClick={handleClose}
+            sx={{ mt: 2, mx: 1 }}
+          >
+            Cancel
           </Button>
           <Button
             variant="contained"
@@ -55,7 +80,7 @@ const ConfirmDialog = ({ open, onClose, onAgree, title, description }) => {
             autoFocus
             sx={{ mt: 2, mx: 1 }}
           >
-            Setuju
+            Delete
           </Button>
         </Box>
       </Box>

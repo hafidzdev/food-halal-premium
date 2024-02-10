@@ -272,6 +272,7 @@ export default function CartProduct({ productCart, refetchData }) {
                   color="error"
                   sx={{ mt: 2 }}
                   onClick={() => handleOpenConfirmDelete(product)}
+                  startIcon={<Iconify icon="carbon:trash-can" />}
                 >
                   Delete
                 </Button>
