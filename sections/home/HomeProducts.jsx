@@ -176,7 +176,7 @@ export default function HomeProducts() {
         sx={{
           flexGrow: 1,
           pl: { md: 8 },
-          ml: { md: 3.5, sm: 2, xs: 1 },
+          ml: { md: 3.5, sm: 3, xs: 1 },
           width: { md: `calc(100% - ${100}px)` },
         }}
       >
