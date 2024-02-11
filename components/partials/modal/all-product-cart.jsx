@@ -43,8 +43,10 @@ const AllProductCart = memo(({ selectedCart }) => {
       <>
         <Alert
           severity="warning"
+          sx={{ my: 1 }}
           action={
             <Button
+              variant="contained"
               color="inherit"
               size="small"
               onClick={handleOpenCreateModal}

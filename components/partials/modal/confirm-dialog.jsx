@@ -5,8 +5,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Iconify from "../Iconify";
+import { useResponsive } from "@/hooks/use-responsive";
 
 const ConfirmDialog = ({ open, onClose, onAgree, title, description }) => {
+  const mdUp = useResponsive("up", "md");
   const handleClose = () => {
     onClose();
   };
@@ -28,7 +30,7 @@ const ConfirmDialog = ({ open, onClose, onAgree, title, description }) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: mdUp ? 400 : 300,
           bgcolor: "background.paper",
           boxShadow: 24,
           p: 4,

@@ -93,7 +93,7 @@ const AddProductCartDialog = memo(({ open, onClose }) => {
             :
           </Grid>
           <Grid item xs={9}>
-            {product?.price}
+            ¥{product?.price}
           </Grid>
 
           <Grid item xs={2}>
