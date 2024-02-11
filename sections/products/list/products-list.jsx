@@ -82,7 +82,7 @@ export default function ProductList({ product, ...other }) {
           right: 8,
           zIndex: 9,
           top: 8,
-          opacity: 0,
+          opacity: 1,
           position: "absolute",
           transition: (theme) =>
             theme.transitions.create("opacity", {

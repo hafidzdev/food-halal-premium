@@ -84,7 +84,7 @@ export default function ProductGrid({ product, sx, ...other }) {
             right: 8,
             zIndex: 9,
             bottom: 8,
-            opacity: 0,
+            opacity: 1,
             position: "absolute",
             transition: (theme) =>
               theme.transitions.create("opacity", {
