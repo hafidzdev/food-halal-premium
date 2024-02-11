@@ -5,15 +5,17 @@ import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Unstable_Grid2";
 import Container from "@mui/material/Container";
-import { Stack, Box, Typography } from "@mui/material";
+import { Stack, Box, Typography, Link } from "@mui/material";
 import Iconify from "@/components/partials/Iconify";
 import { useBoolean } from "@/hooks/use-boolean";
+import { RouterLink } from "@/routes/components";
 
 import { useCart } from "@/context/CartContext";
 import CartUser from "../cart/cart-user";
 import { CreateCart } from "@/components/partials/modal";
 import SnackbarMessage from "@/components/partials/snackbar/snackbar-message";
 import CartListSkeleton from "../skeleton/cart-list-skeleton";
+import EmptyContent from "@/components/partials/content/empty-content";
 
 // ----------------------------------------------------------------------
 
@@ -93,8 +95,30 @@ export default function CartView() {
                 ))
               : cart.length > 0
               ? cart.map((item, index) => <CartUser key={index} cart={item} />)
-              : "No Matching Data! "}
+              : ""}
           </Box>
+
+          {cart.length > 0 ? (
+            ""
+          ) : (
+            <>
+              <EmptyContent
+                title="Cart is empty"
+                description="Look like you have no items in your shopping cart."
+                img={"/assets/illustrations/illustration_empty_content.svg"}
+              />
+
+              <br />
+              <Link component={RouterLink} href={"/product"} underline="none">
+                <Button
+                  color="inherit"
+                  startIcon={<Iconify icon={"fluent:ios-arrow-24-filled"} />}
+                >
+                  Continue Shopping
+                </Button>
+              </Link>
+            </>
+          )}
         </Grid>
       </Grid>
 
