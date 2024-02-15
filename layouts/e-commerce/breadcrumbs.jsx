@@ -1,23 +1,16 @@
 import PropTypes from "prop-types";
-import { useCart } from "@/context/CartContext";
 
 import Box from "@mui/material/Box";
-import Badge from "@mui/material/Badge";
-import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
 import { alpha, useTheme } from "@mui/material/styles";
 
 import CustomBreadcrumbs from "@/components/partials/custom-breadcrumbs";
-import { RouterLink } from "@/routes/components";
 import { bgGradient } from "@/theme/css";
-import Iconify from "@/components/partials/Iconify";
 
 // ----------------------------------------------------------------------
 
 export default function Breadcrumbs({ menuLink }) {
   const theme = useTheme();
-  const [cart] = useCart();
 
   return (
     <Box
@@ -46,47 +39,6 @@ export default function Breadcrumbs({ menuLink }) {
             },
           }}
         />
-        {/* <Stack
-          spacing={3}
-          direction="row"
-          alignItems="center"
-          flexGrow={1}
-          justifyContent="flex-end"
-        >
-          <Badge badgeContent={0} color="info">
-            <IconButton
-              component={RouterLink}
-              href={"#"}
-              size="small"
-              color="inherit"
-              sx={{ p: 0 }}
-            >
-              <Iconify icon="carbon:favorite" width={24} />
-            </IconButton>
-          </Badge>
-
-          <Badge badgeContent={cart?.length} color="error">
-            <IconButton
-              component={RouterLink}
-              href={"/cart"}
-              size="small"
-              color="inherit"
-              sx={{ p: 0 }}
-            >
-              <Iconify icon="carbon:shopping-cart" width={24} />
-            </IconButton>
-          </Badge>
-
-          <IconButton
-            component={RouterLink}
-            href={""}
-            size="small"
-            color="inherit"
-            sx={{ p: 0 }}
-          >
-            <Iconify icon="carbon:user" width={24} />
-          </IconButton>
-        </Stack> */}
       </Container>
     </Box>
   );
