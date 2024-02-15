@@ -31,10 +31,13 @@ const mainNav = [
     title: "Home",
     path: "/",
   },
-
   {
     title: "Products",
     path: "/product",
+  },
+  {
+    title: "Cart",
+    path: "/cart",
   },
   {
     title: "About Us",
