@@ -46,7 +46,7 @@ export default function Breadcrumbs({ menuLink }) {
             },
           }}
         />
-        <Stack
+        {/* <Stack
           spacing={3}
           direction="row"
           alignItems="center"
@@ -86,7 +86,7 @@ export default function Breadcrumbs({ menuLink }) {
           >
             <Iconify icon="carbon:user" width={24} />
           </IconButton>
-        </Stack>
+        </Stack> */}
       </Container>
     </Box>
   );
