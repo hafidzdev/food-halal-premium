@@ -56,7 +56,7 @@ export default function CartView() {
       }}
     >
       <Grid container spacing={{ xs: 5, md: 8 }}>
-        <Grid xs={12} md={8} lg={12}>
+        <Grid xs={12} lg={12}>
           <Stack
             direction="row"
             alignItems="center"
