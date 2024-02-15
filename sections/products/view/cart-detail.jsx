@@ -44,7 +44,7 @@ export default function CartDetailsView({ cartId, cart }) {
       }}
     >
       <Grid container justifyContent="center" spacing={{ xs: 5, md: 8 }}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={8}>
           <Link underline="none" href="/cart" marginTop={10}>
             <Iconify icon="carbon:arrow-left" color="text.primary" />
           </Link>

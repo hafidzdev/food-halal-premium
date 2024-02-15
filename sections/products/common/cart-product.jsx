@@ -147,8 +147,8 @@ export default function CartProduct({ productCart, refetchData }) {
           display="grid"
           gridTemplateColumns={{
             xs: "repeat(2, 1fr)",
-            sm: "repeat(2, 1fr)",
-            md: "repeat(3, 1fr)",
+            sm: "repeat(3, 1fr)",
+            md: "repeat(4, 1fr)",
           }}
         >
           {productCart?.map((product, index) => (
