@@ -13,21 +13,37 @@ import {
   IconButton,
   Typography,
   DialogContent,
+  Badge,
 } from "@mui/material";
 import Iconify from "@/components/partials/Iconify";
 import { RouterLink } from "@/routes/components";
-import { useRouter } from "next/navigation";
 import { useBoolean } from "@/hooks/use-boolean";
 import BarcodeScanner from "@/components/partials/barcodeScanner";
 import Quagga from "quagga";
+import { useCart } from "@/context/CartContext";
+import { usePathname } from "@/routes/hooks/use-pathname";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const useActiveLink = (path) => {
+  const pathname = usePathname();
+
+  // Check for an exact match or partial match
+  const isActive =
+    pathname === path || (path !== "/" && pathname.startsWith(path));
+
+  return isActive;
+};
+
 const NavBottom = () => {
   const theme = useTheme();
-  const router = useRouter();
+  const [cart] = useCart();
+
+  // set active menu
+  const active1 = useActiveLink("/");
+  const active2 = useActiveLink("/cart");
 
   const [hideNav, setHideNav] = useState(0); // toggle scroll hide effect
   const openScanModal = useBoolean();
@@ -70,10 +86,6 @@ const NavBottom = () => {
       justifyContent: "center",
       alignItems: "center",
     },
-    active: { color: "primary.main" },
-    diactive: {
-      color: theme.palette.mode === "light" ? "common.black" : "common.white",
-    },
   };
 
   return (
@@ -97,7 +109,13 @@ const NavBottom = () => {
               <Link href="/" component={RouterLink}>
                 <BottomNavigationAction
                   label="Home"
-                  icon={<Iconify icon={"carbon:home"} width={26} height={26} />}
+                  icon={<Iconify icon={"mdi:home"} width={26} height={26} />}
+                  sx={{
+                    ...(active1 && {
+                      color: theme.palette.primary.main,
+                      bgcolor: theme.palette.background.neutral,
+                    }),
+                  }}
                 />
               </Link>
             </Grid>
@@ -114,8 +132,18 @@ const NavBottom = () => {
               <Link component={RouterLink} href="/cart">
                 <BottomNavigationAction
                   label="Cart"
-                  icon={<Iconify icon={"mdi:cart"} width={30} height={30} />}
+                  icon={
+                    <Badge badgeContent={cart?.length} color="error">
+                      <Iconify icon={"mdi:cart"} width={26} height={26} />
+                    </Badge>
+                  }
                   disableRipple={true}
+                  sx={{
+                    ...(active2 && {
+                      color: theme.palette.primary.main,
+                      bgcolor: theme.palette.background.neutral,
+                    }),
+                  }}
                 />
               </Link>
             </Grid>
